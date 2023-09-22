@@ -1,0 +1,1 @@
+export { DefSvgIcon } from './SvgIcon'
