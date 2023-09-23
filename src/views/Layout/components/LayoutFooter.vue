@@ -1,7 +1,7 @@
 <template>
   <div class="layout-footer">
     <el-row :gutter="50">
-      <el-col :span="17" :xs="0">
+      <el-col :span="17">
         <div class="footer-left">
           <div class="logo" style="margin: 0 0 20px 20px">
             <def-svg-icon
@@ -54,7 +54,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="7" :xs="24">
+      <el-col :span="7">
         <div class="footer-right">
           <div class="assist">
             <div class="button1">

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <el-row  justify="space-between" style="align-items: center;">
-            <el-col :span="3" :xs="0">
+        <el-row  justify="space-between" :gutter="10" style="align-items: center;">
+            <el-col :span="3">
                 <div class="category-left">
                     <div class="left-box">
                         <div class="left-icon1">
@@ -17,11 +17,41 @@
                     </div>
                 </div>
             </el-col>
-            <el-col :span="16" :xs="24">
-                <div style="background-color: yellow; height: 100px;"></div>
+            <el-col :span="16">
+                <div class="category-center">
+                    <a>番剧</a>
+                    <a>国创</a>
+                    <a>综艺</a>
+                    <a>动画</a>
+                    <a>鬼畜</a>
+                    <a>舞蹈</a>
+                    <a>娱乐</a>
+                    <a>科技</a>
+                    <a>美食</a>
+                    <a>汽车</a>
+                    <a>运动</a>
+                    <a>电影</a>
+                    <a>电视剧</a>
+                    <a>纪录片</a>
+                    <a>游戏</a>
+                    <a>音乐</a>
+                    <a>影视</a>
+                    <a>知识</a>
+                    <a>资讯</a>
+                    <a>生活</a>
+                    <a>时尚</a>
+                    <a>更多</a>
+                </div>
             </el-col>
-            <el-col :span="5" :xs="0">
-                <div class="category-right"></div>
+            <el-col :span="5">
+                <div class="category-right">
+                    <a @mouseover="changeSvgColor('specolumn')" @mouseleave="svgColorReturn"><def-svg-icon svg-name="specolumn" :svg-color="svgColors.specolumn"></def-svg-icon>专栏</a>
+                    <a @mouseover="changeSvgColor('activity')" @mouseleave="svgColorReturn"><def-svg-icon svg-name="activity" :svg-color="svgColors.activity"></def-svg-icon>活动</a>
+                    <a @mouseover="changeSvgColor('community')" @mouseleave="svgColorReturn"><def-svg-icon svg-name="community" :svg-color="svgColors.community"></def-svg-icon>社区中心</a>
+                    <a @mouseover="changeSvgColor('live')" @mouseleave="svgColorReturn"><def-svg-icon svg-name="live" :svg-color="svgColors.live"></def-svg-icon>直播</a>
+                    <a @mouseover="changeSvgColor('class')" @mouseleave="svgColorReturn"><def-svg-icon svg-name="class" :svg-color="svgColors.class"></def-svg-icon>课堂</a>
+                    <a @mouseover="changeSvgColor('music')" @mouseleave="svgColorReturn"><def-svg-icon svg-name="music" :svg-color="svgColors.music"></def-svg-icon>新歌热榜</a>
+                </div>
             </el-col>
         </el-row>
 
@@ -29,11 +59,31 @@
 </template>
 
 <script setup lang="ts">
+import { reactive } from 'vue';
+const svgColors:any=reactive({
+    specolumn:'#707070',
+    activity:'#707070',
+    community:'#707070',
+    live:'#707070',
+    class:'#707070',
+    music:'#707070'
+})
+
+const changeSvgColor=(svgName:string)=>{
+    svgColors[svgName] = '#05AAE6';
+}
+
+const svgColorReturn = ()=>{
+    for(const key in svgColors){
+        svgColors[key] = '#707070';
+    }
+}
 
 </script>
 
 <style lang="scss" scoped>
     .container{
+        padding: 0 20px;
         .category-left{
             display: flex;
             flex-direction: row;
@@ -63,9 +113,51 @@
             }
         }
 
+        .category-center{
+            border-right: 1px solid rgba($color: #9499a0, $alpha: 0.5);
+            height: 75px;
+            padding: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            a{
+                color: #61666D;
+                cursor: pointer;
+                display: inline-block;
+                text-align: center;
+                width: 60px;
+                padding: 7px;
+                height:28px;
+                background-color: #F6F7F8;
+                margin-right: 10px;
+                border-radius: 5px;
+                &:hover{
+                    background-color: #e3e5e7;
+                }
+            }
+        }
+
         .category-right{
-            background-color: green;
             height: 100px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 10px;
+            a{
+                text-decoration: none;
+                color: #707070;
+                display: inline-block;
+                margin: 6px;
+                cursor: pointer;
+                svg{
+                    margin-right: 5px;
+                    vertical-align:middle;
+                }
+                &:hover{
+                    color:#05AAE6;
+                }
+            }
         }
     }
 </style>

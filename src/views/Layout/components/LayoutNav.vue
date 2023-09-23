@@ -1,11 +1,7 @@
 <template>
-  <nav class="nav-container">
-    <el-row
-      :gutter="5"
-      justify="space-around"
-      style="padding-top: 5px; display: flex; align-items: center"
+    <div
+      class="nav-container"
     >
-      <el-col :xs="22" :span="10">
         <div class="col-left">
           <div class="nav-list">
             <def-svg-icon svg-name="home" svg-color="#ffffff"></def-svg-icon
@@ -34,24 +30,16 @@
             ><a>下载客户端</a>
           </div>
         </div>
-      </el-col>
-      <el-col :xs="0" :span="5"
-        >
         <div class="search-container">
           <input type="text" placeholder="请输入搜索内容" />
           <div class="search-icon">
             <def-svg-icon svg-name="search"></def-svg-icon>
           </div>
         </div>
-      </el-col>
-      <el-col :xs="2" :span="1"
-        >
         <div class="avatar">
           <img src="@/assets/images/avatar.jpg" />
         </div>
-      </el-col>
-      <el-col :xs="0" :span="6"
-        ><div class="col-right">
+<div class="col-right">
           <div class="nav-list nav-list-right">
             <div class="shake-icon">
               <def-svg-icon
@@ -118,8 +106,7 @@
               ><a>创作中心</a>
             </div>
           </div>
-        </div></el-col>
-        <el-col :xs="0" :span="2">
+        </div>
           <div class="contribute-atc">
           <el-button type="primary"
             ><def-svg-icon
@@ -130,34 +117,35 @@
             >投稿</el-button
           >
         </div>
-        </el-col>
-    </el-row>
-  </nav>
+    </div>
 </template>
 
 <script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .nav-container {
-  z-index: 999;
   position: absolute;
-  width: 100%;
-  padding: 10px;
+  z-index: 999;
+  padding:10px;
+  padding-top: 15px;
+  display:flex;
+  align-items: center;
   .col-left {
     display: flex;
-    justify-content: space-around;
+    flex-shrink: 0;
     svg {
       transform: translate(-20%, -10%);
     }
   }
   .col-right {
     display: flex;
-    justify-content: space-around;
+    flex-shrink: 0;
   }
   .nav-list {
     cursor: pointer;
     color: #fff;
     position: relative;
+    margin:0 12px ;
     .shake {
       display: inline-block;
       &:hover {
@@ -186,10 +174,12 @@
     }
   }
   .search-container {
+    flex-shrink: 0;
     position: relative;
     display: flex;
     align-items: center;
     height: 42px;
+    width: 250px;
     background-color: #dee8eb;
     border-radius: 8px;
     border: none;
@@ -208,7 +198,7 @@
 
     .search-icon {
       position: absolute;
-      right: 4px;
+      right: 8px;
       border-radius: 5px;
       padding: 8px;
       padding-right: 4px;
@@ -222,17 +212,15 @@
     }
   }
   .avatar {
+    flex-shrink: 0;
     cursor: pointer;
     width: 40px;
     height: 40px;
     border: #fff 2px solid;
     border-radius: 50%;
-    position: relative;
-    left: 20%;
+    margin-left: 15px;
 
     img {
-      width: 100%;
-      height: 100%;
       border-radius: 50%;
     }
   }

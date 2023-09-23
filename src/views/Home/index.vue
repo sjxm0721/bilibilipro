@@ -3,6 +3,14 @@
         <HomeBanner/>
         <div class="body">
             <HomeCategory/>
+            <div class="home-hot">
+                <div class="left-carousel">
+                    <HomeCarousel/>
+                </div>
+                <div class="right-hot">
+                    <HomeSuggest/>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -10,12 +18,29 @@
 <script setup lang="ts">
 import HomeBanner from './components/HomeBanner.vue'
 import HomeCategory from './components/HomeCategory.vue'
+import HomeCarousel from './components/HomeCarousel.vue';
+import HomeSuggest from './components/HomeSuggest.vue'
 
 </script>
 
 <style scoped lang="scss">
 .body{
-    width: 100%;
-    padding: 10px 100px;
+    padding: 10px 60px;
+}
+.home-hot{
+    height: 500px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    .left-carousel{
+        width: 48%;
+        height: 83%;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .right-hot{
+        width:48%;
+        height: 100%;
+    }
 }
 </style>

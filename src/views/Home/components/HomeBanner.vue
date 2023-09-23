@@ -16,7 +16,7 @@
   height: 144px;
   padding: 10px;
   background-image: url("@/assets/images/banner.jpg");
-  background-size: cover;
+  background-size:cover;
 
   .banner-logo img {
     width: 160px;

@@ -1,18 +1,8 @@
 <template>
-  <nav class="nav-container" :class="{ show: y > 50 }">
-    <el-row
-      :gutter="5"
-      justify="space-around"
-      style="padding-top: 5px; display: flex; align-items: center"
-    >
-      <el-col
-        :span="10"
-        :xs="22"
-        class="col-left"
-        style="display: flex; align-items: baseline"
-      >
-        <div class="nav-list">
-          <a>
+  <div class="nav-container" :class="{ show: y > 50 }">
+    <div class="col-left">
+      <div class="nav-list">
+        <a>
             <def-svg-icon
               svg-name="bilibili"
               svg-width="60px"
@@ -20,124 +10,118 @@
             ></def-svg-icon>
             <span>首页</span></a
           >
+      </div>
+      <div class="nav-list">
+        <a class="shake">番剧</a>
+      </div>
+      <div class="nav-list">
+        <a class="shake">直播</a>
+      </div>
+      <div class="nav-list">
+        <a class="shake">游戏中心</a>
+      </div>
+      <div class="nav-list">
+        <a class="shake">会员购</a>
+      </div>
+      <div class="nav-list">
+        <a class="shake">漫画</a>
+      </div>
+      <div class="nav-list">
+        <a class="shake">赛事</a>
+      </div>
+      <div class="nav-list">
+        <def-svg-icon svg-name="download" svg-color="#000000"></def-svg-icon
+        ><a>下载客户端</a>
+      </div>
+    </div>
+    <div class="search-container">
+      <input type="text" placeholder="请输入搜索内容" />
+      <div class="search-icon">
+        <def-svg-icon svg-name="search"></def-svg-icon>
+      </div>
+    </div>
+    <div class="avatar">
+      <img src="@/assets/images/avatar.jpg" />
+    </div>
+    <div class="col-right">
+      <div class="nav-list nav-list-right">
+        <div class="shake-icon">
+          <def-svg-icon
+            svg-name="member"
+            svg-width="20px"
+            svg-height="20px"
+            svg-color="#000000"
+          ></def-svg-icon
+          ><a>大会员</a>
         </div>
-        <div class="nav-list">
-          <a class="shake">番剧</a>
+      </div>
+      <div class="nav-list nav-list-right">
+        <div class="shake-icon">
+          <def-svg-icon
+            svg-name="message"
+            svg-width="20px"
+            svg-height="20px"
+            svg-color="#000000"
+          ></def-svg-icon
+          ><a>消息</a>
         </div>
-        <div class="nav-list">
-          <a class="shake">直播</a>
+      </div>
+      <div class="nav-list nav-list-right">
+        <div class="shake-icon">
+          <def-svg-icon
+            svg-name="dynamic"
+            svg-width="20px"
+            svg-height="20px"
+            svg-color="#000000"
+          ></def-svg-icon
+          ><a>动态</a>
         </div>
-        <div class="nav-list">
-          <a class="shake">游戏中心</a>
+      </div>
+      <div class="nav-list nav-list-right">
+        <div class="shake-icon">
+          <def-svg-icon
+            svg-name="collection"
+            svg-width="20px"
+            svg-height="20px"
+            svg-color="#000000"
+          ></def-svg-icon
+          ><a>收藏</a>
         </div>
-        <div class="nav-list">
-          <a class="shake">会员购</a>
+      </div>
+      <div class="nav-list nav-list-right">
+        <div class="shake-icon">
+          <def-svg-icon
+            svg-name="history"
+            svg-width="20px"
+            svg-height="20px"
+            svg-color="#000000"
+          ></def-svg-icon
+          ><a>历史</a>
         </div>
-        <div class="nav-list">
-          <a class="shake">漫画</a>
+      </div>
+      <div class="nav-list nav-list-right">
+        <div class="shake-icon">
+          <def-svg-icon
+            svg-name="idea"
+            svg-width="20px"
+            svg-height="20px"
+            svg-color="#000000"
+          ></def-svg-icon
+          ><a>创作中心</a>
         </div>
-        <div class="nav-list">
-          <a class="shake">赛事</a>
-        </div>
-        <div class="nav-list">
-          <def-svg-icon svg-name="download"></def-svg-icon><a>下载客户端</a>
-        </div>
-      </el-col>
-
-      <el-col :span="5" :xs="0" class="center-search">
-        <div class="search-container">
-          <input type="text" placeholder="请输入搜索内容" />
-          <div class="search-icon">
-            <def-svg-icon svg-name="search"></def-svg-icon>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="1" :xs="2">
-        <div class="avatar">
-          <img src="@/assets/images/avatar.jpg" />
-        </div>
-      </el-col>
-      <el-col :span="6" :xs="0">
-        <div class="col-right">
-          <div class="nav-list nav-list-right">
-            <div class="shake-icon">
-              <def-svg-icon
-                svg-name="member"
-                svg-width="20px"
-                svg-height="20px"
-              ></def-svg-icon
-              ><a>大会员</a>
-            </div>
-          </div>
-          <div class="nav-list nav-list-right">
-            <div class="shake-icon">
-              <def-svg-icon
-                svg-name="message"
-                svg-width="20px"
-                svg-height="20px"
-              ></def-svg-icon
-              ><a>消息</a>
-            </div>
-          </div>
-          <div class="nav-list nav-list-right">
-            <div class="shake-icon">
-              <def-svg-icon
-                svg-name="dynamic"
-                svg-width="20px"
-                svg-height="20px"
-              ></def-svg-icon
-              ><a>动态</a>
-            </div>
-          </div>
-          <div class="nav-list nav-list-right">
-            <div class="shake-icon">
-              <def-svg-icon
-                svg-name="collection"
-                svg-width="20px"
-                svg-height="20px"
-                svg-color="#000000"
-              ></def-svg-icon
-              ><a>收藏</a>
-            </div>
-          </div>
-          <div class="nav-list nav-list-right">
-            <div class="shake-icon">
-              <def-svg-icon
-                svg-name="history"
-                svg-width="20px"
-                svg-height="20px"
-              ></def-svg-icon
-              ><a>历史</a>
-            </div>
-          </div>
-          <div class="nav-list nav-list-right">
-            <div class="shake-icon">
-              <def-svg-icon
-                svg-name="idea"
-                svg-width="20px"
-                svg-height="20px"
-                svg-color="#000"
-              ></def-svg-icon
-              ><a>创作中心</a>
-            </div>
-          </div>
-        </div>
-      </el-col>
-
-      <el-col :span="2" :xs="0">
-        <div class="contribute-atc">
-          <el-button type="primary"
-            ><def-svg-icon
-              svg-name="upload"
-              svg-height="25px"
-              svg-width="25px"
-            ></def-svg-icon
-            >投稿</el-button
-          >
-        </div>
-      </el-col>
-    </el-row>
-  </nav>
+      </div>
+    </div>
+    <div class="contribute-atc">
+      <el-button type="primary"
+        ><def-svg-icon
+          svg-name="upload"
+          svg-height="25px"
+          svg-width="25px"
+        ></def-svg-icon
+        >投稿</el-button
+      >
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -153,8 +137,12 @@ const { y } = useScroll(window);
   z-index: 999999;
   height: 70px;
   background-color: #fff;
+  border-bottom: 1px solid rgba($color: #9499a0, $alpha: 0.3);
+
   width: 100%;
   padding: 10px;
+  display: flex;
+  align-items: center;
 
   //隐藏状态：往上平移自身高度+完全透明
   transform: translateY(-100%);
@@ -169,19 +157,21 @@ const { y } = useScroll(window);
 
   .col-left {
     display: flex;
-    justify-content: space-around;
+    align-items: baseline;
+    flex-shrink: 0;
     svg {
       transform: translate(-20%, -10%);
     }
   }
   .col-right {
     display: flex;
-    justify-content: space-around;
+    flex-shrink: 0;
   }
   .nav-list {
     cursor: pointer;
     color: #000;
     position: relative;
+    margin: 0 11px;
     .shake {
       display: inline-block;
       &:hover {
@@ -209,56 +199,54 @@ const { y } = useScroll(window);
       }
     }
   }
-  .center-search {
-    .search-container {
-      position: relative;
-      display: flex;
-      align-items: center;
-      height: 42px;
-      background-color: #dee8eb;
-      border-radius: 8px;
+  .search-container {
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 42px;
+    width: 250px;
+    background-color: #dee8eb;
+    border-radius: 8px;
+    border: none;
+    input {
+      width: 80%;
+      height: 80%;
+      margin-left: 5px;
+      padding: 8px;
       border: none;
-      input {
-        width: 80%;
-        height: 80%;
-        margin-left: 5px;
-        padding: 8px;
-        border: none;
-        border-radius: 6px;
-        background-color: #dee8eb;
-        &:focus {
-          background-color: #d3dde0;
-        }
+      border-radius: 6px;
+      background-color: #dee8eb;
+      &:focus {
+        background-color: #d3dde0;
       }
+    }
 
-      .search-icon {
-        position: absolute;
-        right: 4px;
-        border-radius: 5px;
-        padding: 8px;
-        padding-right: 4px;
-        &:hover {
-          background-color: #d3dde0;
-        }
-      }
-
+    .search-icon {
+      position: absolute;
+      right: 8px;
+      border-radius: 5px;
+      padding: 8px;
+      padding-right: 4px;
       &:hover {
-        background-color: #fff;
+        background-color: #d3dde0;
       }
+    }
+
+    &:hover {
+      background-color: #fff;
     }
   }
   .avatar {
+    flex-shrink: 0;
     cursor: pointer;
     width: 40px;
     height: 40px;
     border: #fff 2px solid;
     border-radius: 50%;
-    position: relative;
-    left: 20%;
+    margin-left: 15px;
 
     img {
-      width: 100%;
-      height: 100%;
       border-radius: 50%;
     }
   }
