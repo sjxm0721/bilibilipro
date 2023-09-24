@@ -13,7 +13,7 @@
 <style scoped lang="scss">
 .banner-container {
   position: relative;
-  height: 144px;
+  height: 130px;
   padding: 10px;
   background-image: url("@/assets/images/banner.jpg");
   background-size:cover;

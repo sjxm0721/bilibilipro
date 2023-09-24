@@ -184,7 +184,7 @@ console.log(routePath);
     cursor: pointer;
     color: #000;
     position: relative;
-    margin: 0 11px;
+    margin: 0 8px;
     .shake {
       display: inline-block;
       &:hover {

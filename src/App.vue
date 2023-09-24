@@ -8,7 +8,6 @@
 <style lang="scss" scoped>
 #app{
     height: 100vh;
-    width: 1360px;
-    min-width: 1360px;
+    min-width: 1240px;
 }
 </style>

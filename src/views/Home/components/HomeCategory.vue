@@ -90,6 +90,7 @@ const svgColorReturn = ()=>{
             .left-box{
                 cursor: pointer;
                 width: 45%;
+                margin-right: 15px;
                 .left-icon1,
                 .left-icon2{
                     display: inline-block;
@@ -116,7 +117,7 @@ const svgColorReturn = ()=>{
         .category-center{
             border-right: 1px solid rgba($color: #9499a0, $alpha: 0.5);
             height: 75px;
-            padding: 5px;
+            padding: 4px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -130,7 +131,7 @@ const svgColorReturn = ()=>{
                 padding: 7px;
                 height:28px;
                 background-color: #F6F7F8;
-                margin-right: 10px;
+                margin-right: 4px;
                 border-radius: 5px;
                 &:hover{
                     background-color: #e3e5e7;
@@ -143,15 +144,15 @@ const svgColorReturn = ()=>{
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            padding: 10px;
+            padding: 6px;
             a{
                 text-decoration: none;
                 color: #707070;
                 display: inline-block;
-                margin: 6px;
+                margin-right: 10px;
                 cursor: pointer;
                 svg{
-                    margin-right: 5px;
+                    margin-right: 4px;
                     vertical-align:middle;
                 }
                 &:hover{
