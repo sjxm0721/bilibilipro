@@ -12,7 +12,7 @@
           <def-svg-icon
             svg-name="bilibili"
             svg-width="60px"
-            svg-height="30px"
+            svg-height="25px"
           ></def-svg-icon>
           <span>首页</span></a
         >

@@ -1,7 +1,6 @@
 <template>
-  <div
-    class="nav-container"
-  >
+  <div style="position: relative;">
+    <div class="nav-container">
       <div class="col-left">
         <div class="nav-list">
           <def-svg-icon svg-name="home" svg-color="#ffffff"></def-svg-icon
@@ -39,7 +38,7 @@
       <div class="avatar">
         <img src="@/assets/images/avatar.jpg" />
       </div>
-<div class="col-right">
+      <div class="col-right">
         <div class="nav-list nav-list-right">
           <div class="shake-icon">
             <def-svg-icon
@@ -107,7 +106,7 @@
           </div>
         </div>
       </div>
-        <div class="contribute-atc">
+      <div class="contribute-atc">
         <el-button type="primary"
           ><def-svg-icon
             svg-name="upload"
@@ -117,123 +116,138 @@
           >投稿</el-button
         >
       </div>
+    </div>
+    <div class="banner-logo">
+      <a href="javascript:;">
+        <img src="@/assets/images/logo.jpg" />
+      </a>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts"></script>
 
 <style scoped lang="scss">
-.nav-container {
-position: absolute;
-z-index: 999;
-padding:10px;
-padding-top: 15px;
-display:flex;
-justify-content: space-around;
-align-items: center;
-width: 100%;
-.col-left {
-  display: flex;
-  flex-shrink: 0;
-  svg {
-    transform: translate(-20%, -10%);
-  }
-}
-.col-right {
-  display: flex;
-  flex-shrink: 0;
-}
-.nav-list {
+.banner-logo img {
+  width: 160px;
+  height: 80px;
+  left: 42px;
+  bottom: 8px;
+  position: absolute;
   cursor: pointer;
-  color: #fff;
-  position: relative;
-  margin:0 9px ;
-  .shake {
-    display: inline-block;
-    &:hover {
-      animation: animate 0.5s ease-in-out 1;
+}
+.nav-container {
+  height: 150px;
+  padding: 15px;
+  padding-top: 15px;
+  background-image: url("@/assets/images/banner.jpg");
+  background-size: cover;
+  display: flex;
+  justify-content: space-around;
+  .col-left {
+    display: flex;
+    margin-top: 10px;
+    width: 40%;
+    height: 25px;
+    justify-content: space-around;
+    svg {
+      transform: translate(-20%, -10%);
     }
   }
-  .shake-icon {
+  .col-right {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    &:hover {
-      & svg {
+    width: 25%;
+    height: 25px;
+    justify-content: space-around;
+  }
+  .nav-list {
+    cursor: pointer;
+    color: #fff;
+    .shake {
+      display: inline-block;
+      &:hover {
         animation: animate 0.5s ease-in-out 1;
       }
     }
-  }
-  @keyframes animate {
-    0%,
-    50%,
-    100% {
-      transform: translateY(0);
+    .shake-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      &:hover {
+        & svg {
+          animation: animate 0.5s ease-in-out 1;
+        }
+      }
     }
-    20% {
-      transform: translateY(-4px);
+    @keyframes animate {
+      0%,
+      50%,
+      100% {
+        transform: translateY(0);
+      }
+      20% {
+        transform: translateY(-4px);
+      }
     }
   }
-}
-.search-container {
-  flex-shrink: 0;
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 42px;
-  width: 250px;
-  background-color: #dee8eb;
-  border-radius: 8px;
-  border: none;
-  input {
-    width: 80%;
-    height: 80%;
-    margin-left: 5px;
-    padding: 8px;
-    border: none;
-    border-radius: 6px;
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 20%;
+    height: 42px;
+    width: 250px;
     background-color: #dee8eb;
-    &:focus {
-      background-color: #d3dde0;
+    border-radius: 8px;
+    border: none;
+    input {
+      width: 80%;
+      height: 80%;
+      margin-left: 5px;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      background-color: #dee8eb;
+      &:focus {
+        background-color: #d3dde0;
+      }
     }
-  }
 
-  .search-icon {
-    position: absolute;
-    right: 8px;
-    border-radius: 5px;
-    padding: 8px;
-    padding-right: 4px;
+    .search-icon {
+      position: absolute;
+      right: 8px;
+      border-radius: 5px;
+      padding: 8px;
+      padding-right: 4px;
+      &:hover {
+        background-color: #d3dde0;
+      }
+    }
+
     &:hover {
-      background-color: #d3dde0;
+      background-color: #fff;
+    }
+  }
+  .avatar {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border: #fff 2px solid;
+    border-radius: 50%;
+    margin-left: 15px;
+
+    img {
+      border-radius: 50%;
     }
   }
 
-  &:hover {
-    background-color: #fff;
+  .nav-list-right {
+    a {
+      margin: 2px;
+    }
   }
-}
-.avatar {
-  flex-shrink: 0;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  border: #fff 2px solid;
-  border-radius: 50%;
-  margin-left: 15px;
-
-  img {
-    border-radius: 50%;
+  .contribute-atc {
+    margin: 5px;
   }
-}
-
-.nav-list-right {
-  a {
-    margin: 2px;
-  }
-}
-.contribute-atc {
-  margin: 5px;
-}
 }
 </style>
