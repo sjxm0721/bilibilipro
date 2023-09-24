@@ -1,29 +1,39 @@
 <template>
   <div class="container">
     <div class="top-pic">
-      <img :src="itemPicture" />
+      <!-- <img :src="itemPicture" /> -->
+      <img src="@/assets/images/tk.jpg">
       <div class="video-attr">
         <def-svg-icon svg-name="clickNum"></def-svg-icon>
-        {{ clickNum }}
+        <!-- {{ clickNum }} -->
+        114514
       </div>
       <div class="video-attr">
         <def-svg-icon svg-name="barrageNum"></def-svg-icon>
-        {{ barrageNum }}
+        <!-- {{ barrageNum }} -->
+        8379
     </div>
-      <div class="video-attr">{{ videoTime }}</div>
+      <div class="video-attr">
+        <!-- {{ videoTime }} -->
+        111:29
+      </div>
       <div id="shadow"></div>
     </div>
     <div class="center-title">
         <a>
-            {{ title }}
+            <!-- {{ title }} -->
+          <!-- 远子大小姐XX视频意外流出 -->
+          ldjaldwaldjwaldkjwalkdjalwkdjalwkdjawlkdjawlkdjawlkdjawlkdjawlkdjawldkjawlkdjawldldja
         </a>
     </div>
     <div class="bottom-info">
         <a class="author">
-            {{ author }}
+            <!-- {{ author }} -->
+            不知出家的下流女仆
         </a>
         <a class="post-time">
-            {{ postTime }}
+            <!-- {{ postTime }} -->
+            1922-2-22
         </a>
     </div>
   </div>
@@ -49,6 +59,9 @@ defineProps({
 
 <style lang="scss" scoped>
 .container {
+  display: flex;
+  flex-direction: column;
+
   border-radius: 5px;
   overflow: hidden;
   .top-pic {
@@ -96,6 +109,7 @@ defineProps({
   }
   .center-title {
     height: 16%;
+    width: 100%;
     line-height: 1.2em;
     font-weight:500;
     overflow: hidden;
@@ -117,16 +131,17 @@ defineProps({
     width: 100%;
     height: 12%;
     a{
-        cursor: pointer;
         font-size: 1em;
         line-height: 1em;
         color: rgba($color: #707070, $alpha: 0.8);
+        
+    }
+    .author{
+      cursor: pointer;
+        margin-right: 10%;
         &:hover{
             color:#05AAE6;
         }
-    }
-    .author{
-        margin-right: 10%;
     }
   }
 }

@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from '@/views/Home/index.vue'
 import Layout from '@/views/Layout/index.vue'
+import Video from '@/views/Video/index.vue'
 
 let router = createRouter({
   history: createWebHashHistory(),
@@ -13,6 +14,10 @@ let router = createRouter({
           path: '', // 子路由的路径
           component: Home, // 子路由对应的组件
         },
+        {
+          path: 'video/BV1',
+          component: Video,
+        }
       ],
     },
   ],

@@ -11,6 +11,9 @@
                     <HomeSuggest/>
                 </div>
             </div>
+            <div class="hot-video">
+                <HomeVideo/>
+            </div>
         </div>
     </div>
 </template>
@@ -18,16 +21,17 @@
 <script setup lang="ts">
 import HomeBanner from './components/HomeBanner.vue'
 import HomeCategory from './components/HomeCategory.vue'
-import HomeCarousel from './components/HomeCarousel.vue';
+import HomeCarousel from './components/HomeCarousel.vue'
 import HomeSuggest from './components/HomeSuggest.vue'
+import HomeVideo from './components/HomeVideo.vue'
 
 </script>
 
 <style scoped lang="scss">
 .body{
     padding: 10px 60px;
-}
-.home-hot{
+
+    .home-hot{
     height: 500px;
     display: flex;
     justify-content: space-between;
@@ -43,4 +47,6 @@ import HomeSuggest from './components/HomeSuggest.vue'
         height: 100%;
     }
 }
+}
+
 </style>
