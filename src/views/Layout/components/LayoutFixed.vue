@@ -149,6 +149,7 @@ console.log(routePath);
   padding: 10px;
   display: flex;
   align-items: center;
+  justify-content: space-around;
 
   //隐藏状态：往上平移自身高度+完全透明
   transform: translateY(-100%);
