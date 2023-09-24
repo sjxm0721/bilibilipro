@@ -1,5 +1,6 @@
 <template>
     <div>
+        <HomeNav/>
         <HomeBanner/>
         <div class="body">
             <HomeCategory/>
@@ -19,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import HomeNav from './components/HomeNav.vue'
 import HomeBanner from './components/HomeBanner.vue'
 import HomeCategory from './components/HomeCategory.vue'
 import HomeCarousel from './components/HomeCarousel.vue'

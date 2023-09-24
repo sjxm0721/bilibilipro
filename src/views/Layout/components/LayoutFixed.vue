@@ -1,15 +1,21 @@
 <template>
-  <div class="nav-container" :class="{ show: y > 50 }">
+  <div
+    class="nav-container"
+    :class="[
+      { show: y > 50 || routePath !== '/' },
+      { fixed: y > 50 || routePath === '/' },
+    ]"
+  >
     <div class="col-left">
       <div class="nav-list">
         <a>
-            <def-svg-icon
-              svg-name="bilibili"
-              svg-width="60px"
-              svg-height="30px"
-            ></def-svg-icon>
-            <span>首页</span></a
-          >
+          <def-svg-icon
+            svg-name="bilibili"
+            svg-width="60px"
+            svg-height="30px"
+          ></def-svg-icon>
+          <span>首页</span></a
+        >
       </div>
       <div class="nav-list">
         <a class="shake">番剧</a>
@@ -125,16 +131,16 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from "vue-router";
 import { useScroll } from "@vueuse/core";
+import { ref } from "vue";
 const { y } = useScroll(window);
+const routePath = ref(useRoute().fullPath);
+console.log(routePath);
 </script>
 
 <style scoped lang="scss">
 .nav-container {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 999999;
   height: 70px;
   background-color: #fff;
   border-bottom: 1px solid rgba($color: #9499a0, $alpha: 0.3);
@@ -153,6 +159,13 @@ const { y } = useScroll(window);
     transition: all 0.3s linear;
     transform: none;
     opacity: 1;
+  }
+
+  &.fixed {
+    position: fixed;
+    z-index: 999999;
+    left: 0;
+    top: 0;
   }
 
   .col-left {

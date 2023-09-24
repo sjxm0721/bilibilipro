@@ -1,17 +1,17 @@
 <template>
   <div class="container">
-    <div class="top-pic">
+    <div class="top-pic" @click="toVideo">
       <!-- <img :src="itemPicture" /> -->
       <img src="@/assets/images/tk.jpg">
       <div class="video-attr">
-        <def-svg-icon svg-name="clickNum"></def-svg-icon>
+        <def-svg-icon svg-name="clickNum" svg-color="#ffffff"></def-svg-icon>
         <!-- {{ clickNum }} -->
         114514
       </div>
       <div class="video-attr">
-        <def-svg-icon svg-name="barrageNum"></def-svg-icon>
+        <def-svg-icon svg-name="barrageNum" svg-color="#ffffff"></def-svg-icon>
         <!-- {{ barrageNum }} -->
-        8379
+        11037
     </div>
       <div class="video-attr">
         <!-- {{ videoTime }} -->
@@ -19,11 +19,10 @@
       </div>
       <div id="shadow"></div>
     </div>
-    <div class="center-title">
+    <div class="center-title" @click="toVideo">
         <a>
             <!-- {{ title }} -->
-          <!-- 远子大小姐XX视频意外流出 -->
-          ldjaldwaldjwaldkjwalkdjalwkdjalwkdjawlkdjawlkdjawlkdjawlkdjawlkdjawldkjawlkdjawldldja
+          抖m远子大小姐XX视频意外流出
         </a>
     </div>
     <div class="bottom-info">
@@ -40,6 +39,8 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+const router=useRouter()
 defineProps({
   itemPicture: String,
   clickNum: {
@@ -55,6 +56,10 @@ defineProps({
   author: String,
   postTime: String,
 });
+
+const toVideo=()=>{
+    router.push("/video/BV1")
+}
 </script>
 
 <style lang="scss" scoped>
