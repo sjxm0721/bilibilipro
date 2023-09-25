@@ -118,7 +118,7 @@
       </div>
     </div>
     <div class="contribute-atc">
-      <el-button type="primary"
+      <el-button type="success"
         ><def-svg-icon
           svg-name="upload"
           svg-height="25px"
