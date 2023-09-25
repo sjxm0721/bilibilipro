@@ -13,17 +13,17 @@
           <div class="about">
             <el-row :gutter="40" justify="start">
               <el-col
-                :span="12"
+                :span="14"
                 style="display: flex; flex-direction: row"
                 class="col1"
               >
-                <el-col :span="8">
+                <el-col :span="7">
                   <div class="about-box-col">
                     <a>关于我们</a>
                     <a>联系我们</a>
                   </div>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="7">
                   <div class="about-box-col">
                     <a>友情链接</a>
                     <a>加入我们</a>

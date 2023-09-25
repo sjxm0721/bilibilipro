@@ -3,10 +3,12 @@
     <div class="top-pic" @click="toVideo">
       <!-- <img :src="itemPicture" /> -->
       <img src="@/assets/images/tk.jpg">
-      <div class="video-attr">
+      
+    <div class="video-attr">
         <def-svg-icon svg-name="clickNum" svg-color="#ffffff"></def-svg-icon>
         <!-- {{ clickNum }} -->
-        114514
+        <!-- 114514 -->
+        1000万
       </div>
       <div class="video-attr">
         <def-svg-icon svg-name="barrageNum" svg-color="#ffffff"></def-svg-icon>
@@ -85,13 +87,13 @@ const toVideo=()=>{
       align-items: center;
       z-index: 999;
       svg{
-        margin-right: 5%;
+        margin-right: 3px;
       }
       &:nth-child(2) {
         left: 5%;
       }
       &:nth-child(3) {
-        left: 30%;
+        left: 35%;
       }
       &:nth-child(4) {
         right: 5%;

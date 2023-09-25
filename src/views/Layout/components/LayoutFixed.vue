@@ -144,8 +144,9 @@ console.log(routePath);
   height: 70px;
   background-color: #fff;
   border-bottom: 1px solid rgba($color: #9499a0, $alpha: 0.3);
-
   width: 100%;
+  min-width: 1240px;
+  max-width: 1440px;
   padding: 10px;
   display: flex;
   align-items: center;
@@ -172,20 +173,21 @@ console.log(routePath);
   .col-left {
     display: flex;
     align-items: baseline;
-    flex-shrink: 0;
+    justify-content: space-around;
+    // width: 40%;
+    width: 500px;
     svg {
       transform: translate(-20%, -10%);
     }
   }
   .col-right {
     display: flex;
-    flex-shrink: 0;
+    width: 300px;
+    justify-content: space-around;
   }
   .nav-list {
     cursor: pointer;
     color: #000;
-    position: relative;
-    margin: 0 8px;
     .shake {
       display: inline-block;
       &:hover {
@@ -252,7 +254,7 @@ console.log(routePath);
     }
   }
   .avatar {
-    flex-shrink: 0;
+    // flex-shrink: 0;
     cursor: pointer;
     width: 40px;
     height: 40px;

@@ -9,5 +9,6 @@
 #app{
     height: 100vh;
     min-width: 1240px;
+    max-width: 1440px;
 }
 </style>

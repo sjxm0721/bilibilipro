@@ -28,7 +28,6 @@
                     <a>娱乐</a>
                     <a>科技</a>
                     <a>美食</a>
-                    <a>汽车</a>
                     <a>运动</a>
                     <a>电影</a>
                     <a>电视剧</a>
@@ -37,7 +36,6 @@
                     <a>音乐</a>
                     <a>影视</a>
                     <a>知识</a>
-                    <a>资讯</a>
                     <a>生活</a>
                     <a>时尚</a>
                     <a>更多</a>
@@ -118,20 +116,19 @@ const svgColorReturn = ()=>{
             border-right: 1px solid rgba($color: #9499a0, $alpha: 0.5);
             height: 75px;
             padding: 4px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
+            display: grid;
+            grid-template-columns: 8% 8% 8% 8% 8% 8% 8% 8% 8% 8%;
+            grid-column-gap: 2%;
+            grid-template-rows:40% 40%;
+            grid-row-gap: 20%;
+            overflow: hidden;
             a{
                 color: #61666D;
                 cursor: pointer;
                 display: inline-block;
                 text-align: center;
-                width: 60px;
                 padding: 7px;
-                height:28px;
                 background-color: #F6F7F8;
-                margin-right: 4px;
                 border-radius: 5px;
                 &:hover{
                     background-color: #e3e5e7;
@@ -141,18 +138,23 @@ const svgColorReturn = ()=>{
 
         .category-right{
             height: 100px;
-            display: flex;
-            flex-wrap: wrap;
+            // display: flex;
+            // flex-wrap: wrap;
+            // align-items: center;
+            display: grid;
+            grid-template-columns: 25% 25% 40%;
+            grid-column-gap: 5%;
+            grid-template-rows:45% 45%;
+            grid-row-gap: 10%;
             align-items: center;
             padding: 6px;
             a{
                 text-decoration: none;
                 color: #707070;
                 display: inline-block;
-                margin-right: 10px;
                 cursor: pointer;
                 svg{
-                    margin-right: 4px;
+                    margin-right: 5%;
                     vertical-align:middle;
                 }
                 &:hover{
