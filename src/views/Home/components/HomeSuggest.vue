@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="suggest-container">
     <!-- <def-video-item></def-video-item> -->
     <div class="item" v-for="item in hots" :key="item.id">
       <def-video-item
@@ -63,7 +63,7 @@ const hots = ref([
 </script>
 
 <style lang="scss" scoped>
-.container {
+.suggest-container {
   font-size: 14px;
   width: 100%;
   height: 100%;
@@ -73,6 +73,7 @@ const hots = ref([
   align-content: space-between;
 
   .item {
+    display: flex;
     width: 48%;
     height: 48%;
     border-radius: 10px;

@@ -7,7 +7,7 @@
     ]"
   >
     <div class="col-left">
-      <div class="nav-list">
+      <div class="nav-list" @click="toHome">
         <a>
           <def-svg-icon
             svg-name="bilibili"
@@ -46,7 +46,7 @@
         <def-svg-icon svg-name="search"></def-svg-icon>
       </div>
     </div>
-    <div class="avatar">
+    <div class="avatar" @click="toMember">
       <img src="@/assets/images/avatar.jpg" />
     </div>
     <div class="col-right">
@@ -131,12 +131,21 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute,useRouter } from "vue-router";
 import { useScroll } from "@vueuse/core";
 import { ref } from "vue";
 const { y } = useScroll(window);
 const routePath = ref(useRoute().fullPath);
-console.log(routePath);
+const router = useRouter()
+
+const toHome = ()=>{
+  router.push("/")
+}
+
+const toMember=()=>{
+  router.push("/member/114514")
+}
+
 </script>
 
 <style scoped lang="scss">

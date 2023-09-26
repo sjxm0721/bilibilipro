@@ -2,7 +2,7 @@
   <div style="position: relative;">
     <div class="nav-container">
       <div class="col-left">
-        <div class="nav-list">
+        <div class="nav-list" @click="toHome">
           <def-svg-icon svg-name="home" svg-color="#ffffff"></def-svg-icon
           ><a>首页</a>
         </div>
@@ -35,7 +35,7 @@
           <def-svg-icon svg-name="search"></def-svg-icon>
         </div>
       </div>
-      <div class="avatar">
+      <div class="avatar" @click="toMember">
         <img src="@/assets/images/avatar.jpg" />
       </div>
       <div class="col-right">
@@ -125,7 +125,20 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+
+const toHome = ()=>{
+  router.push("/")
+}
+
+const toMember=()=>{
+  router.push("/member/114514")
+}
+
+</script>
 
 <style scoped lang="scss">
 .banner-logo img {

@@ -1,17 +1,17 @@
 <template>
-  <div class="container">
+  <div class="video-item-container">
     <div class="top-pic" @click="toVideo">
       <!-- <img :src="itemPicture" /> -->
       <img src="@/assets/images/tk.jpg">
       
     <div class="video-attr">
-        <def-svg-icon svg-name="clickNum" svg-color="#ffffff"></def-svg-icon>
+        <def-svg-icon svg-name="clickNum" svg-color="#ffffff" svg-height="1em" svg-width="1em"></def-svg-icon>
         <!-- {{ clickNum }} -->
         <!-- 114514 -->
         1000万
       </div>
       <div class="video-attr">
-        <def-svg-icon svg-name="barrageNum" svg-color="#ffffff"></def-svg-icon>
+        <def-svg-icon svg-name="barrageNum" svg-color="#ffffff" svg-height="1em" svg-width="1em"></def-svg-icon>
         <!-- {{ barrageNum }} -->
         11037
     </div>
@@ -65,19 +65,22 @@ const toVideo=()=>{
 </script>
 
 <style lang="scss" scoped>
-.container {
+.video-item-container {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 
-  border-radius: 5px;
+  border-radius: 3%;
   overflow: hidden;
+  font-size: 1em;
   .top-pic {
+    font-size: 1em;
     height: 64%;
     width: 100%;
     position: relative;
     cursor: pointer;
     img {
-      border-radius: 5px;
+      border-radius: 3%;
     }
     .video-attr {
       position: absolute;
@@ -86,8 +89,9 @@ const toVideo=()=>{
       display: flex;
       align-items: center;
       z-index: 999;
+      font-size: 1em;
       svg{
-        margin-right: 3px;
+        margin-right: 0.2em;
       }
       &:nth-child(2) {
         left: 5%;
@@ -109,21 +113,21 @@ const toVideo=()=>{
         opacity: 0.3;
         background-image: linear-gradient(to top,#000,#f0f0f0);
         position: absolute;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5%;
+        border-bottom-right-radius: 5%;
         bottom: 0;
       }
   }
   .center-title {
     height: 16%;
     width: 100%;
-    line-height: 1.2em;
     font-weight:500;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-wrap: break-word;
+    font-size: 1em;
     a{
         font-size: 1.2em;
         cursor: pointer;
@@ -137,6 +141,7 @@ const toVideo=()=>{
     align-items: center;
     width: 100%;
     height: 12%;
+    font-size: 1em;
     a{
         font-size: 1em;
         line-height: 1em;

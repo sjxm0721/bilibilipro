@@ -1,6 +1,6 @@
 <template>
-  <div class="main-content">
-    <div class="left-image">
+  <div class="video-panel-item-content">
+    <div class="left-image" @click="toVideo">
       <img src="@/assets/images/lian.jpg" />
       <img :src="itemPicture">
       <div class="time-last">
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="right-info">
-      <div class="info-title">
+      <div class="info-title" @click="toVideo">
         <!-- {{title}} -->
         抖s女王莲，没有她就弄不出来
       </div>
@@ -77,7 +77,7 @@ const toVideo=()=>{
 </script>
 
 <style scoped lang="scss">
-.main-content {
+.video-panel-item-content {
   display: flex;
   justify-content: space-between;
   .left-image {
@@ -85,7 +85,7 @@ const toVideo=()=>{
     border-radius: 3%;
     overflow: hidden;
     position: relative;
-    width: 40%;
+    width: 44%;
     .time-last {
       display: inline-block;
       padding: 2%;
@@ -100,7 +100,7 @@ const toVideo=()=>{
     }
   }
   .right-info {
-    width: 56%;
+    width: 52%;
     .info-title {
       cursor: pointer;
       font-size: 1.2em;

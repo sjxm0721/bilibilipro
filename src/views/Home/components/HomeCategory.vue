@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="category-container">
         <el-row  justify="space-between" :gutter="10" style="align-items: center;">
             <el-col :span="3">
                 <div class="category-left">
@@ -80,7 +80,7 @@ const svgColorReturn = ()=>{
 </script>
 
 <style lang="scss" scoped>
-    .container{
+    .category-container{
         padding: 0 20px;
         .category-left{
             display: flex;

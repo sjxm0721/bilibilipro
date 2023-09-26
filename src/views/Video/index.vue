@@ -379,7 +379,7 @@ const svgColorReturn = () => {
       margin-top: 25px;
       border-top: 1px solid rgba($color: #9499a0, $alpha: 0.5);
       .other-video {
-        margin-top: 15px;
+        margin-top: 20px;
         width: 100%;
       }
     }
