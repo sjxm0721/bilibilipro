@@ -20,7 +20,7 @@
         </div>
         <div class="info-route">
           <div class="route-left">
-            <div id="home">
+            <div id="home" @click="changeRoute(0)" :class="{choosed:routeChoosed===0}">
               <def-svg-icon
                 svg-name="memberHome"
                 svg-color="#00C091"
@@ -29,7 +29,7 @@
               ></def-svg-icon>
               主页
             </div>
-            <div id="active">
+            <div id="active" @click="changeRoute(1)" :class="{choosed:routeChoosed===1}">
               <def-svg-icon
                 svg-name="memberActive"
                 svg-color="#FB7299"
@@ -38,7 +38,7 @@
               ></def-svg-icon>
               动态
             </div>
-            <div id="contribute">
+              <div id="contribute" @click="changeRoute(2)" :class="{choosed:routeChoosed===2}">
               <def-svg-icon
                 svg-name="memberContribute"
                 svg-color="#02B5DA"
@@ -47,7 +47,8 @@
               ></def-svg-icon>
               投稿
             </div>
-            <div id="collect">
+
+            <div id="collect" @click="changeRoute(3)" :class="{choosed:routeChoosed===3}">
               <def-svg-icon
                 svg-name="collectionSolid"
                 svg-color="#F3A034"
@@ -84,7 +85,47 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRoute,useRouter } from 'vue-router';
+import { ref,onMounted } from 'vue';
+
+const routeChoosed = ref(0)
+const router = useRouter()
+const route = useRoute()
+
+onMounted(()=>{
+  const newPath:string = route.fullPath
+  if(newPath.includes('dynamic')){
+    routeChoosed.value = 1
+  }
+  else if(newPath.includes('video')){
+    routeChoosed.value = 2
+  }
+  else if(newPath.includes('favlist')){
+    routeChoosed.value = 3
+  }
+  else{
+    routeChoosed.value = 0
+  }
+})
+
+const changeRoute = (newRoute:number)=>{
+  routeChoosed.value = newRoute
+  if(newRoute===0){
+    router.push("/member/114514")
+  }
+  else if(newRoute===1){
+    router.push("/member/114514/dynamic")
+  }
+  else if(newRoute===2){
+    router.push("/member/114514/video")
+  }
+  else if(newRoute===3){
+    router.push("/member/114514/favlist")
+  }
+}
+
+</script>
 
 <style scoped lang="scss">
 .member-container {
@@ -159,6 +200,9 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        .choosed{
+          color:#00a1d6;
+        }
         div {
           cursor: pointer;
           margin: 0 2%;
@@ -196,6 +240,8 @@
   }
   .container-body{
     margin: 10px 0;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px #eee;
   }
 }
 </style>

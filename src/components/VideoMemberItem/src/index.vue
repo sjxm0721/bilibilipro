@@ -14,22 +14,17 @@
           抖s女王莲，没有她就弄不出来
         </div>
         <div class="info-num">
-          <span style="margin-right: 5%"
-            ><def-svg-icon svg-name="clickNum" svg-color="#9499A0"></def-svg-icon
+          <div class="info-num-left"
+            ><def-svg-icon svg-name="clickNum" svg-color="#9499A0" svg-height="1em" svg-width="1.2em"></def-svg-icon
             >
               <!-- {{clickNum}} -->
             114514
-            </span
+            </div
           >
-          <span
-            ><def-svg-icon
-              svg-name="barrageNum"
-              svg-color="#9499A0"
-            ></def-svg-icon
-            >
-            <!-- {{ barrageNum }} -->
-            11037
-            </span
+          <div class="info-num-right">
+            <!-- {{ postTime }} -->
+            02-18
+            </div
           >
         </div>
       </div>
@@ -57,10 +52,7 @@
       type: Number,
       default: 0,
     },
-    barrageNum: {
-      type: Number,
-      default: 0,
-    },
+    postTime:String,
     videoTime: String,
     title: String,
   });
@@ -113,8 +105,16 @@
       .info-num {
         font-size: 1em;
         color: #9499A0;
+        .info-num-left,
+        .info-num-right{
+          font-size: 1em;
+          line-height: 1.5em;
+          display: inline-block;
+          width: 50%;
+        }
         svg{
-          margin-right:2%
+          margin:2%;
+          font-size: 1em;
         }
       }
     }

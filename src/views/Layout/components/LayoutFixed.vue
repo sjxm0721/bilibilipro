@@ -61,7 +61,7 @@
           ><a>大会员</a>
         </div>
       </div>
-      <div class="nav-list nav-list-right">
+      <div class="nav-list nav-list-right" @click="toMessage">
         <div class="shake-icon">
           <def-svg-icon
             svg-name="message"
@@ -144,6 +144,10 @@ const toHome = ()=>{
 
 const toMember=()=>{
   router.push("/member/114514")
+}
+
+const toMessage=()=>{
+  router.push("/message")
 }
 
 </script>
