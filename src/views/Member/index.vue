@@ -59,11 +59,11 @@
             </div>
           </div>
           <div class="route-right">
-            <div style="cursor: pointer;">
+            <div style="cursor: pointer;" @click="toFollow">
               <div class="route-right-top">关注数</div>
               <div class="route-right-number">71</div>
             </div>
-            <div style="cursor: pointer;">
+            <div style="cursor: pointer;" @click="toFans">
               <div class="route-right-top">粉丝数</div>
               <div class="route-right-number">233万</div>
             </div>
@@ -96,16 +96,16 @@ const route = useRoute()
 onMounted(()=>{
   const newPath:string = route.fullPath
   if(newPath.includes('dynamic')){
-    routeChoosed.value = 1
+    changeRoute(1)
   }
   else if(newPath.includes('video')){
-    routeChoosed.value = 2
+    changeRoute(2)
   }
   else if(newPath.includes('favlist')){
-    routeChoosed.value = 3
+    changeRoute(3)
   }
   else{
-    routeChoosed.value = 0
+    changeRoute(0)
   }
 })
 
@@ -123,6 +123,14 @@ const changeRoute = (newRoute:number)=>{
   else if(newRoute===3){
     router.push("/member/114514/favlist")
   }
+}
+
+const toFans=()=>{
+  router.push('/member/114514/fans/fans')
+}
+
+const toFollow=()=>{
+  router.push('/member/114514/fans/follow')
 }
 
 </script>

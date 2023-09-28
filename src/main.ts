@@ -2,8 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 
-
-
+//引入NPlayer播放器
+import NPlayer from "@nplayer/vue";
 
 //引入svg
 import 'virtual:svg-icons-register'
@@ -25,5 +25,6 @@ const app = createApp(App)
 
 app.use(globalComponent)
 app.use(router)
+app.use(NPlayer)
 
 app.mount('#app')

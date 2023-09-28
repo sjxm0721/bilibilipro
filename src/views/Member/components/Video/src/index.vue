@@ -95,7 +95,7 @@
           line-height: 50px;
           padding-left: 20px;
           height: 50px;
-  
+          transition: background-color .3s ease;
           .category {
             display: inline-block;
             width: 80px;

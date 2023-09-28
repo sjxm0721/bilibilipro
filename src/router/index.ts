@@ -43,6 +43,20 @@ let router = createRouter({
               path:'favlist',
               component:()=>import('@/views/Member/components/Favlist/src/index.vue')
             },
+            {
+              path:'fans',
+              component:()=>import('@/views/Member/components/Fans/src/index.vue'),
+              children:[
+                {
+                  path:'fans',
+                  component:()=>import('@/views/Member/components/Fans/components/Fans.vue')
+                },
+                {
+                  path:'follow',
+                  component:()=>import('@/views/Member/components/Fans/components/Follow.vue')
+                }
+              ]
+            }
           ]
         }
       ],

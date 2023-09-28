@@ -26,7 +26,9 @@
             >
           </div>
         </div>
-        <div class="video-player"></div>
+        <div class="video-player">
+          <def-video-player></def-video-player>
+        </div>
         <div class="video-sl">
           <span @mouseover="changeSvgColor('like')" @mouseleave="svgColorReturn"
             ><def-svg-icon
@@ -236,7 +238,7 @@ const svgColorReturn = () => {
   display: flex;
   justify-content: space-between;
   .container-left {
-    width: 66%;
+    width: 61%;
     .video-main {
       height: 650px;
       .video-info {
@@ -298,7 +300,7 @@ const svgColorReturn = () => {
     }
   }
   .container-right {
-    width: 30%;
+    width: 35%;
     .author {
       height: 100px;
       display: flex;
