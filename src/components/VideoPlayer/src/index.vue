@@ -58,7 +58,6 @@ registerIcon("webEnterFullscreen", bilibiliSvg.createIcon(bilibiliSvg.webFull));
 registerIcon("enterFullscreen", bilibiliSvg.createIcon(bilibiliSvg.full));
 
 const playerOptions = {
-  // src:"http://43.138.245.107/index.m3u8",
   controls: [
     [
       "play",
@@ -73,6 +72,13 @@ const playerOptions = {
     ],
     ["progress"],
   ],
+  bpControls: {
+    600: [
+      ['play', 'progress', 'time', 'web-fullscreen', 'fullscreen'],
+      [],
+      ['spacer', 'airplay', 'settings'],
+    ]
+  },
   plugins: [new Danmaku(danmakuOptions)],
   themeColor: "rgba(35,173,229, 1)",
   progressBg: "rgba(35,173,229, 1)",
