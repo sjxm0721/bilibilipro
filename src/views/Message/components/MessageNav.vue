@@ -127,11 +127,11 @@
   </template>
   
   <script setup lang="ts">
-  import { useRoute,useRouter } from "vue-router";
-  import { useScroll } from "@vueuse/core";
-  import { ref } from "vue";
-  const { y } = useScroll(window);
-  const routePath = ref(useRoute().fullPath);
+  import { useRouter } from "vue-router";
+  // import { useScroll } from "@vueuse/core";
+  // import { ref } from "vue";
+  // const { y } = useScroll(window);
+  // const routePath = ref(useRoute().fullPath);
   const router = useRouter()
   
   const toHome = ()=>{

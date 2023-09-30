@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
+    "@ffmpeg/core": "^0.12.3",
+    "@ffmpeg/ffmpeg": "^0.12.6",
     "@nplayer/danmaku": "^1.0.12",
     "@nplayer/vue": "^1.0.12",
     "@vueuse/core": "^10.4.1",

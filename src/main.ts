@@ -14,7 +14,7 @@ import router from './router'
 import '@/styles/index.scss'
 
 //注册全局组件
-import globalComponent from '@/components/index'
+import globalComponent from '../src/components/index.ts'
 
 //@ts-ignore
 

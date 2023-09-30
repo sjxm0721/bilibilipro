@@ -32,18 +32,18 @@
   </template>
   
   <script setup lang="ts">
-  import { ref } from "vue";
+  // import { ref } from "vue";
   import { useRouter } from 'vue-router';
   
-  const svgColor: any = ref("#9499A0");
+  // const svgColor: any = ref("#9499A0");
   
-  const changeSvgColor = () => {
-    svgColor.value = "#05AAE6";
-  };
+  // const changeSvgColor = () => {
+  //   svgColor.value = "#05AAE6";
+  // };
   
-  const svgColorReturn = () => {
-      svgColor.value = "#9499A0";
-  };
+  // const svgColorReturn = () => {
+  //     svgColor.value = "#9499A0";
+  // };
   
   const router=useRouter()
   defineProps({

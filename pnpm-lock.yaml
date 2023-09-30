@@ -8,6 +8,12 @@ dependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
     version: registry.npmmirror.com/@element-plus/icons-vue@2.1.0(vue@3.3.4)
+  '@ffmpeg/core':
+    specifier: ^0.12.3
+    version: registry.npmmirror.com/@ffmpeg/core@0.12.3
+  '@ffmpeg/ffmpeg':
+    specifier: ^0.12.6
+    version: registry.npmmirror.com/@ffmpeg/ffmpeg@0.12.6
   '@nplayer/danmaku':
     specifier: ^1.0.12
     version: registry.npmmirror.com/@nplayer/danmaku@1.0.12
@@ -369,6 +375,29 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  registry.npmmirror.com/@ffmpeg/core@0.12.3:
+    resolution: {integrity: sha512-HjTvLnb7WEbApO7vmscLsKfnpCf2OT4AspatST1GntUt/NZWILMHSKHer0SVCKi1ce3LQQ7tUQqS7qkjn4T4mg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ffmpeg/core/-/core-0.12.3.tgz}
+    name: '@ffmpeg/core'
+    version: 0.12.3
+    engines: {node: '>=16.x'}
+    dev: false
+
+  registry.npmmirror.com/@ffmpeg/ffmpeg@0.12.6:
+    resolution: {integrity: sha512-4CuXDaqrCga5qBwVtiDDR45y65OGPYZd7VzwGCGz3QLdrQH7xaLYEjU19XL4DTCL0WnTSH8752b8Atyb1SiiLw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ffmpeg/ffmpeg/-/ffmpeg-0.12.6.tgz}
+    name: '@ffmpeg/ffmpeg'
+    version: 0.12.6
+    engines: {node: '>=18.x'}
+    dependencies:
+      '@ffmpeg/types': registry.npmmirror.com/@ffmpeg/types@0.12.1
+    dev: false
+
+  registry.npmmirror.com/@ffmpeg/types@0.12.1:
+    resolution: {integrity: sha512-n+v9yvxaBPi1Z/1wy2PvqMHvED3qV7LXBWnBmMBAAzybbs4KWp6wrhCTMxITORMHXpPZEEupsBH1iEoLuzYSUw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ffmpeg/types/-/types-0.12.1.tgz}
+    name: '@ffmpeg/types'
+    version: 0.12.1
+    engines: {node: '>=16.x'}
+    dev: false
 
   registry.npmmirror.com/@floating-ui/core@1.5.0:
     resolution: {integrity: sha512-kK1h4m36DQ0UHGj5Ah4db7R0rHemTqqO0QLvUqi1/mUUp3LuAWbWxdxSIf/XsnH9VS6rRVPLJCncjRzUvyCLXg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@floating-ui/core/-/core-1.5.0.tgz}
