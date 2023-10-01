@@ -110,6 +110,59 @@
           </div>
         </div>
       </div>
+      <div class="video-comment">
+        <div class="comment-head">
+          <div class="comment-info">
+            <div class="head-left">评论</div>
+            <div class="head-num">529</div>
+            <div class="order-hotest">
+              <span
+                style="cursor: pointer"
+                :class="{
+                  choosed: choosedOrder === 0,
+                  'mouse-in': hoverOrder === 0,
+                }"
+                @click="changeOrder(0)"
+                @mouseenter="mouseInOrder(0)"
+                @mouseleave="mouseOutOrder"
+                >最热</span
+              >
+            </div>
+            <div class="order-newest">
+              <span
+                style="cursor: pointer"
+                :class="{
+                  choosed: choosedOrder === 1,
+                  'mouse-in': hoverOrder === 1,
+                }"
+                @click="changeOrder(1)"
+                @mouseenter="mouseInOrder(1)"
+                @mouseleave="mouseOutOrder"
+                >最新</span
+              >
+            </div>
+          </div>
+          <div class="comment-publish">
+            <div class="avatar-big">
+              <img src="@/assets/images/avatar.jpg" />
+            </div>
+            <div class="textarea-and-button">
+              <el-input
+              v-model="input"
+                :rows="2"
+                type="input"
+                placeholder="Please input"
+                style="width: 85%;"
+                size="large"
+              />
+              <el-button type="primary" size="large">发布</el-button>
+            </div>
+          </div>
+        </div>
+        <div class="comment-body">
+          <def-comment></def-comment>
+        </div>
+      </div>
     </div>
     <div class="container-right">
       <div class="author">
@@ -213,13 +266,31 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 const svgColors: any = reactive({
   like: "#61666D",
   coin: "#61666D",
   collectionSolid: "#61666D",
   messageSolid: "#61666D",
 });
+
+const input = ref('')
+
+const choosedOrder = ref(0);
+const hoverOrder = ref(-1);
+
+const changeOrder = (newOrder: number) => {
+  hoverOrder.value = -1;
+  choosedOrder.value = newOrder;
+};
+
+const mouseInOrder = (newOrder: number) => {
+  if (newOrder != choosedOrder.value) hoverOrder.value = newOrder;
+};
+
+const mouseOutOrder = () => {
+  hoverOrder.value = -1;
+};
 
 const changeSvgColor = (svgName: string) => {
   svgColors[svgName] = "#06aeec";
@@ -237,6 +308,12 @@ const svgColorReturn = () => {
   margin: 20px 100px;
   display: flex;
   justify-content: space-between;
+  img {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
   .container-left {
     width: 61%;
     .video-main {
@@ -298,6 +375,51 @@ const svgColorReturn = () => {
         }
       }
     }
+    .video-comment {
+      .comment-head {
+        height: 100px;
+        margin: 30px 0;
+        .comment-info {
+          display: flex;
+          align-items: center;
+          .head-left {
+            font-size: 1.5em;
+            margin-right: 5px;
+          }
+          .head-num {
+            color: #9499a0;
+            margin-right: 30px;
+          }
+          .choosed {
+            color: #000;
+          }
+          .mouse-in {
+            color: #06aeec;
+          }
+          .order-hotest,
+          .order-newest {
+            color: #9499a0;
+            padding: 0 15px;
+          }
+          .order-hotest {
+            border-right: 1px solid #9499a0;
+          }
+        }
+        .comment-publish {
+          margin-top: 25px;
+          display: flex;
+          .avatar-big {
+            width: 10%;
+          }
+          .textarea-and-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 90%;
+          }
+        }
+      }
+    }
   }
   .container-right {
     width: 35%;
@@ -307,12 +429,6 @@ const svgColorReturn = () => {
       align-items: center;
       .author-avatar {
         width: 18%;
-        img {
-          cursor: pointer;
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-        }
       }
       .author-info {
         width: 82%;

@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-// import Home from '../views/Home/index.vue'
 
 let router = createRouter({
   history: createWebHashHistory(),
@@ -64,6 +63,10 @@ let router = createRouter({
     {
       path:'/message',
       component:()=>import('../views/Message/index.vue')
+    },
+    {
+      path:'/dynamic',
+      component:()=>import('../views/Dynamic/index.vue')
     }
   ],
   scrollBehavior() {

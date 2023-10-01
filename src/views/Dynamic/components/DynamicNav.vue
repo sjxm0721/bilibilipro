@@ -1,10 +1,17 @@
 <template>
-  <div style="position: relative;">
-    <div class="nav-container">
+    <div
+      class="nav-container fixed"
+    >
       <div class="col-left">
         <div class="nav-list" @click="toHome">
-          <def-svg-icon svg-name="home" svg-color="#ffffff"></def-svg-icon
-          ><a>首页</a>
+          <a>
+            <def-svg-icon
+              svg-name="bilibili"
+              svg-width="60px"
+              svg-height="25px"
+            ></def-svg-icon>
+            <span>首页</span></a
+          >
         </div>
         <div class="nav-list">
           <a class="shake">番剧</a>
@@ -25,7 +32,7 @@
           <a class="shake">赛事</a>
         </div>
         <div class="nav-list">
-          <def-svg-icon svg-name="download" svg-color="#ffffff"></def-svg-icon
+          <def-svg-icon svg-name="download" svg-color="#000000"></def-svg-icon
           ><a>下载客户端</a>
         </div>
       </div>
@@ -45,7 +52,7 @@
               svg-name="member"
               svg-width="20px"
               svg-height="20px"
-              svg-color="#ffffff"
+              svg-color="#000000"
             ></def-svg-icon
             ><a>大会员</a>
           </div>
@@ -56,18 +63,18 @@
               svg-name="message"
               svg-width="20px"
               svg-height="20px"
-              svg-color="#ffffff"
+              svg-color="#000000"
             ></def-svg-icon
             ><a>消息</a>
           </div>
         </div>
-        <div class="nav-list nav-list-right" @click="toDynamic">
+        <div class="nav-list nav-list-right">
           <div class="shake-icon">
             <def-svg-icon
               svg-name="dynamic"
               svg-width="20px"
               svg-height="20px"
-              svg-color="#ffffff"
+              svg-color="#000000"
             ></def-svg-icon
             ><a>动态</a>
           </div>
@@ -78,7 +85,7 @@
               svg-name="collection"
               svg-width="20px"
               svg-height="20px"
-              svg-color="#ffffff"
+              svg-color="#000000"
             ></def-svg-icon
             ><a>收藏</a>
           </div>
@@ -89,7 +96,7 @@
               svg-name="history"
               svg-width="20px"
               svg-height="20px"
-              svg-color="#ffffff"
+              svg-color="#000000"
             ></def-svg-icon
             ><a>历史</a>
           </div>
@@ -100,7 +107,7 @@
               svg-name="idea"
               svg-width="20px"
               svg-height="20px"
-              svg-color="#ffffff"
+              svg-color="#000000"
             ></def-svg-icon
             ><a>创作中心</a>
           </div>
@@ -117,158 +124,150 @@
         >
       </div>
     </div>
-    <div class="banner-logo">
-      <a href="javascript:;">
-        <img src="@/assets/images/logo.jpg" />
-      </a>
-    </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { useRouter } from 'vue-router';
-
-const router = useRouter()
-
-const toHome = ()=>{
-  router.push("/")
-}
-
-const toMember=()=>{
-  router.push("/member/114514")
-}
-
-const toMessage = ()=>{
-  router.push("/message")
-}
-
-const toDynamic = ()=>{
-  router.push("/dynamic")
-}
-
-</script>
-
-<style scoped lang="scss">
-.banner-logo img {
-  width: 160px;
-  height: 80px;
-  left: 42px;
-  bottom: 8px;
-  position: absolute;
-  cursor: pointer;
-}
-.nav-container {
-  height: 150px;
-  padding: 15px;
-  padding-top: 15px;
-  background-image: url("@/assets/images/banner.jpg");
-  background-size: cover;
-  display: flex;
-  justify-content: space-around;
-  .col-left {
+  </template>
+  
+  <script setup lang="ts">
+  import { useRouter } from "vue-router";
+  const router = useRouter()
+  
+  const toHome = ()=>{
+    router.push("/")
+  }
+  
+  const toMember=()=>{
+    router.push("/member/114514")
+  }
+  
+  const toMessage=()=>{
+    router.push("/message")
+  }
+  
+  </script>
+  
+  <style scoped lang="scss">
+  .nav-container {
+    height: 70px;
+    background-color: #fff;
+    border-bottom: 1px solid rgba($color: #9499a0, $alpha: 0.3);
+    width: 100%;
+    min-width: 1240px;
+    max-width: 1440px;
+    padding: 10px;
     display: flex;
-    margin-top: 10px;
-    width: 40%;
-    height: 25px;
+    align-items: center;
     justify-content: space-around;
-    svg {
-      transform: translate(-20%, -10%);
+  
+    &.fixed {
+      position: fixed;
+      z-index: 999999;
+      left: 0;
+      top: 0;
     }
-  }
-  .col-right {
-    display: flex;
-    width: 25%;
-    height: 25px;
-    justify-content: space-around;
-  }
-  .nav-list {
-    cursor: pointer;
-    color: #fff;
-    .shake {
-      display: inline-block;
-      &:hover {
-        animation: animate 0.5s ease-in-out 1;
+  
+    .col-left {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-around;
+      // width: 40%;
+      width: 500px;
+      svg {
+        transform: translate(-20%, -10%);
       }
     }
-    .shake-icon {
+    .col-right {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      &:hover {
-        & svg {
+      width: 300px;
+      justify-content: space-around;
+    }
+    .nav-list {
+      cursor: pointer;
+      color: #000;
+      .shake {
+        display: inline-block;
+        &:hover {
           animation: animate 0.5s ease-in-out 1;
         }
       }
-    }
-    @keyframes animate {
-      0%,
-      50%,
-      100% {
-        transform: translateY(0);
+      .shake-icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        &:hover {
+          & svg {
+            animation: animate 0.5s ease-in-out 1;
+          }
+        }
       }
-      20% {
-        transform: translateY(-4px);
+      @keyframes animate {
+        0%,
+        50%,
+        100% {
+          transform: translateY(0);
+        }
+        20% {
+          transform: translateY(-4px);
+        }
       }
     }
-  }
-  .search-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 20%;
-    height: 42px;
-    width: 250px;
-    background-color: #dee8eb;
-    border-radius: 8px;
-    border: none;
-    input {
-      width: 80%;
-      height: 80%;
-      margin-left: 5px;
-      padding: 8px;
-      border: none;
-      border-radius: 6px;
+    .search-container {
+      flex-shrink: 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 42px;
+      width: 250px;
       background-color: #dee8eb;
-      &:focus {
-        background-color: #d3dde0;
+      border-radius: 8px;
+      border: none;
+      input {
+        width: 80%;
+        height: 80%;
+        margin-left: 5px;
+        padding: 8px;
+        border: none;
+        border-radius: 6px;
+        background-color: #dee8eb;
+        &:focus {
+          background-color: #d3dde0;
+        }
       }
-    }
-
-    .search-icon {
-      position: absolute;
-      right: 8px;
-      border-radius: 5px;
-      padding: 8px;
-      padding-right: 4px;
+  
+      .search-icon {
+        position: absolute;
+        right: 8px;
+        border-radius: 5px;
+        padding: 8px;
+        padding-right: 4px;
+        &:hover {
+          background-color: #d3dde0;
+        }
+      }
+  
       &:hover {
-        background-color: #d3dde0;
+        background-color: #fff;
       }
     }
-
-    &:hover {
-      background-color: #fff;
-    }
-  }
-  .avatar {
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border: #fff 2px solid;
-    border-radius: 50%;
-    margin-left: 15px;
-
-    img {
+    .avatar {
+      // flex-shrink: 0;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border: #fff 2px solid;
       border-radius: 50%;
+      margin-left: 15px;
+  
+      img {
+        border-radius: 50%;
+      }
+    }
+  
+    .nav-list-right {
+      a {
+        margin: 2px;
+      }
+    }
+    .contribute-atc {
+      margin: 5px;
     }
   }
-
-  .nav-list-right {
-    a {
-      margin: 2px;
-    }
-  }
-  .contribute-atc {
-    margin: 5px;
-  }
-}
-</style>
+  </style>
