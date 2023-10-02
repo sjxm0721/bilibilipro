@@ -68,7 +68,7 @@
             ><a>消息</a>
           </div>
         </div>
-        <div class="nav-list nav-list-right">
+        <div class="nav-list nav-list-right" @click="toDynamic">
           <div class="shake-icon">
             <def-svg-icon
               svg-name="dynamic"
@@ -145,6 +145,10 @@
   const toMessage=()=>{
     router.push("/message")
   }
+
+  const toDynamic = ()=>{
+  router.push("/dynamic")
+}
   
   </script>
   
