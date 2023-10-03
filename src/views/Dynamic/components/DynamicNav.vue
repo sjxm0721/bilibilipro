@@ -38,7 +38,7 @@
       </div>
       <div class="search-container">
         <input type="text" placeholder="请输入搜索内容" />
-        <div class="search-icon">
+        <div class="search-icon" @click="toSearch">
           <def-svg-icon svg-name="search"></def-svg-icon>
         </div>
       </div>
@@ -144,6 +144,10 @@
 
   const toDynamic = ()=>{
   router.push("/dynamic")
+}
+
+const toSearch = ()=>{
+  router.push("/search")
 }
   
   </script>

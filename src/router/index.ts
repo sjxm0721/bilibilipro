@@ -57,6 +57,10 @@ let router = createRouter({
               ]
             }
           ]
+        },
+        {
+          path:'search',
+          component:()=>import('../views/Search/index.vue')
         }
       ],
     },

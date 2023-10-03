@@ -40,9 +40,9 @@
         ><a>下载客户端</a>
       </div>
     </div>
-    <div class="search-container">
+    <div class="search-container" :style="{visibility: searchHidden()}">
       <input type="text" placeholder="请输入搜索内容" />
-      <div class="search-icon">
+      <div class="search-icon" @click="toSearch">
         <def-svg-icon svg-name="search"></def-svg-icon>
       </div>
     </div>
@@ -152,6 +152,15 @@ const toMessage=()=>{
 
 const toDynamic = ()=>{
   router.push("/dynamic")
+}
+
+const toSearch = ()=>{
+  router.push("/search")
+}
+
+const searchHidden = ()=>{
+  if(useRoute().fullPath.includes("/search"))return "hidden"
+  else return 'visible'
 }
 
 </script>
