@@ -58,15 +58,22 @@ const images = ref([
 
 .el-carousel__item {
   .carousel-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     height: 100%;
     img {
-      height: 80%;
+      height: 100%;
+      object-fit: cover; 
     }
     .info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 999;
       height: 20%;
-      background-color: black;
+      width: 100%;
+      background-color: rgba($color: #fff, $alpha: 0.2);
     }
   }
 }

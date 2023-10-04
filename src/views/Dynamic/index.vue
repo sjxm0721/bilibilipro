@@ -55,6 +55,17 @@
             <div style="margin-top: 10px; color: #1296DB;">动态</div>
           </div>
         </div>
+        <div class="dynamic-show">
+          <div class="dynamic-content box">
+            <def-dynamic></def-dynamic>
+          </div>
+          <div class="dynamic-content box">
+            <def-dynamic></def-dynamic>
+          </div>
+          <div class="dynamic-content box">
+            <def-dynamic></def-dynamic>
+          </div>
+        </div>
       </div>
       <div class="dynamic-right">
         <div class="box top">
@@ -240,6 +251,13 @@ const input = ref("");
           border: 1px solid #06AEEC;
         }
       }
+      .dynamic-show{
+        .dynamic-content{
+          margin-top: 10px;
+          padding: 15px;
+          background-color: #fff;
+        }
+      }
     }
     .dynamic-right {
       width: 20%;
@@ -280,10 +298,10 @@ const input = ref("");
             background-color: rgb(240, 240, 240);
           }
           .topic-logo {
-            width: 10%;
+            width: 12%;
           }
           .main-content {
-            width: 85%;
+            width: 88%;
             .topic-title > span:hover {
               color: #1296db;
             }

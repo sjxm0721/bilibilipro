@@ -4,6 +4,7 @@
     <router-view></router-view>
     <LayoutFooter />
     <Login/>
+    <el-backtop :right="10" :bottom="100" />
   </div>
 </template>
 

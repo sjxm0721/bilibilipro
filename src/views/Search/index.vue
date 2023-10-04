@@ -25,18 +25,128 @@
       </el-tabs>
     </div>
     <div class="search-order">
-        <div class="order-box" @click="orderChange(0)" :class="{'active-order':activeOrder===0}">综合排序</div>
-        <div class="order-box" @click="orderChange(1)" :class="{'active-order':activeOrder===1}">最多播放</div>
-        <div class="order-box" @click="orderChange(2)" :class="{'active-order':activeOrder===2}">最新发布</div>
-        <div class="order-box" @click="orderChange(3)" :class="{'active-order':activeOrder===3}">最多弹幕</div>
-        <div class="order-box" @click="orderChange(4)" :class="{'active-order':activeOrder===4}">最多收藏</div>
+      <div
+        class="order-box"
+        @click="orderChange(0)"
+        :class="{ 'active-order': activeOrder === 0 }"
+      >
+        综合排序
+      </div>
+      <div
+        class="order-box"
+        @click="orderChange(1)"
+        :class="{ 'active-order': activeOrder === 1 }"
+      >
+        最多播放
+      </div>
+      <div
+        class="order-box"
+        @click="orderChange(2)"
+        :class="{ 'active-order': activeOrder === 2 }"
+      >
+        最新发布
+      </div>
+      <div
+        class="order-box"
+        @click="orderChange(3)"
+        :class="{ 'active-order': activeOrder === 3 }"
+      >
+        最多弹幕
+      </div>
+      <div
+        class="order-box"
+        @click="orderChange(4)"
+        :class="{ 'active-order': activeOrder === 4 }"
+      >
+        最多收藏
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+      <div class="content-box">
+        <def-video-item></def-video-item>
+      </div>
+    </div>
+    <div class="search-pagination">
+        <el-pagination background layout="prev, pager, next" :total="1000" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type { TabsPaneContext } from "element-plus";
+import type { TabsPaneName } from "element-plus";
 
 const searchStyle = ref(0);
 const searchFocus = () => {
@@ -53,12 +163,11 @@ const navChange = (name: TabPaneName) => {
   activeNav.value = name;
 };
 
-const activeOrder = ref(0)
+const activeOrder = ref(0);
 
-const orderChange = (newOrder:number) =>{
-    activeOrder.value = newOrder
-}
-
+const orderChange = (newOrder: number) => {
+  activeOrder.value = newOrder;
+};
 </script>
 
 <style scoped lang="scss">
@@ -97,39 +206,58 @@ const orderChange = (newOrder:number) =>{
     }
   }
   .search-nav {
-    padding:0 50px;
-    border-bottom:2px solid #F1F2F3;
-    :deep() .el-tabs__header{
-        margin-bottom:5px;
+    padding: 0 50px;
+    border-bottom: 2px solid #f1f2f3;
+    :deep() .el-tabs__header {
+      margin-bottom: 5px;
     }
     :deep() .el-tabs__item {
-        font-size:1.2em;
-        margin:6px;
+      font-size: 1.2em;
+      margin: 6px;
     }
-    :deep() .el-tabs__nav-wrap::after{
-        display:none;
+    :deep() .el-tabs__nav-wrap::after {
+      display: none;
     }
   }
-  .search-order{
-    width:100%;
-    height:100px;
-    padding:25px 50px;
-    display:flex;
-    .active-order{
-        background-color:#DFF6FD;
-        color:#06AEEC !important;
+  .search-order {
+    width: 100%;
+    height: 100px;
+    padding: 25px 50px;
+    display: flex;
+    .active-order {
+      background-color: #dff6fd;
+      color: #06aeec !important;
     }
-    .order-box{
-        cursor:pointer;
-        height:36px;
-        width:90px;
-        margin-right:10px;
-        line-height:36px;
-        text-align:center;
-        border-radius:8px;
-        color:#61666D;
-        transition:background-color .3s ease;
+    .order-box {
+      cursor: pointer;
+      height: 36px;
+      width: 90px;
+      margin-right: 10px;
+      line-height: 36px;
+      text-align: center;
+      border-radius: 8px;
+      color: #61666d;
+      transition: background-color 0.3s ease;
     }
+  }
+  .main-content {
+    width: 100%;
+    // height: 1000px;
+    padding: 0 50px;
+    display: grid;
+    grid-template-columns: 18% 18% 18% 18% 18%;
+    grid-auto-flow: row dense;
+    grid-column-gap: 2%;
+    // overflow: hidden;
+    .content-box {
+      font-size: 13px;
+      height: 200px;
+      margin-bottom: 30px;
+    }
+  }
+  .search-pagination{
+    width: 30%;
+    margin:20px auto;
   }
 }
 </style>
