@@ -64,6 +64,7 @@
   
   <style scoped lang="scss">
   .video-member-item-content {
+    height: 100%;
     font-size:1em;
     display: flex;
     justify-content: space-between;
@@ -90,6 +91,7 @@
       font-size: 1em;
       .info-title {
         cursor: pointer;
+        height: 3em;
         font-size: 1.1em;
         line-height: 1.5em;
         overflow: hidden;

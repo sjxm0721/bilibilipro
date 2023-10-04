@@ -11,10 +11,10 @@
     <div class="right-info">
       <div class="info-title" @click="toVideo">
         <!-- {{title}} -->
-        抖s女王莲，没有她就弄不出来就到了为大家挖了葵儿哦去外面，密度我脾气哦诶我去看金额为全局代码恕难从命，撒多久为i哦额情节恶趣味了趣味就哦企鹅加我企鹅理解企鹅近期委屈哦家
+        抖s女王莲，没有她就弄不出来
       </div>
       <div class="info-brief">
-        档案编号：No.0308档案名称：纽约邓海燕失踪案事件时间：2021年9月18日jdwioeuwqkjeqnqweqiweoqwenc,mdciwqejqwieuqwjewenqwme,qwneqk
+        档案编号：No.0308档案名称：纽约邓海燕失踪案事件时间：2021年9月18日
       </div>
       <div class="info-num">
         <span style="margin-right: 5%"
@@ -47,9 +47,9 @@ const toVideo = () => {
 .video-dynamic-component {
   display: flex;
   justify-content: space-between;
-  font-size:1em;
+  font-size: 1em;
   .left-image {
-    font-size:1em;
+    font-size: 1em;
     cursor: pointer;
     border-radius: 3%;
     overflow: hidden;
@@ -69,14 +69,14 @@ const toVideo = () => {
     }
   }
   .right-info {
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 60%;
     padding: 10px;
-    font-size:1em;
+    font-size: 1em;
     .info-title {
-      height: 36%;
+      height: 2.2em;
       cursor: pointer;
       font-size: 1.1em;
       line-height: 1.1em;
@@ -91,7 +91,7 @@ const toVideo = () => {
       }
     }
     .info-brief {
-      height: 41%;
+      height: 2em;
       font-size: 0.9em;
       line-height: 1em;
       color: #9499a0;
@@ -102,7 +102,7 @@ const toVideo = () => {
       word-wrap: break-word;
     }
     .info-num {
-      font-size:1em;
+      font-size: 1em;
       height: 20%;
       color: #9499a0;
       svg {

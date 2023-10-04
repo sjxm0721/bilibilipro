@@ -85,7 +85,7 @@ const toVideo=()=>{
     border-radius: 3%;
     overflow: hidden;
     position: relative;
-    width: 40%;
+    width: 36%;
     .time-last {
       display: inline-block;
       padding: 2%;
@@ -100,8 +100,9 @@ const toVideo=()=>{
     }
   }
   .right-info {
-    width: 56%;
+    width: 60%;
     .info-title {
+      height:2.4em;
       cursor: pointer;
       font-size: 1.2em;
       line-height: 1.2em;

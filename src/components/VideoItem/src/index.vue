@@ -129,7 +129,7 @@ const toVideo = () => {
     }
   }
   .center-title {
-    height: 20%;
+    height: 3.4em;
     width: 100%;
     font-weight: 500;
     overflow: hidden;
