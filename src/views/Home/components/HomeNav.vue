@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative;">
+  <div style="position: relative">
     <div class="nav-container">
       <div class="col-left">
         <div class="nav-list" @click="toHome">
@@ -35,8 +35,27 @@
           <def-svg-icon svg-name="search"></def-svg-icon>
         </div>
       </div>
-      <div class="avatar" @click="toMember">
-        <img src="@/assets/images/avatar.jpg" />
+      <div class="avatar">
+        <div v-if="accountStore.myInfo?.uid">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <img
+                :src="accountStore.myInfo?.avatar"
+                v-if="accountStore.myInfo?.uid"
+              />
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="toMember">个人空间</el-dropdown-item>
+                <el-dropdown-item>修改密码</el-dropdown-item>
+                <el-dropdown-item divided>退出登陆</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <div v-else @click="accountStore.showLogin" class="to-login">
+          <span>登陆</span>
+        </div>
       </div>
       <div class="col-right">
         <div class="nav-list nav-list-right">
@@ -126,30 +145,34 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
+import { useAccountStore } from "@/stores/modules/account";
 
-const router = useRouter()
+const accountStore = useAccountStore();
+const router = useRouter();
 
-const toHome = ()=>{
-  router.push("/")
-}
+const toHome = () => {
+  router.push("/");
+};
 
-const toMember=()=>{
-  router.push("/member/114514")
-}
+const toMember = () => {
+  router.push({
+    name:'member',
+    params:{uid:accountStore.myInfo?.uid}
+  });
+};
 
-const toMessage = ()=>{
-  router.push("/message")
-}
+const toMessage = () => {
+  router.push("/message");
+};
 
-const toDynamic = ()=>{
-  router.push("/dynamic")
-}
+const toDynamic = () => {
+  router.push("/dynamic");
+};
 
-const toSearch = ()=>{
-  router.push("/search")
-}
-
+const toSearch = () => {
+  router.push("/search");
+};
 </script>
 
 <style scoped lang="scss">
@@ -254,15 +277,29 @@ const toSearch = ()=>{
     }
   }
   .avatar {
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border: #fff 2px solid;
-    border-radius: 50%;
+    // flex-shrink: 0;
     margin-left: 15px;
 
     img {
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border: #fff 2px solid;
       border-radius: 50%;
+    }
+
+    .to-login {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #06aeec;
+      text-align: center;
+      cursor: pointer;
+      > span {
+        line-height: 40px;
+        color: #fff;
+        font-weight: bold;
+      }
     }
   }
 

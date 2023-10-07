@@ -8,7 +8,7 @@ import Danmaku from "@nplayer/danmaku";
 import { Popover, Icon } from "nplayer";
 import Hls from "hls.js";
 import { onMounted } from "vue";
-import bilibiliSvg from "../../../utils/bilibiliSvg";
+import bilibiliSvg from "@/utils/bilibiliSvg";
 
 let player:any = null;
 
@@ -16,7 +16,7 @@ let player:any = null;
 const danmakuOptions = {
   autoInsert: true,
   items: [
-    { time: 1, text: "弹幕～" },
+    { time: 1, text: "弹幕～" ,isMe:true},
     { time: 52, text: "星野爱" },
   ],
 };
@@ -58,6 +58,10 @@ registerIcon("webEnterFullscreen", bilibiliSvg.createIcon(bilibiliSvg.webFull));
 registerIcon("enterFullscreen", bilibiliSvg.createIcon(bilibiliSvg.full));
 
 const playerOptions = {
+  // poster:'@/assets/images/idol.jpg',
+  // poster:'../../../src/assets/images/hua.jpg',
+  poster:'../../../src/assets/images/teio.jpg',
+  posterEnable:true,
   controls: [
     [
       "play",
@@ -140,7 +144,8 @@ onMounted(() => {
     });
 
     // 绑定 video 元素成功的时候，去加载视频
-    hls.loadSource("http://43.138.245.107/master.m3u8");
+    // hls.loadSource("http://43.138.245.107/idolm3u8/master.m3u8");
+    hls.loadSource("http://43.138.245.107/teiom3u8/master.m3u8");
   });
 
   player.on('DanmakuSend', (opts:any) => {
@@ -186,3 +191,6 @@ onMounted(() => {
     }
   }
 </style>
+
+
+

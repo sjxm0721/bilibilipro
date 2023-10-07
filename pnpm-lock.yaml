@@ -20,6 +20,9 @@ dependencies:
   '@nplayer/vue':
     specifier: ^1.0.12
     version: registry.npmmirror.com/@nplayer/vue@1.0.12(nplayer@1.0.15)
+  '@types/js-cookie':
+    specifier: ^3.0.4
+    version: registry.npmmirror.com/@types/js-cookie@3.0.4
   '@vueuse/core':
     specifier: ^10.4.1
     version: registry.npmmirror.com/@vueuse/core@10.4.1(vue@3.3.4)
@@ -35,12 +38,21 @@ dependencies:
   hls.js:
     specifier: ^1.4.12
     version: registry.npmmirror.com/hls.js@1.4.12
+  js-cookie:
+    specifier: ^3.0.4
+    version: registry.npmmirror.com/js-cookie@3.0.4
   nplayer:
     specifier: ^1.0.15
     version: registry.npmmirror.com/nplayer@1.0.15
   path:
     specifier: ^0.12.7
     version: registry.npmmirror.com/path@0.12.7
+  pinia:
+    specifier: 2.1.6
+    version: registry.npmmirror.com/pinia@2.1.6(typescript@5.2.2)(vue@3.3.4)
+  pinia-plugin-persistedstate:
+    specifier: 3.2.0
+    version: registry.npmmirror.com/pinia-plugin-persistedstate@3.2.0(pinia@2.1.6)
   sass:
     specifier: ^1.67.0
     version: registry.npmmirror.com/sass@1.67.0
@@ -562,6 +574,12 @@ packages:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/estree/-/estree-1.0.1.tgz}
     name: '@types/estree'
     version: 1.0.1
+
+  registry.npmmirror.com/@types/js-cookie@3.0.4:
+    resolution: {integrity: sha512-vMMnFF+H5KYqdd/myCzq6wLDlPpteJK+jGFgBus3Da7lw+YsDmx2C8feGTzY2M3Fo823yON+HC2CL240j4OV+w==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/js-cookie/-/js-cookie-3.0.4.tgz}
+    name: '@types/js-cookie'
+    version: 3.0.4
+    dev: false
 
   registry.npmmirror.com/@types/json-schema@7.0.13:
     resolution: {integrity: sha512-RbSSoHliUbnXj3ny0CNFOoxrIDV6SUGyStHsvDqosw6CkdPV8TtWGlfecuK4ToyMEAql6pzNxgCFKanovUzlgQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/json-schema/-/json-schema-7.0.13.tgz}
@@ -2222,6 +2240,13 @@ packages:
     version: 2.6.4
     dev: true
 
+  registry.npmmirror.com/js-cookie@3.0.4:
+    resolution: {integrity: sha512-tlu5VGqPFMP5eBefnmszCFZkPXG2n527NRN9XdNtN6FZ5n/0e98TdDm8BOz290OIIsxtXb9XTJjfqE6gVhOHQw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/js-cookie/-/js-cookie-3.0.4.tgz}
+    name: js-cookie
+    version: 3.0.4
+    engines: {node: '>=14', npm: '>=9.5.0'}
+    dev: false
+
   registry.npmmirror.com/json-parse-even-better-errors@2.3.1:
     resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz}
     name: json-parse-even-better-errors
@@ -2657,6 +2682,38 @@ packages:
     name: picomatch
     version: 2.3.1
     engines: {node: '>=8.6'}
+
+  registry.npmmirror.com/pinia-plugin-persistedstate@3.2.0(pinia@2.1.6):
+    resolution: {integrity: sha512-tZbNGf2vjAQcIm7alK40sE51Qu/m9oWr+rEgNm/2AWr1huFxj72CjvpQcIQzMknDBJEkQznCLAGtJTIcLKrKdw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pinia-plugin-persistedstate/-/pinia-plugin-persistedstate-3.2.0.tgz}
+    id: registry.npmmirror.com/pinia-plugin-persistedstate/3.2.0
+    name: pinia-plugin-persistedstate
+    version: 3.2.0
+    peerDependencies:
+      pinia: ^2.0.0
+    dependencies:
+      pinia: registry.npmmirror.com/pinia@2.1.6(typescript@5.2.2)(vue@3.3.4)
+    dev: false
+
+  registry.npmmirror.com/pinia@2.1.6(typescript@5.2.2)(vue@3.3.4):
+    resolution: {integrity: sha512-bIU6QuE5qZviMmct5XwCesXelb5VavdOWKWaB17ggk++NUwQWWbP5YnsONTk3b752QkW9sACiR81rorpeOMSvQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pinia/-/pinia-2.1.6.tgz}
+    id: registry.npmmirror.com/pinia/2.1.6
+    name: pinia
+    version: 2.1.6
+    peerDependencies:
+      '@vue/composition-api': ^1.4.0
+      typescript: '>=4.4.4'
+      vue: ^2.6.14 || ^3.3.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      '@vue/devtools-api': registry.npmmirror.com/@vue/devtools-api@6.5.0
+      typescript: registry.npmmirror.com/typescript@5.2.2
+      vue: registry.npmmirror.com/vue@3.3.4
+      vue-demi: registry.npmmirror.com/vue-demi@0.14.6(vue@3.3.4)
+    dev: false
 
   registry.npmmirror.com/pkg-types@1.0.3:
     resolution: {integrity: sha512-nN7pYi0AQqJnoLPC9eHFQ8AcyaixBUOwvqc5TDnIKCMEE6I0y8P7OKA7fPexsXGCGxQDl/cmrLAp26LhcwxZ4A==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pkg-types/-/pkg-types-1.0.3.tgz}
@@ -3303,7 +3360,6 @@ packages:
     version: 5.2.2
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: true
 
   registry.npmmirror.com/ufo@1.3.0:
     resolution: {integrity: sha512-bRn3CsoojyNStCZe0BG0Mt4Nr/4KF+rhFlnNXybgqt5pXHNFRlqinSoQaTrGyzE4X8aHplSb+TorH+COin9Yxw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ufo/-/ufo-1.3.0.tgz}

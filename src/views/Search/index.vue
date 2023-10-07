@@ -146,7 +146,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type { TabsPaneName } from "element-plus";
+import type { TabPaneName } from 'element-plus'
 
 const searchStyle = ref(0);
 const searchFocus = () => {
@@ -160,7 +160,7 @@ const searchBlur = () => {
 const activeNav = ref("comprehensive");
 
 const navChange = (name: TabPaneName) => {
-  activeNav.value = name;
+  activeNav.value = name.toString();
 };
 
 const activeOrder = ref(0);

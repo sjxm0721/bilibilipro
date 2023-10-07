@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container" v-show="showLogin">
+  <div class="login-container" v-show="accountStore.loginBox">
     <div class="login-box">
       <div class="close-button">
         <def-svg-icon svg-name="close" @click="closeLogin"></def-svg-icon>
@@ -12,7 +12,11 @@
             style="border-top-left-radius: 8px; border-top-right-radius: 8px"
           >
             <div class="pre">账号</div>
-            <input v-model="username" type="input" placeholder="请输入账号" />
+            <input
+              v-model="accountInfo.accountId"
+              type="input"
+              placeholder="请输入账号"
+            />
           </div>
           <div
             class="form-item"
@@ -24,7 +28,7 @@
             <div class="pre">密码</div>
             <input
               :type="isVisible"
-              v-model="password"
+              v-model="accountInfo.password"
               placeholder="请输入密码"
             />
             <div class="append-icon">
@@ -43,7 +47,11 @@
         </form>
       </div>
       <div style="margin-top: 20px">
-        <el-button type="primary" size="large" style="width: 200px"
+        <el-button
+          type="primary"
+          size="large"
+          style="width: 200px"
+          @click="getLoginToken"
           >登陆</el-button
         >
       </div>
@@ -59,25 +67,41 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
+import { reqLogin } from "@/api/account/index";
+import { setToken } from "@/utils/auth";
+import type { LoginResponseData } from "@/api/account/type";
+import { useAccountStore } from "@/stores/modules/account";
+import { ElMessage } from "element-plus";
 
 const isVisible = ref("password");
 
-const showLogin = ref(false)
+const accountInfo = reactive({
+  accountId: "",
+  password: "",
+});
 
-const username = ref("");
-
-const password = ref("");
+const accountStore = useAccountStore();
 
 const changeVisibility = () => {
   if (isVisible.value === "password") isVisible.value = "input";
   else isVisible.value = "password";
 };
 
-const closeLogin = ()=>{
-    showLogin.value = false
-}
+const closeLogin = () => {
+  accountStore.hideLogin();
+};
 
+//登陆相关业务
+const getLoginToken = async () => {
+  const { accountId, password } = accountInfo;
+  const result: LoginResponseData = await reqLogin({ accountId, password });
+  accountInfo.accountId = "";
+  accountInfo.password = "";
+  setToken(result.data as string);
+  accountStore.getMyInfo(result.data as string);
+  accountStore.hideLogin();
+};
 </script>
 
 <style scoped lang="scss">
@@ -106,13 +130,13 @@ const closeLogin = ()=>{
     display: flex;
     flex-direction: column;
     align-items: center;
-    .close-button{
-        position: absolute;
-        right: 20px;
-        top: 20px;
-        svg{
-            cursor: pointer;
-        }
+    .close-button {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      svg {
+        cursor: pointer;
+      }
     }
     .title {
       font-size: 1.4em;

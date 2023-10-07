@@ -2,7 +2,7 @@
   <div class="video-dynamic-component">
     <div class="left-image" @click="toVideo">
       <img src="@/assets/images/lian.jpg" />
-      <img :src="itemPicture" />
+      <!-- <img :src="itemPicture" /> -->
       <div class="time-last">
         <!-- {{ videoTime }} -->
         07:21

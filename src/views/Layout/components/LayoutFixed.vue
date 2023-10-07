@@ -40,15 +40,33 @@
         ><a>下载客户端</a>
       </div>
     </div>
-    <div class="search-container" :style="{visibility: searchHidden()}">
+    <div class="search-container" :style="{ visibility: searchHidden() }">
       <input type="text" placeholder="请输入搜索内容" />
       <div class="search-icon" @click="toSearch">
         <def-svg-icon svg-name="search"></def-svg-icon>
       </div>
     </div>
-    <div class="avatar" @click="toMember">
-      <img src="@/assets/images/avatar.jpg" />
-    </div>
+    <div class="avatar">
+        <div v-if="accountStore.myInfo?.uid">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <img
+                :src="accountStore.myInfo?.avatar"
+              />
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="toMember">个人空间</el-dropdown-item>
+                <el-dropdown-item>修改密码</el-dropdown-item>
+                <el-dropdown-item divided @click="accountStore.logout">退出登陆</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <div v-else @click="accountStore.showLogin" class="to-login">
+          <span>登陆</span>
+        </div>
+       </div> 
     <div class="col-right">
       <div class="nav-list nav-list-right">
         <div class="shake-icon">
@@ -131,37 +149,42 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute,useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useScroll } from "@vueuse/core";
 import { ref } from "vue";
+import { useAccountStore } from "@/stores/modules/account";
 const { y } = useScroll(window);
 const routePath = ref(useRoute().fullPath);
-const router = useRouter()
+const router = useRouter();
+const accountStore = useAccountStore();
 
-const toHome = ()=>{
-  router.push("/")
-}
+const toHome = () => {
+  router.push("/");
+};
 
-const toMember=()=>{
-  router.push("/member/114514")
-}
+const toMember = () => {
+  router.push({
+    name:'member',
+    params:{uid:accountStore.myInfo?.uid}
+  });
+};
 
-const toMessage=()=>{
-  router.push("/message")
-}
+const toMessage = () => {
+  router.push("/message");
+};
 
-const toDynamic = ()=>{
-  router.push("/dynamic")
-}
+const toDynamic = () => {
+  router.push("/dynamic");
+};
 
-const toSearch = ()=>{
-  router.push("/search")
-}
+const toSearch = () => {
+  router.push("/search");
+};
 
-const searchHidden = ()=>{
-  if(useRoute().fullPath.includes("/search"))return "hidden"
-  else return 'visible'
-}
+const searchHidden = () => {
+  if (useRoute().fullPath.includes("/search")) return "hidden";
+  else return "visible";
+};
 
 </script>
 
@@ -281,15 +304,28 @@ const searchHidden = ()=>{
   }
   .avatar {
     // flex-shrink: 0;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border: #fff 2px solid;
-    border-radius: 50%;
     margin-left: 15px;
 
     img {
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border: #fff 2px solid;
       border-radius: 50%;
+    }
+
+    .to-login {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #06AEEC;
+      text-align: center;
+      cursor: pointer;
+      >span{
+        line-height: 40px;
+        color:#fff;
+        font-weight: bold;
+      }
     }
   }
 

@@ -40,5 +40,19 @@ export default defineConfig(() => {
         },
       },
     },
+    //本地运行配置，反向代理配置
+    server:{
+      cors:true,
+      open:true,
+      //配置反向代理
+      proxy:{
+        '/api':{
+          target:'http://localhost:8080',
+          changeOrigin:true,
+          ws: true, //允许websocket代理
+          rewrite: (path)=> path.replace(/^\/api/,'')//将api替换为空字符
+        }
+      }
+    }
   };
 });

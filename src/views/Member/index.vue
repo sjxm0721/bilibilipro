@@ -88,10 +88,12 @@
 <script setup lang="ts">
 import { useRoute,useRouter } from 'vue-router';
 import { ref,onMounted } from 'vue';
+import { useAccountStore } from '@/stores/modules/account';
 
 const routeChoosed = ref(0)
 const router = useRouter()
 const route = useRoute()
+const accountStore = useAccountStore()
 
 onMounted(()=>{
   const newPath:string = route.fullPath
@@ -112,25 +114,43 @@ onMounted(()=>{
 const changeRoute = (newRoute:number)=>{
   routeChoosed.value = newRoute
   if(newRoute===0){
-    router.push("/member/114514")
+    router.push({
+    name:'member',
+    params:{uid:accountStore.myInfo?.uid}
+  })
   }
   else if(newRoute===1){
-    router.push("/member/114514/dynamic")
+    router.push({
+    name:'memberDynamic',
+    params:{uid:accountStore.myInfo?.uid}
+  })
   }
   else if(newRoute===2){
-    router.push("/member/114514/video")
+    router.push({
+    name:'memberVideo',
+    params:{uid:accountStore.myInfo?.uid}
+  })
   }
   else if(newRoute===3){
-    router.push("/member/114514/favlist")
+    router.push({
+    name:'memberFavlist',
+    params:{uid:accountStore.myInfo?.uid}
+  })
   }
 }
 
 const toFans=()=>{
-  router.push('/member/114514/fans/fans')
+  router.push({
+    name:'memberFans',
+    params:{uid:accountStore.myInfo?.uid}
+  })
 }
 
 const toFollow=()=>{
-  router.push('/member/114514/fans/follow')
+  router.push({
+    name:'memberFollow',
+    params:{uid:accountStore.myInfo?.uid}
+  })
 }
 
 </script>
