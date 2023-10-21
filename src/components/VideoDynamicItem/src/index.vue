@@ -1,34 +1,29 @@
 <template>
   <div class="video-dynamic-component">
     <div class="left-image" @click="toVideo">
-      <img src="@/assets/images/lian.jpg" />
-      <!-- <img :src="itemPicture" /> -->
+      <img :src="poster"/>
       <div class="time-last">
-        <!-- {{ videoTime }} -->
-        07:21
+        {{ timeConvert(lastTime) }}
       </div>
     </div>
     <div class="right-info">
       <div class="info-title" @click="toVideo">
-        <!-- {{title}} -->
-        抖s女王莲，没有她就弄不出来
+        {{title}}
       </div>
       <div class="info-brief">
-        档案编号：No.0308档案名称：纽约邓海燕失踪案事件时间：2021年9月18日
+        {{ videoBrief }}
       </div>
       <div class="info-num">
         <span style="margin-right: 5%"
           ><def-svg-icon svg-name="clickNum" svg-color="#9499A0"></def-svg-icon>
-          <!-- {{clickNum}} -->
-          114514
+          {{clickNum}}
         </span>
         <span
           ><def-svg-icon
             svg-name="barrageNum"
             svg-color="#9499A0"
           ></def-svg-icon>
-          <!-- {{ barrageNum }} -->
-          11037
+          {{ barrageNum }}
         </span>
       </div>
     </div>
@@ -37,9 +32,22 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { timeConvert } from "@/utils/timeFormator";
 const router = useRouter();
+const props = defineProps<{
+  videoId:number,
+  clickNum:number,
+  barrageNum:number,
+  poster:string,
+  videoBrief:string,
+  title:string,
+  lastTime:number
+}>()
 const toVideo = () => {
-  router.push("/video/BV1");
+  router.push({
+    name:'video',
+    params:{videoId:'BV'+props.videoId}
+  });
 };
 </script>
 
@@ -55,6 +63,11 @@ const toVideo = () => {
     overflow: hidden;
     position: relative;
     width: 36%;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     .time-last {
       display: inline-block;
       padding: 2%;

@@ -11,7 +11,7 @@
     <div class="right-info">
       <div class="info-title" @click="toVideo">
         <!-- {{title}} -->
-        抖s女王莲，没有她就弄不出来
+        kkkk可挖离开多久啊无聊多久挖来的恐惧啊无聊的恐惧挖到卡为井底蛙大家挖空了多久挖空了多久挖ieouwqeuqwewqj就离开多久啊无聊多久挖
       </div>
       <div class="info-author" @mouseover="changeSvgColor" @mouseleave="svgColorReturn">
         <def-svg-icon svg-name="up" :svg-color="svgColor"></def-svg-icon>
@@ -86,6 +86,11 @@ const toVideo=()=>{
     overflow: hidden;
     position: relative;
     width: 36%;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     .time-last {
       display: inline-block;
       padding: 2%;

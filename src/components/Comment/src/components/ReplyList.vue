@@ -1,27 +1,34 @@
 <template>
   <div class="reply-list-container">
     <div class="avatar-small">
-      <img src="@/assets/images/amane.jpg" />
+      <img :src="replyData.avatar" />
     </div>
     <div class="reply-content">
-      <span class="user-name">四季夏目天下第一</span>&nbsp;&nbsp;&nbsp;
+      <span class="user-name">{{ replyData.accountName }}</span>&nbsp;&nbsp;
+      <span v-if="replyData.responseName">回复&nbsp;&nbsp;<span class="response-name">{{ replyData.responseName }}</span>&nbsp;&nbsp;&nbsp; </span>
       <span style="font-size: 1.1em"
         >
-        四季夏目0721
+        {{ replyData.content }}
         </span
       >
       <div class="reply-info">
-        2023-09-30 16:50 &nbsp;&nbsp;&nbsp;
+        {{ replyData.postTime }} &nbsp;&nbsp;&nbsp;
         <def-svg-icon svg-name="likeLight" svg-color="#9499a0"></def-svg-icon>
-        233 &nbsp;&nbsp;&nbsp;
+        {{ replyData.likeNum }} &nbsp;&nbsp;&nbsp;
         <def-svg-icon svg-name="unlikeLight" svg-color="#9499a0"></def-svg-icon>
-        &nbsp;&nbsp;&nbsp; 回复
+        &nbsp;&nbsp;&nbsp; <span class="reply-button" @click="clickReplyButton(replyData.commentId,replyData.accountName)">回复</span>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { CommentData } from '@/api/comment/type';
+defineProps<{replyData:CommentData,clickReplyButton:Function}>()
+
+
+
+</script>
 
 <style scoped lang="scss">
 .reply-list-container {
@@ -48,8 +55,18 @@
         color: #06aeec;
       }
     }
+    .response-name{
+      color:#008AC5;
+      cursor: pointer;
+    }
     .reply-info {
       color: #9499a0;
+      .reply-button{
+        cursor: pointer;
+          &:hover{
+            color:#06AEEC;
+          }
+      }
     }
   }
 }

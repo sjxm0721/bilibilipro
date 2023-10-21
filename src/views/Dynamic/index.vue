@@ -56,15 +56,7 @@
           </div>
         </div>
         <div class="dynamic-show">
-          <div class="dynamic-content box">
-            <def-dynamic></def-dynamic>
-          </div>
-          <div class="dynamic-content box">
-            <def-dynamic></def-dynamic>
-          </div>
-          <div class="dynamic-content box">
-            <def-dynamic></def-dynamic>
-          </div>
+          <DynamicContent></DynamicContent>
         </div>
       </div>
       <div class="dynamic-right">
@@ -146,8 +138,12 @@
 
 <script setup lang="ts">
 import DynamicNav from "../../views/Dynamic/components/DynamicNav.vue";
-import { ref } from "vue";
+import DynamicContent from "./components/DynamicContent.vue";
+import { ref} from "vue";
 const input = ref("");
+
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -187,15 +183,15 @@ const input = ref("");
         border-radius: 50%;
         cursor: pointer;
       }
-      width: 15%;
+      width: 18%;
       height: 3000px;
       margin-right: 15px;
 
       .user-info-head {
         display: flex;
         align-items: center;
-        justify-content: space-around;
         span {
+          margin-left: 15px;
           font-size: 1.2em;
           cursor: pointer;
           color: #fb7299;
@@ -226,7 +222,7 @@ const input = ref("");
         border-radius: 50%;
         cursor: pointer;
       }
-      width: 40%;
+      width: 52%;
       .title-box {
         font-size: 1.3em;
       }
@@ -251,16 +247,9 @@ const input = ref("");
           border: 1px solid #06AEEC;
         }
       }
-      .dynamic-show{
-        .dynamic-content{
-          margin-top: 10px;
-          padding: 15px;
-          background-color: #fff;
-        }
-      }
     }
     .dynamic-right {
-      width: 20%;
+      width: 25%;
       margin-left: 15px;
       .top {
         padding: 0;
@@ -280,7 +269,7 @@ const input = ref("");
         }
       }
       .topic-list {
-        padding: 3px;
+        padding: 20px;
         .title {
           font-size: 1.3em;
           font-weight: 700;
@@ -291,7 +280,7 @@ const input = ref("");
           height: 63px;
           display: flex;
           justify-content: space-between;
-          padding: 10px;
+          padding: 15px;
           border-radius: 6px;
           margin-bottom: 15px;
           &:hover {
@@ -301,7 +290,7 @@ const input = ref("");
             width: 12%;
           }
           .main-content {
-            width: 88%;
+            width: 84%;
             .topic-title > span:hover {
               color: #1296db;
             }

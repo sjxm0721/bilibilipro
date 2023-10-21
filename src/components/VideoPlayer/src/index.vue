@@ -1,42 +1,51 @@
 <template>
   <div class="player-container">
-    <NPlayer :options="playerOptions" :set="setPlayer" ref="videoPlayer" />
+    <div style="height: 100%;">
+      <NPlayer :options="playerOptions" :set="setPlayer" ref="videoPlayer" style="height: 480px;"/>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
-import Danmaku from "@nplayer/danmaku";
+import Danmaku, { DanmakuPluginOption } from "@nplayer/danmaku";
 import { Popover, Icon } from "nplayer";
 import Hls from "hls.js";
-import { onMounted } from "vue";
+import {ref,onMounted} from "vue";
 import bilibiliSvg from "@/utils/bilibiliSvg";
+import type{BarragePostData,BarrageData} from '@/api/barrage/type'
+import { BulletOption } from "@nplayer/danmaku/dist/src/ts/danmaku/bullet";
+import { useAccountStore } from "@/stores/modules/account"
+import {reqSendBarrage} from '@/api/barrage/index'
 
-let player:any = null;
+let player: any = null;
+const account = useAccountStore().myInfo
+
+const props = defineProps<{poster:String,src:String,videoId:Number,getDanmakuList:Function}>()
+
+const danmakuContent = ref<BarrageData[]>([])
 
 //弹幕资源
-const danmakuOptions = {
+const danmakuOptions= {
   autoInsert: true,
-  items: [
-    { time: 1, text: "弹幕～" ,isMe:true},
-    { time: 52, text: "星野爱" },
-  ],
+  items:danmakuContent.value as BulletOption[],
 };
 
-interface Quantity{
-    el:HTMLDivElement;
-    btn:HTMLDivElement;
-    popover:Popover;
-    itemElements:HTMLDivElement[];
-    value:any;
-    init():any
+
+interface Quantity {
+  el: HTMLDivElement;
+  btn: HTMLDivElement;
+  popover: Popover;
+  itemElements: HTMLDivElement[];
+  value: any;
+  init(): any;
 }
 
 //控制条项
-const Quantity:Quantity = {
+const Quantity: Quantity = {
   el: document.createElement("div"),
-  btn:document.createElement("div"),
-  popover:new Popover(document.createElement("div")),
-  itemElements:[],
-  value:null,
+  btn: document.createElement("div"),
+  popover: new Popover(document.createElement("div")),
+  itemElements: [],
+  value: null,
   init() {
     this.btn = document.createElement("div");
     this.btn.textContent = "画质";
@@ -58,10 +67,8 @@ registerIcon("webEnterFullscreen", bilibiliSvg.createIcon(bilibiliSvg.webFull));
 registerIcon("enterFullscreen", bilibiliSvg.createIcon(bilibiliSvg.full));
 
 const playerOptions = {
-  // poster:'@/assets/images/idol.jpg',
-  // poster:'../../../src/assets/images/hua.jpg',
-  poster:'../../../src/assets/images/teio.jpg',
-  posterEnable:true,
+  poster: props.poster,
+  posterEnable: true,
   controls: [
     [
       "play",
@@ -78,22 +85,30 @@ const playerOptions = {
   ],
   bpControls: {
     600: [
-      ['play', 'progress', 'time', 'web-fullscreen', 'fullscreen'],
+      ["play", "progress", "time", "web-fullscreen", "fullscreen"],
       [],
-      ['spacer', 'airplay', 'settings'],
-    ]
+      ["spacer", "airplay", "settings"],
+    ],
   },
-  plugins: [new Danmaku(danmakuOptions)],
+  plugins: [new Danmaku(danmakuOptions as DanmakuPluginOption)],
   themeColor: "rgba(35,173,229, 1)",
+  volumeVertical:true,
   progressBg: "rgba(35,173,229, 1)",
   volumeProgressBg: "rgba(35,173,229, 1)",
   progressDot: bilibiliSvg.createIcon(bilibiliSvg.dot, true)(),
   posterPlayEl: bilibiliSvg.createIcon(bilibiliSvg.playBig)(),
 };
 
-const setPlayer = (p:any) => {
+const setPlayer = (p: any) => {
   player = p;
 };
+
+ //更新弹幕库
+ const updateDanmaku = (newDanmakuContent:BarrageData[])=>{
+    danmakuContent.value = newDanmakuContent
+    player.danmaku.items = danmakuContent.value
+  }
+
 
 onMounted(() => {
   const hls = new Hls();
@@ -103,7 +118,7 @@ onMounted(() => {
       hls.levels.sort((a, b) => b.height - a.height);
       const frag = document.createDocumentFragment();
       // 5. 给与清晰度对应的元素添加，点击切换清晰度功能
-      const listener = (i:any) => (init:any) => {
+      const listener = (i: any) => (init: any) => {
         const last = Quantity.itemElements[Quantity.itemElements.length - 1];
         const prev = Quantity.itemElements[Quantity.value] || last;
         const el = Quantity.itemElements[i] || last;
@@ -144,23 +159,57 @@ onMounted(() => {
     });
 
     // 绑定 video 元素成功的时候，去加载视频
-    // hls.loadSource("http://43.138.245.107/idolm3u8/master.m3u8");
-    hls.loadSource("http://43.138.245.107/teiom3u8/master.m3u8");
+    hls.loadSource(props.src as string);
   });
 
-  player.on('DanmakuSend', (opts:any) => {
-  console.log(opts)
+
+ 
+
+  player.on("ready", () => {
+  // 在播放器就绪后设置弹幕数据
+  player.sendDanmaku(danmakuContent.value);
+  });
+
+  player.on("DanmakuSend", (opts: any) => {
+    const {color,text,time,type} = opts
+    let danmakuTmp:BarragePostData = {
+      color,
+      text,
+      time,
+      type,
+      videoId:props.videoId as number,
+      uid:account?.uid as number
+    }
+    sendBarrage(danmakuTmp)
+    .then(()=>{
+      props.getDanmakuList()
+    })
+  });
+
+  hls.attachMedia(player.video)
+
+});
+
+//发送弹幕的回调
+const sendBarrage = async(danmaku:BarragePostData)=>{
+  await reqSendBarrage(danmaku)
+}
+
+
+defineExpose({
+  updateDanmaku
 })
 
-  hls.attachMedia(player.video);
-});
+
 </script>
 
 <style lang="scss">
 .player-container {
   background-color: black;
-  width: 100%;
+  max-height: 500px;
   height: 100%;
+  overflow: hidden;
+  width: auto;
   .quantity {
     position: relative;
     padding: 0 8px;
@@ -185,12 +234,9 @@ onMounted(() => {
   }
 }
 
-.nplayer_slider{
-    span{
-      top:11px !important;
-    }
+.nplayer_slider {
+  span {
+    top: 11px !important;
   }
+}
 </style>
-
-
-

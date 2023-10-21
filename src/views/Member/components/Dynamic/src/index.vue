@@ -1,15 +1,7 @@
 <template>
   <div class="member-dynamic-container">
     <div class="left-show">
-      <div class="dynamic-content box">
-        <def-dynamic></def-dynamic>
-      </div>
-      <div class="dynamic-content box">
-        <def-dynamic></def-dynamic>
-      </div>
-      <div class="dynamic-content box">
-        <def-dynamic></def-dynamic>
-      </div>
+      <MemberDynamicContent></MemberDynamicContent>
     </div>
     <div class="right-info">
       <div style="margin: 20px">个人资料</div>
@@ -21,7 +13,14 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import MemberDynamicContent from './MemberDynamicContent.vue';
+import { useRoute } from 'vue-router';
+const route = useRoute()
+console.log(route.params.uid)
+
+
+</script>
 
 <style scoped lang="scss">
 .member-dynamic-container {

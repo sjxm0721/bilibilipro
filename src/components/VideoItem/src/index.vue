@@ -1,9 +1,7 @@
 <template>
   <div class="video-item-container">
     <div class="top-pic" @click="toVideo">
-      <!-- <img :src="itemPicture" /> -->
-      <img src="@/assets/images/tk.jpg" />
-
+      <img :src="videoBox?.poster" />
       <div class="video-attr">
         <def-svg-icon
           svg-name="clickNum"
@@ -11,9 +9,7 @@
           svg-height="1em"
           svg-width="1em"
         ></def-svg-icon>
-        <!-- {{ clickNum }} -->
-        <!-- 114514 -->
-        1000万
+        {{ videoBox?.clickNum }}
       </div>
       <div class="video-attr">
         <def-svg-icon
@@ -22,56 +18,53 @@
           svg-height="1em"
           svg-width="1em"
         ></def-svg-icon>
-        <!-- {{ barrageNum }} -->
-        11037
+        {{ videoBox?.barrageNum }}
       </div>
       <div class="video-attr">
-        <!-- {{ videoTime }} -->
-        111:29
+        {{ lastTime }}
       </div>
       <div id="shadow"></div>
     </div>
     <div class="center-title" @click="toVideo">
       <a>
-        <!-- {{ title }} -->
-        抖m远子大小姐XX视频意外流出
+        {{ videoBox?.title }}
       </a>
     </div>
     <div class="bottom-info">
       <a class="author">
-        <!-- {{ author }} -->
-        不知出家的下流女仆
+        {{ videoBox?.accountName }}
       </a>
       <a class="post-time">
-        <!-- {{ postTime }} -->
-        1922-2-22
+        {{ postTime }}
       </a>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter} from "vue-router";
+import type { VideoBox } from "@/api/video/type";
+import { computed } from "vue";
+import {timeConvert} from '@/utils/timeFormator'
 const router = useRouter();
-defineProps({
-  itemPicture: String,
-  clickNum: {
-    type: Number,
-    default: 0,
-  },
-  barrageNum: {
-    type: Number,
-    default: 0,
-  },
-  videoTime: String,
-  title: String,
-  author: String,
-  postTime: String,
-});
+const props = defineProps<{videoBox:VideoBox}>();
 
 const toVideo = () => {
-  router.push("/video/BV1");
-};
+  router.push({
+    name:'video',
+    params:{videoId:'BV'+props.videoBox.videoId}
+  });
+}
+
+const lastTime = computed(()=>{
+  return timeConvert(props.videoBox?.lastTime)
+}) 
+
+const postTime =computed(()=>{
+  return props.videoBox?.postTime.split(" ")[0]
+})
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -90,6 +83,9 @@ const toVideo = () => {
     position: relative;
     cursor: pointer;
     img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       border-radius: 3%;
     }
     .video-attr {

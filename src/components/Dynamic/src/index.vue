@@ -1,18 +1,28 @@
 <template>
   <div class="dynamic-component">
-    <div class="avatar">
-      <img src="@/assets/images/avatar.jpg" />
+    <div style="display: flex; font-size: 1em; justify-content: space-between;">
+      <div class="avatar">
+      <img :src="dynamicData.avatar" />
     </div>
     <div class="main-content">
-      <div><span class="user">吃肉的绵羊</span></div>
-      <div class="publish-time">2023-10-04 11:20:59</div>
+      <div>
+        <span class="user">{{ dynamicData.accountName }}</span>
+      </div>
+      <div class="publish-time">{{ dynamicData.postTime }}</div>
       <div class="dynamic-body">
         <div class="type-word">
-          我投稿了一个视频，快来围观吧！
-          djlwadjawldjawlkdjwadlkjdl家里的挖就到啦我多久啊来我的恐惧啊我离开多久外u去我饿企鹅u去哦额u去哦为i鹅u去
+          {{ dynamicData.text }}
         </div>
-        <div class="type-video" v-show="true">
-          <def-video-dynamic-item></def-video-dynamic-item>
+        <div class="type-video" v-if="dynamicData.videoId">
+          <def-video-dynamic-item
+            :videoId="dynamicData.videoId"
+            :lastTime="dynamicData.lastTime"
+            :poster="dynamicData.poster"
+            :title="dynamicData.title"
+            :videoBrief="dynamicData.videoBrief"
+            :barrageNum="dynamicData.barrageNum"
+            :clickNum="dynamicData.clickNum"
+          ></def-video-dynamic-item>
         </div>
       </div>
       <div class="user-operation">
@@ -20,27 +30,46 @@
           <def-svg-icon svg-name="forward" svg-color="#99A2AA"></def-svg-icon>
           <span>0</span>
         </div>
-        <div class="operation">
+        <div class="operation" @click="clickComment">
           <def-svg-icon svg-name="comment" svg-color="#99A2AA"></def-svg-icon>
-          <span>0</span>
+          <span>{{ dynamicData.commentNum }}</span>
         </div>
         <div class="operation">
           <def-svg-icon svg-name="likeLight" svg-color="#99A2AA"></def-svg-icon>
-          <span>0</span>
+          <span>{{ dynamicData.likeNum }}</span>
         </div>
       </div>
+    </div>
+    </div>
+    
+    <div class="comment-body" v-if="showComment">
+      <def-comment :dynamicId="dynamicData.dynamicId"></def-comment>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue"
+import type { DynamicData } from "@/api/dynamic/type";
+defineProps<{ dynamicData: DynamicData }>()
+
+const showComment = ref<boolean>(false)
+const clickComment = ()=>{
+  if(showComment.value === true){
+    showComment.value = false
+  }
+  else{
+    showComment.value = true
+  }
+}
+</script>
 
 <style scoped lang="scss">
 .dynamic-component {
-  display: flex;
-  font-size:1em;
+  font-size: 1em;
+  padding: 0 10px;
   .avatar {
-    width: 14%;
+    width: 8%;
     text-align: center;
     img {
       width: 50px;
@@ -69,6 +98,7 @@
       .type-word {
         line-height: 1.5em;
         margin-bottom: 15px;
+        word-wrap: break-word; 
       }
       .type-video {
         font-size: 1em;
@@ -80,8 +110,9 @@
       display: flex;
       align-items: center;
       width: 100%;
-      justify-content: space-between;
+      justify-content: space-around;
       font-size: 1em;
+      margin-top: 20px;
       .operation {
         cursor: pointer;
         svg {
@@ -93,5 +124,7 @@
       }
     }
   }
+  // .comment-body{
+  // }
 }
 </style>

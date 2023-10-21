@@ -1,29 +1,24 @@
 <template>
     <div class="video-member-item-content">
       <div class="top-image" @click="toVideo">
-        <img src="@/assets/images/lian.jpg" />
-        <!-- <img :src="itemPicture"> -->
+        <img :src="videoBox.poster" />
         <div class="time-last">
-          <!-- {{ videoTime }} -->
-          07:21
+          {{ lastTime }}
         </div>
       </div>
       <div class="bottom-info">
         <div class="info-title" @click="toVideo">
-          <!-- {{title}} -->
-          抖s女王莲，没有她就弄不出来
+          {{ videoBox.title }}
         </div>
         <div class="info-num">
           <div class="info-num-left"
             ><def-svg-icon svg-name="clickNum" svg-color="#9499A0" svg-height="1em" svg-width="1.2em"></def-svg-icon
             >
-              <!-- {{clickNum}} -->
-            114514
+            {{ videoBox.clickNum }}
             </div
           >
           <div class="info-num-right">
-            <!-- {{ postTime }} -->
-            02-18
+            {{ postTime }}
             </div
           >
         </div>
@@ -32,33 +27,28 @@
   </template>
   
   <script setup lang="ts">
-  // import { ref } from "vue";
+import type { VideoBox } from "@/api/video/type";
+import {timeConvert} from '@/utils/timeFormator'
   import { useRouter } from 'vue-router';
-  
-  // const svgColor: any = ref("#9499A0");
-  
-  // const changeSvgColor = () => {
-  //   svgColor.value = "#05AAE6";
-  // };
-  
-  // const svgColorReturn = () => {
-  //     svgColor.value = "#9499A0";
-  // };
-  
-  const router=useRouter()
-  defineProps({
-    itemPicture: String,
-    clickNum: {
-      type: Number,
-      default: 0,
-    },
-    postTime:String,
-    videoTime: String,
-    title: String,
-  });
+  import {computed} from 'vue'
+
+const props = defineProps<{videoBox:VideoBox}>();
+const router=useRouter()
+
+
+const lastTime = computed(()=>{
+  return timeConvert(props.videoBox?.lastTime)
+}) 
+
+const postTime =computed(()=>{
+  return props.videoBox?.postTime.split(" ")[0]
+})
   
   const toVideo=()=>{
-      router.push("/video/BV1")
+      router.push({
+        name:'video',
+        params:{videoId:'BV'+props.videoBox.videoId}
+      })
   }
   </script>
   
@@ -71,9 +61,15 @@
     flex-direction: column;
     .top-image {
       cursor: pointer;
+      height:60%;
       border-radius: 3%;
       overflow: hidden;
       position: relative;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
       .time-last {
         display: inline-block;
         padding: 2%;

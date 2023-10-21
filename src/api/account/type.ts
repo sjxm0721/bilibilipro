@@ -25,6 +25,6 @@ export interface LoginResponseData extends ResponseData{
     data?:string
 }
 
-export interface MyInfoResponseData extends ResponseData{
+export interface AccountInfoResponseData extends ResponseData{
     data:AccountInfoData
 }

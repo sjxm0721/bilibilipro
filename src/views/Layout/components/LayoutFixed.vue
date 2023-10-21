@@ -170,11 +170,17 @@ const toMember = () => {
 };
 
 const toMessage = () => {
-  router.push("/message");
+  router.push({
+    name:'messageResponse',
+    params:{uid:accountStore.myInfo?.uid}
+  });
 };
 
 const toDynamic = () => {
-  router.push("/dynamic");
+  router.push({
+    name:'dynamic',
+    params:{uid:accountStore.myInfo?.uid}
+  });
 };
 
 const toSearch = () => {

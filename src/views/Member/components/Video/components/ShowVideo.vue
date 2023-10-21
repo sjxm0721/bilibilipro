@@ -6,78 +6,44 @@
         <div
           class="order-type"
           @click="changeOrder(0)"
-          :class="{ choosed: choosedOrder === 0 }"
+          :class="{ choosed: videoPage.order === 0 }"
         >
           最新发布
         </div>
         <div
           class="order-type"
           @click="changeOrder(1)"
-          :class="{ choosed: choosedOrder === 1 }"
+          :class="{ choosed: videoPage.order === 1 }"
         >
           最多播放
         </div>
         <div
           class="order-type"
           @click="changeOrder(2)"
-          :class="{ choosed: choosedOrder === 2 }"
+          :class="{ choosed: videoPage.order === 2 }"
         >
           最多收藏
         </div>
       </div>
       <div class="video-body">
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
-        </div>
-        <div class="video">
-          <def-video-member-item></def-video-member-item>
+        <div
+          class="video"
+          v-for="item in videoPageResult?.record"
+          :key="item.videoId"
+        >
+          <def-video-member-item :videoBox="item"></def-video-member-item>
         </div>
       </div>
       <div class="video-pagination">
-        <div class="demo-pagination-block">
+        <div class="demo-pagination-block" style="margin-left: 20%">
           <el-pagination
-            current-page="1"
-            page-size="10"
-            page-sizes="[100, 200, 300, 400]"
+            v-model:current-page="videoPage.page"
+            v-model:page-size="videoPage.pageSize"
             layout="pager,total, jumper"
-            background="true"
-            :total="200"
+            :background="true"
+            :total="videoPageResult === undefined ? 0 : videoPageResult.total"
+            @current-change="handleCurrentChange"
           />
-          <!-- :small="small"
-            :disabled="disabled"
-            :background="background" -->
-          <!-- @size-change="handleSizeChange"
-            @current-change="handleCurrentChange" -->
         </div>
       </div>
     </div>
@@ -85,13 +51,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import type { VideoPage } from "@/api/member/type";
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import type { PageVideoData } from "@/api/video/type";
+import { reqMemberVideoPage } from "@/api/member";
 
-const choosedOrder = ref(0);
+const route = useRoute();
 
 const changeOrder = (order: number) => {
-  choosedOrder.value = order;
+  videoPage.value.order = order
+  videoPage.value.page = 1
+  getVideoPage();
 };
+
+//获取投稿视频列表分页数据
+const videoPage = ref<VideoPage>({
+  uid: Number(route.params.uid as string),
+  order: 0,
+  page: 1,
+  pageSize: 10,
+});
+const videoPageResult = ref<PageVideoData>();
+const getVideoPage = async () => {
+  const { uid, order, page, pageSize } = videoPage.value;
+  const res = await reqMemberVideoPage(uid, order, page, pageSize);
+  videoPageResult.value = res.data;
+};
+
+onMounted(() => getVideoPage());
+
+
+//当前页面发生变化
+const handleCurrentChange=(page:number)=>{
+  videoPage.value.page = page
+  getVideoPage()
+}
 </script>
 
 <style scoped lang="scss">
@@ -127,6 +122,10 @@ const changeOrder = (order: number) => {
         padding-bottom: 10px;
         cursor: pointer;
       }
+    }
+    .video-pagination {
+      margin-top: 30px;
+      width: 100%;
     }
   }
 }

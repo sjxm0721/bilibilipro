@@ -48,12 +48,34 @@
   
   <script setup lang="ts">
   import { ref } from "vue";
+  import { useRouter } from "vue-router";
   const navChoosed = ref(0);
   const navMouseIn = ref(-1);
-  
+  const router = useRouter()
+
   const changeNav = (newNav: number) => {
     navChoosed.value = newNav;
     navMouseIn.value = -1;
+    if(navChoosed.value === 0){
+        router.push({
+          name:'memberVideo'
+        })
+    }
+    else if(navChoosed.value === 1){
+      router.push({
+          name:'memberAudio'
+        })
+    }
+    else if(navChoosed.value === 2){
+      router.push({
+          name:'memberArticle'
+        })
+    }
+    else if(navChoosed.value === 3){
+      router.push({
+          name:'memberAlbum'
+        })
+    }
   };
   
   const mouseIn = (newNav: number) => {
@@ -75,6 +97,7 @@
     .left-nav {
       width: 16%;
       background-color: #fff;
+      border-right: 1px solid #EEE;
       ul {
         list-style: none;
         .choosed {

@@ -4,6 +4,7 @@ import { AccountInfoData } from "@/api/account/type";
 import { ref } from "vue";
 import { reqMyInfo } from "@/api/account";
 import { removeToken } from "@/utils/auth";
+import { useWebSocketStore } from "./websocket";
 import router from "@/router";
 
 export const useAccountStore = defineStore('account',()=>{
@@ -18,13 +19,16 @@ export const useAccountStore = defineStore('account',()=>{
     const getMyInfo = async(token:string)=>{
         const result = await reqMyInfo(token)
         myInfo.value = result.data 
+        websocketStore.initializeWebSocket()
     }
     const clearMyInfo = ()=>{
         myInfo.value = null
     }
+    const websocketStore = useWebSocketStore()
     const logout = ()=>{
         clearMyInfo()
         removeToken()
+        websocketStore.closeWebSocket()
         router.push("/")
         showLogin()
     }

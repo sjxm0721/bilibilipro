@@ -48,7 +48,7 @@
               <el-dropdown-menu>
                 <el-dropdown-item @click="toMember">个人空间</el-dropdown-item>
                 <el-dropdown-item>修改密码</el-dropdown-item>
-                <el-dropdown-item divided>退出登陆</el-dropdown-item>
+                <el-dropdown-item divided @click="accountStore.logout">退出登陆</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -163,11 +163,17 @@ const toMember = () => {
 };
 
 const toMessage = () => {
-  router.push("/message");
+  router.push({
+    name:'messageResponse',
+    params:{uid:accountStore.myInfo?.uid}
+  });
 };
 
 const toDynamic = () => {
-  router.push("/dynamic");
+  router.push({
+    name:'dynamic',
+    params:{uid:accountStore.myInfo?.uid}
+  });
 };
 
 const toSearch = () => {

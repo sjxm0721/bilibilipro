@@ -72,7 +72,6 @@ import { reqLogin } from "@/api/account/index";
 import { setToken } from "@/utils/auth";
 import type { LoginResponseData } from "@/api/account/type";
 import { useAccountStore } from "@/stores/modules/account";
-import { ElMessage } from "element-plus";
 
 const isVisible = ref("password");
 
@@ -96,11 +95,11 @@ const closeLogin = () => {
 const getLoginToken = async () => {
   const { accountId, password } = accountInfo;
   const result: LoginResponseData = await reqLogin({ accountId, password });
-  accountInfo.accountId = "";
-  accountInfo.password = "";
-  setToken(result.data as string);
+  accountInfo.accountId = ""
+  accountInfo.password = ""
+  setToken(result.data as string)
   accountStore.getMyInfo(result.data as string);
-  accountStore.hideLogin();
+  accountStore.hideLogin()
 };
 </script>
 

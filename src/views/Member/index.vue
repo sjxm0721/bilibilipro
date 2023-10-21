@@ -5,11 +5,11 @@
         <div class="info-bg">
           <div class="member-info">
             <div class="avatar">
-              <img src="@/assets/images/avatar.jpg" />
+              <img :src="memberStore.memberInfo?.avatar" />
             </div>
             <div class="intro">
-              <div id="name">不知出远子</div>
-              <div id="brief">小可爱，谢谢关注！！</div>
+              <div id="name">{{ memberStore.memberInfo?.accountName }}</div>
+              <div id="brief">{{ memberStore.memberInfo?.accountBrief }}</div>
             </div>
             <div class="button-right">
               <el-button type="success" size="large">关注</el-button>
@@ -61,11 +61,11 @@
           <div class="route-right">
             <div style="cursor: pointer;" @click="toFollow">
               <div class="route-right-top">关注数</div>
-              <div class="route-right-number">71</div>
+              <div class="route-right-number">{{ memberStore.memberInfo?.followNum }}</div>
             </div>
             <div style="cursor: pointer;" @click="toFans">
               <div class="route-right-top">粉丝数</div>
-              <div class="route-right-number">233万</div>
+              <div class="route-right-number">{{ memberStore.memberInfo?.fansNum }}</div>
             </div>
             <div>
               <div class="route-right-top">获赞数</div>
@@ -79,7 +79,7 @@
         </div>
       </div>
       <div class="container-body">
-        <router-view />
+        <router-view/>
       </div>
     </div>
   </div>
@@ -88,12 +88,12 @@
 <script setup lang="ts">
 import { useRoute,useRouter } from 'vue-router';
 import { ref,onMounted } from 'vue';
-import { useAccountStore } from '@/stores/modules/account';
+import { useMemberStore } from '@/stores/modules/member';
 
 const routeChoosed = ref(0)
 const router = useRouter()
 const route = useRoute()
-const accountStore = useAccountStore()
+const memberStore = useMemberStore()
 
 onMounted(()=>{
   const newPath:string = route.fullPath
@@ -116,25 +116,25 @@ const changeRoute = (newRoute:number)=>{
   if(newRoute===0){
     router.push({
     name:'member',
-    params:{uid:accountStore.myInfo?.uid}
+    params:{uid:memberStore.memberInfo?.uid}
   })
   }
   else if(newRoute===1){
     router.push({
     name:'memberDynamic',
-    params:{uid:accountStore.myInfo?.uid}
+    params:{uid:memberStore.memberInfo?.uid}
   })
   }
   else if(newRoute===2){
     router.push({
     name:'memberVideo',
-    params:{uid:accountStore.myInfo?.uid}
+    params:{uid:memberStore.memberInfo?.uid}
   })
   }
   else if(newRoute===3){
     router.push({
     name:'memberFavlist',
-    params:{uid:accountStore.myInfo?.uid}
+    params:{uid:memberStore.memberInfo?.uid}
   })
   }
 }
@@ -142,16 +142,19 @@ const changeRoute = (newRoute:number)=>{
 const toFans=()=>{
   router.push({
     name:'memberFans',
-    params:{uid:accountStore.myInfo?.uid}
+    params:{uid:memberStore.memberInfo?.uid}
   })
 }
 
 const toFollow=()=>{
   router.push({
     name:'memberFollow',
-    params:{uid:accountStore.myInfo?.uid}
+    params:{uid:memberStore.memberInfo?.uid}
   })
 }
+
+//获取用户信息
+onMounted(()=>memberStore.getMemberInfo(parseInt(route.params.uid as string)))
 
 </script>
 
