@@ -2,7 +2,7 @@
   <div class="show-video-container">
     <div class="right-video">
       <div class="video-nav">
-        <span class="label">我的视频</span>
+        <span class="label">{{ account?.uid===memberInfo?.uid?'我的视频':'TA的视频' }}</span>
         <div
           class="order-type"
           @click="changeOrder(0)"
@@ -31,7 +31,7 @@
           v-for="item in videoPageResult?.record"
           :key="item.videoId"
         >
-          <def-video-member-item :videoBox="item"></def-video-member-item>
+          <def-video-member-item :video="item"></def-video-member-item>
         </div>
       </div>
       <div class="video-pagination">
@@ -56,6 +56,11 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import type { PageVideoData } from "@/api/video/type";
 import { reqMemberVideoPage } from "@/api/member";
+import {useAccountStore} from '@/stores/modules/account'
+import { useMemberStore } from "@/stores/modules/member";
+
+const account = useAccountStore().myInfo
+const memberInfo = useMemberStore().memberInfo
 
 const route = useRoute();
 

@@ -1,17 +1,20 @@
 <template>
   <div class="fav-list-container">
     <div class="top-poster">
-      <img src="@/assets/images/nagisa.jpg" />
-      <span class="fav-count">114</span>
+      <img :src="fatherFav.favPoster" />
+      <span class="fav-count">{{ fatherFav.favNum }}</span>
     </div>
     <div class="bottom-info">
-      <div class="info-left"><span>默认收藏夹</span></div>
-      <div class="info-right">公开</div>
+      <div class="info-left"><span>{{ fatherFav.favTitle }}</span></div>
+      <div class="info-right">{{ fatherFav.isPublic === '0'?'公开':'隐藏' }}</div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { FavList } from '@/api/fav/type';
+defineProps<{fatherFav:FavList}>()
+</script>
 
 <style lang="scss" scoped>
 .fav-list-container {

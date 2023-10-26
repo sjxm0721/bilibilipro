@@ -6,8 +6,8 @@
           'message-box-right': item.fromUid === account?.uid,
           'message-box-left': item.toUid === account?.uid,
         }"
-        v-for="item in historyMessages"
-        :key="item.messageId"
+        v-for="(item, index) in websocketStore.historyMessages[messageKey]"
+        :key="index"
       >
         <div class="avatar">
           <img :src="item.fromAvatar" />
@@ -38,64 +38,55 @@
 
 <script setup lang="ts">
 import { useWebSocketStore } from "@/stores/modules/websocket";
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref} from "vue";
 import type { message } from "@/utils/websocketClass.ts";
 import { useAccountStore } from "@/stores/modules/account";
-import WebSocketClass from "@/utils/websocketClass.ts";
-const props = defineProps<{ fromUid: number; toUid: number }>();
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 const websocketStore = useWebSocketStore();
-const socket: WebSocketClass | null = useWebSocketStore().socket;
 const accountStore = useAccountStore();
 const account = accountStore.myInfo;
 const messageInfo = ref<message>({
   isSystem: "0",
-  fromUid: props.fromUid,
-  toUid: props.toUid,
+  fromUid: account?.uid,
+  toUid: parseInt(route.query.mid as string),
   content: "",
   type: "0",
   isAll: false,
 });
-const historyMessages = ref<message[]>([]);
-onMounted(() => {
+const messageKey = account?.uid!< parseInt(route.query.mid as string)! ? `${account?.uid!}-${parseInt(route.query.mid as string)!}`:`${parseInt(route.query.mid as string)!}-${account?.uid!}`
+
+onMounted(()=>{
   const historyMessage: message = {
-    fromUid: props.fromUid,
-    toUid: props.toUid,
+    fromUid: account?.uid,
+    toUid: parseInt(route.query.mid as string),
     isSystem: "0",
     isAll: true,
     type: "0",
   };
-
-  //获取数据
-  socket!.on("message", (data: string) => {
-    // 处理WebSocket消息事件
-    const messageTmp: message = JSON.parse(data);
-    const isSystem = messageTmp.isSystem;
-    const type = messageTmp.type;
-    if (isSystem === "1") {
-      //系统消息
-    } else {
-      //普通消息
-      if (type === "0") {
-        //聊天消息
-        historyMessages.value.push(messageTmp);
-      }
-    }
-  });
   websocketStore.sendMessage(JSON.stringify(historyMessage));
-});
+})
 
-//发送私信
 const sendPrivateMsg = () => {
   const msg: string = JSON.stringify(messageInfo.value);
   let msgMore = {
     fromName: account?.accountName,
     fromAvatar: account?.avatar,
+  };
+  const msgTmp = { ...messageInfo.value, ...msgMore };
+  websocketStore.sendMessage(msg);
+  if(!websocketStore.historyMessages[messageKey]){
+    websocketStore.historyMessages[messageKey]=[]
   }
-  const msgTmp = { ...messageInfo.value, ...msgMore }
-  websocketStore.sendMessage(msg)
-  historyMessages.value.push(msgTmp)
-  messageInfo.value.content = ""
-}
+  websocketStore.historyMessages[messageKey].push(msgTmp)
+  messageInfo.value.content = "";
+};
+
+onUnmounted(()=>{
+  websocketStore.historyMessages[messageKey] = []
+})
+
 </script>
 
 <style scoped lang="scss">

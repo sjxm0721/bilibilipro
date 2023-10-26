@@ -48,7 +48,9 @@
               <el-dropdown-menu>
                 <el-dropdown-item @click="toMember">个人空间</el-dropdown-item>
                 <el-dropdown-item>修改密码</el-dropdown-item>
-                <el-dropdown-item divided @click="accountStore.logout">退出登陆</el-dropdown-item>
+                <el-dropdown-item divided @click="accountStore.logout"
+                  >退出登陆</el-dropdown-item
+                >
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -103,7 +105,7 @@
           </div>
         </div>
         <div class="nav-list nav-list-right">
-          <div class="shake-icon">
+            <div class="shake-icon">
             <def-svg-icon
               svg-name="history"
               svg-width="20px"
@@ -157,22 +159,22 @@ const toHome = () => {
 
 const toMember = () => {
   router.push({
-    name:'member',
-    params:{uid:accountStore.myInfo?.uid}
+    name: "memberHome",
+    params: { uid: accountStore.myInfo?.uid },
   });
 };
 
 const toMessage = () => {
   router.push({
-    name:'messageResponse',
-    params:{uid:accountStore.myInfo?.uid}
+    name: "messageResponse",
+    params: { uid: accountStore.myInfo?.uid },
   });
 };
 
 const toDynamic = () => {
   router.push({
-    name:'dynamic',
-    params:{uid:accountStore.myInfo?.uid}
+    name: "dynamic",
+    params: { uid: accountStore.myInfo?.uid },
   });
 };
 

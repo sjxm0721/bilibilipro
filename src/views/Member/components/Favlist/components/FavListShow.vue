@@ -2,57 +2,35 @@
   <div class="fav-list-show-container">
     <div class="top-brief">
       <div class="poster-container">
-        <img src="@/assets/images/nagisa.jpg" />
+        <img :src="fatherFav.favPoster" />
         <div class="icon-poster">
           <el-icon><Collection color="#fff" /></el-icon>
         </div>
         <div class="icon-back"></div>
       </div>
       <div class="fav-list-info">
-        <div class="title">默认文件夹</div>
-        <div class="author">创建者：四季夏目</div>
-        <div class="number-private">114个内容&nbsp;&nbsp;&nbsp;&nbsp;公开</div>
+        <div class="title">{{ fatherFav.favTitle }}</div>
+        <div class="author">创建者: {{ fatherFav.name }}</div>
+        <div class="number-private">
+          {{ fatherFav.favNum }}个内容&nbsp;&nbsp;&nbsp;&nbsp;公开
+        </div>
       </div>
     </div>
     <div class="fav-video-show">
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
+      <div class="video-box" v-for="(item) in pageFavList" :key="item.favId">
+        <def-video-fav-item :fav="item"></def-video-fav-item>
       </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
-      </div>
-      <div class="video-box">
-        <def-video-fav-item></def-video-fav-item>
+    </div>
+    <div class="video-pagination">
+      <div class="demo-pagination-block" style="margin-left: 20%">
+        <el-pagination
+          v-model:current-page="favPage.page"
+          v-model:page-size="favPage.pageSize"
+          layout="pager,total, jumper"
+          :background="true"
+          :total="total"
+        />
+            <!-- @current-change="handleCurrentChange" -->
       </div>
     </div>
   </div>
@@ -60,6 +38,29 @@
 
 <script setup lang="ts">
 import { Collection } from "@element-plus/icons-vue";
+import type { FavList, FavPage } from "@/api/fav/type";
+import { onMounted, reactive, ref } from "vue";
+import {reqGetPageFavList} from '@/api/fav/index'
+const props = defineProps<{ fatherFav: FavList }>();
+
+const favPage = reactive<FavPage>({
+  page: 1,
+  pageSize: 10,
+  fatherDic: props.fatherFav.favId as number,
+});
+
+//获取输出视频列表数据
+const pageFavList = ref<FavList[]>()
+const total = ref<number>(0)
+const getPageFavList = async ()=>{
+  const res = await reqGetPageFavList(favPage)
+  pageFavList.value = res.data.record
+  total.value = res.data.total
+}
+onMounted(()=>getPageFavList())
+
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -123,6 +124,10 @@ import { Collection } from "@element-plus/icons-vue";
       font-size: 11px;
       margin-top: 20px;
     }
+  }
+  .video-pagination {
+    margin-top: 30px;
+    width: 100%;
   }
 }
 </style>

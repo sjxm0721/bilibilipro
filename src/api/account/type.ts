@@ -18,7 +18,9 @@ export interface AccountInfoData {
     followNum:number,
     fansNum:number,
     dynamicNum:number,
-    accountBrief:string
+    accountBrief:string,
+    likeNum:number,
+    clickNum:number
 }
 
 export interface LoginResponseData extends ResponseData{

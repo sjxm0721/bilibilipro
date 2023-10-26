@@ -1,7 +1,7 @@
 <template>
   <div class="video-item-container">
     <div class="top-pic" @click="toVideo">
-      <img :src="videoBox?.poster" />
+      <img :src="video?.poster" />
       <div class="video-attr">
         <def-svg-icon
           svg-name="clickNum"
@@ -9,7 +9,7 @@
           svg-height="1em"
           svg-width="1em"
         ></def-svg-icon>
-        {{ videoBox?.clickNum }}
+        {{ video?.clickNum }}
       </div>
       <div class="video-attr">
         <def-svg-icon
@@ -18,7 +18,7 @@
           svg-height="1em"
           svg-width="1em"
         ></def-svg-icon>
-        {{ videoBox?.barrageNum }}
+        {{ video?.barrageNum }}
       </div>
       <div class="video-attr">
         {{ lastTime }}
@@ -27,12 +27,12 @@
     </div>
     <div class="center-title" @click="toVideo">
       <a>
-        {{ videoBox?.title }}
+        {{ video?.title }}
       </a>
     </div>
     <div class="bottom-info">
       <a class="author">
-        {{ videoBox?.accountName }}
+        {{ video?.accountName }}
       </a>
       <a class="post-time">
         {{ postTime }}
@@ -43,25 +43,25 @@
 
 <script setup lang="ts">
 import { useRouter} from "vue-router";
-import type { VideoBox } from "@/api/video/type";
+import type { Video } from "@/api/video/type";
 import { computed } from "vue";
 import {timeConvert} from '@/utils/timeFormator'
 const router = useRouter();
-const props = defineProps<{videoBox:VideoBox}>();
+const props = defineProps<{video:Video}>();
 
 const toVideo = () => {
   router.push({
     name:'video',
-    params:{videoId:'BV'+props.videoBox.videoId}
+    params:{videoId:'BV'+props.video.videoId}
   });
 }
 
 const lastTime = computed(()=>{
-  return timeConvert(props.videoBox?.lastTime)
+  return timeConvert(props.video?.lastTime)
 }) 
 
 const postTime =computed(()=>{
-  return props.videoBox?.postTime.split(" ")[0]
+  return props.video?.postTime.split(" ")[0]
 })
 
 

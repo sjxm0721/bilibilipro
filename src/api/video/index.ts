@@ -11,6 +11,7 @@ enum API {
   PAGE_API = "/video/page",
   HOME_SUGGEST_API = "/video/homesuggest",
   VIDEO_INFO_API = "/video/info",
+  VIDEO_CLICK_API = "/video/click"
 }
 
 export const reqGetVideoPageList = (data: PageInfoData) =>

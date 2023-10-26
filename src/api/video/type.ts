@@ -7,23 +7,11 @@ export interface PageInfoData{
     key?:string
 }
 
-export interface VideoBox{
-    videoId:number,
-    title:string,
-    poster:string,
-    clickNum:number,
-    barrageNum:number,
-    lastTime:number,
-    videoBrief:string,
-    uid:number,
-    accountName:string,
-    postTime:string
-}
-
 export interface Video{
     videoId:number,
     title:string,
     src:string,
+    accountName?:string,
     postTime:string,
     barrageNum:number,
     lastTime:number,
@@ -41,7 +29,7 @@ export interface Video{
 }
 
 export interface PageVideoData{
-    record:VideoBox[],
+    record:Video[],
     total:number
 }
 
@@ -50,7 +38,7 @@ export interface PageResponseData extends ResponseData{
 }
 
 export interface HomeSuggestResponseData extends ResponseData{
-    data:VideoBox[]
+    data:Video[]
 }
 
 export interface VideoInfoResponseData extends ResponseData{

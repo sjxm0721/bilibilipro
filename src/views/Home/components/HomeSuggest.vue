@@ -2,7 +2,7 @@
   <div class="suggest-container">
     <div class="item" v-for="(item,index) in videoInSuggest" :key="index">
       <def-video-item
-        :videoBox="item"
+        :video="item"
       ></def-video-item>
     </div>
   </div>
@@ -11,9 +11,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { reqVideoInSuggest } from "@/api/video";
-import type { VideoBox } from "@/api/video/type";
+import type { Video } from "@/api/video/type";
 
-const videoInSuggest = ref<VideoBox[]>()
+const videoInSuggest = ref<Video[]>()
 
 const getVideoInSuggest = async ()=>{
   const res = await reqVideoInSuggest()

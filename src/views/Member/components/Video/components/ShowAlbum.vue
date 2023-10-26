@@ -2,7 +2,7 @@
   <div class="show-album-container">
     <div class="right-album">
       <div class="album-nav">
-        <span class="label">我的相簿</span>
+        <span class="label">{{ account?.uid===memberInfo?.uid?'我的相簿':'TA的相簿' }}</span>
         <div
           class="order-type"
           @click="changeOrder(0)"
@@ -37,6 +37,11 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import {useAccountStore} from '@/stores/modules/account'
+import { useMemberStore } from "@/stores/modules/member";
+
+const account = useAccountStore().myInfo
+const memberInfo = useMemberStore().memberInfo
 
 const choosedOrder = ref(0);
 

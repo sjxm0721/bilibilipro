@@ -21,8 +21,8 @@ let router = createRouter({
           component: () => import("../views/Member/index.vue"),
           children: [
             {
-              path: "",
-              name: "member",
+              path: "home",
+              name: "memberHome",
               component: () =>
                 import("../views/Member/components/Home/src/index.vue"),
             },
@@ -127,7 +127,14 @@ let router = createRouter({
         {
           path:'line',
           name:'messageLine',
-          component:()=>import("@/views/Message/components/MessageLine/index.vue")
+          component:()=>import("@/views/Message/components/MessageLine/index.vue"),
+          children:[
+            {
+              path:'whisper',
+              name:'messageWhisper',
+              component:()=>import("@/views/Message/components/MessageLine/components/MessageBox.vue")
+            }
+          ]
         },
       ]
     },

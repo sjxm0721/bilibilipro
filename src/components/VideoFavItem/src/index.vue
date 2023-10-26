@@ -1,43 +1,41 @@
 <template>
   <div class="video-fav-item-content">
     <div class="top-image" @click="toVideo">
-      <img src="@/assets/images/tk.jpg" />
+      <img :src="fav.videoPoster" />
       <div class="time-last">
-        11:20
+        {{ lastTime }}
       </div>
     </div>
     <div class="bottom-info">
       <div class="info-title" @click="toVideo">
-        远子大小姐想向我告白
+        {{ fav.videoTitle }}
       </div>
       <div class="info-num">
-        收藏于&nbsp;：&nbsp;&nbsp;&nbsp;2021-10-21
+        收藏于&nbsp;：&nbsp;&nbsp;&nbsp;{{ fav.createTime }}
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { VideoBox } from "@/api/video/type";
+import type { FavList } from "@/api/fav/type";
 import { timeConvert } from "@/utils/timeFormator";
 import { useRouter } from "vue-router";
 import { computed } from "vue";
 
-const props = defineProps<{ videoBox: VideoBox }>();
+const props = defineProps<{ fav: FavList }>();
 const router = useRouter();
 
 const lastTime = computed(() => {
-  return timeConvert(props.videoBox?.lastTime);
+  return timeConvert(props.fav?.lastTime as number);
 });
 
-const postTime = computed(() => {
-  return props.videoBox?.postTime.split(" ")[0];
-});
+
 
 const toVideo = () => {
   router.push({
     name: "video",
-    params: { videoId: "BV" + props.videoBox.videoId },
+    params: { videoId: "BV" + props.fav.videoId },
   });
 };
 </script>

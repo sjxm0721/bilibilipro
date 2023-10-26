@@ -29,10 +29,10 @@
       </div>
       <div class="right-show">
         <div class="top-title">
-          {{ title() }}
+          {{ title }}
         </div>
         <div class="center-message">
-            <router-view></router-view>
+          <router-view></router-view>
         </div>
       </div>
     </div>
@@ -41,37 +41,56 @@
 
 <script setup lang="ts">
 import MessageNav from "./components/MessageNav.vue";
-import { useRoute,useRouter } from "vue-router";
-import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { computed, ref, watch } from "vue";
 
 const route = useRoute();
-const router = useRouter()
+const router = useRouter();
 const uid = route.params.uid;
-const choosedNav = ref(0);
+const choosedNav = ref<number>(0);
+
 
 const messageList: string[] = [
   "messageResponse",
   "messageAt",
   "messageLike",
   "messageSys",
-  "messageLine",
+  "messageWhisper",
 ];
+
+const titleList: string[] = [
+  "回复我的",
+  "@ 我的",
+  "收到的赞",
+  "系统通知",
+  "我的消息"
+]
 
 const changeNav = (newNav: number) => {
   choosedNav.value = newNav;
   router.push({
-    name:messageList[newNav],
-    params:{uid}
-  })
+    name: messageList[newNav],
+    params: { uid },
+  });
 };
 
-const title = () => {
-  if (choosedNav.value === 1) return "@ 我的";
-  else if (choosedNav.value === 2) return "收到的赞";
-  else if (choosedNav.value === 3) return "系统通知";
-  else if (choosedNav.value === 4) return "我的消息";
-  else return "回复我的";
+const pathChoose = (newPath: string) => {
+  if (newPath.includes("/response")) choosedNav.value = 0;
+  else if (newPath.includes("/at")) choosedNav.value = 1;
+  else if (newPath.includes("/like")) choosedNav.value = 2;
+  else if (newPath.includes("/system")) choosedNav.value = 3;
+  else if (newPath.includes("/line")) choosedNav.value = 4;
 };
+
+watch(
+  () => route.fullPath,
+  (newFullPath: string) => {
+    pathChoose(newFullPath);
+  },
+  { immediate: true }
+);
+
+const title = computed(()=>titleList[choosedNav.value])
 </script>
 
 <style scoped lang="scss">

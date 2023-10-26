@@ -20,7 +20,6 @@
             ></def-svg-icon>
             全部关注
           </div>
-          <div class="nav-num" :style="{ color: navColor.follow }">100</div>
         </div>
       </div>
       <div class="nav-container">
@@ -42,24 +41,22 @@
             ></def-svg-icon>
             全部粉丝
           </div>
-          <div class="nav-num" :style="{ color: navColor.fans }">10万</div>
         </div>
       </div>
     </div>
     <div class="right-show">
-      <div class="right-top-title">
-        {{ rightTopTitle() }}
-      </div>
-      <router-view :key="route.fullPath"/>
+      <router-view :key="route.fullPath" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive,onMounted } from "vue";
-import { useRoute,useRouter } from "vue-router";
-const router = useRouter()
-const route = useRoute()
+import { ref, reactive, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/modules/member";
+const router = useRouter();
+const route = useRoute();
+const memberStore = useMemberStore()
 const navChoosed = ref("");
 const navMouseIn = ref("");
 const navColor = reactive({
@@ -67,11 +64,31 @@ const navColor = reactive({
   fans: "#99A2AA",
 });
 
-onMounted(()=>{
-    const routePath:string = route.fullPath
-    if(routePath.includes('/fans/follow')) changeNav('follow')
-    if(routePath.includes('/fans/fans')) changeNav('fans') 
-})
+
+const pathChoose = (newPath: string) => {
+  if (newPath.includes("/fans/follow")) {
+    navColor.follow = "#99A2AA";
+    navColor.fans = "#99A2AA";
+    navChoosed.value = "follow";
+    navMouseIn.value = "";
+    navColor["follow"] = "#fff";
+  }
+  if (newPath.includes("/fans/fans")) {
+    navColor.follow = "#99A2AA";
+  navColor.fans = "#99A2AA";
+  navChoosed.value = "fans";
+  navMouseIn.value = "";
+  navColor["fans"] = "#fff";
+  };
+};
+
+watch(
+  () => route.fullPath,
+  (newFullPath) => {
+    pathChoose(newFullPath);
+  },
+  { immediate: true }
+);
 
 const changeNav = (newNav: string) => {
   navColor.follow = "#99A2AA";
@@ -79,7 +96,7 @@ const changeNav = (newNav: string) => {
   navChoosed.value = newNav;
   navMouseIn.value = "";
   navColor[newNav] = "#fff";
-  router.push(`/member/114514/fans/${newNav}`)
+  router.push(`/member/${memberStore.memberInfo?.uid}/fans/${newNav}`);
 };
 
 const mouseIn = (newNav: string) => {
@@ -92,11 +109,6 @@ const mouseOut = () => {
   navMouseIn.value = "";
 };
 
-const rightTopTitle=()=>{
-  if(navChoosed.value === 'follow') return '全部关注'
-  if(navChoosed.value === 'fans') return '全部粉丝'
-  else return ''
-}
 </script>
 
 <style scoped lang="scss">
@@ -128,11 +140,11 @@ const rightTopTitle=()=>{
         margin: 10px 0 20px;
         align-items: center;
         justify-content: space-around;
-        transition: background-color .3s ease;
-        .nav-logo{
-            svg{
-                margin-right: 3px;
-            }
+        transition: background-color 0.3s ease;
+        .nav-logo {
+          svg {
+            margin-right: 3px;
+          }
         }
       }
     }
@@ -142,11 +154,6 @@ const rightTopTitle=()=>{
     padding: 30px 15px;
     vertical-align: baseline;
     background-color: #fff;
-    .right-top-title{
-      height: 40px;
-      font-size: 1.3em;
-      border-bottom: 1px solid #eee;
-    }
   }
 }
 </style>

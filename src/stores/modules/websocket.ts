@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
 import WebSocketClass from "@/utils/websocketClass";
 import { useAccountStore } from "./account";
+import type { message } from "@/utils/websocketClass.ts";
 import { ref } from "vue";
 
 export const useWebSocketStore = defineStore("websocket", () => {
   const socket = ref<WebSocketClass | null>(null);
+  const historyMessages = ref<{ [key: string]: message[] }>({});
   const initializeWebSocket = () => {
     const account = useAccountStore().myInfo;
     socket.value = new WebSocketClass(
@@ -19,6 +21,28 @@ export const useWebSocketStore = defineStore("websocket", () => {
     socket.value.on("open", (event: Event) => {
       // 处理WebSocket连接已打开事件
       console.log("已经连接上ws服务器", event);
+    });
+
+    socket.value.on("message", (data: string) => {
+      // 处理WebSocket消息事件
+      const messageTmp: message = JSON.parse(data);
+      const isSystem = messageTmp.isSystem;
+      const type = messageTmp.type;
+      if (isSystem === "1") {
+        //系统消息
+      } else {
+        //普通消息
+        if (type === "0") {
+          const fromUid:number = messageTmp.fromUid!;
+          const toUid:number = messageTmp.toUid!;
+          const key = fromUid < toUid ? `${fromUid}-${toUid}`:`${toUid}-${fromUid}`
+          if (!historyMessages.value[key]) {
+            historyMessages.value[key] = [];
+          }
+    
+          historyMessages.value[key].push(messageTmp);
+        }
+      }
     });
 
 
@@ -47,6 +71,7 @@ export const useWebSocketStore = defineStore("websocket", () => {
   };
   return {
     socket,
+    historyMessages,
     initializeWebSocket,
     closeWebSocket,
     sendMessage,

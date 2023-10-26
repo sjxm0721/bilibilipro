@@ -154,7 +154,7 @@ const toHome = () => {
 
 const toMember = () => {
   router.push({
-    name:'member',
+    name:'memberHome',
     params:{uid:accountStore.myInfo?.uid}
   });
 };

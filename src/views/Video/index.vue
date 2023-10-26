@@ -31,7 +31,7 @@
             :poster="videoInfo?.poster"
             :src="videoInfo?.src"
             :danmakuContent="danmakuContent"
-            :videoId = "videoInfo?.videoId"
+            :videoId="videoInfo?.videoId"
             :getDanmakuList="getDanmakuList"
             ref="videoPlayer"
           ></def-video-player>
@@ -115,20 +115,21 @@
         </div>
       </div>
       <div class="video-comment" v-if="videoInfo">
-          <def-comment :videoId="videoInfo?.videoId"></def-comment>
+        <def-comment :videoId="videoInfo?.videoId"></def-comment>
       </div>
     </div>
     <div class="container-right">
       <div class="author">
-        <div class="author-avatar">
+        <div class="author-avatar" @click="toMember">
           <img :src="accountInfo?.avatar" />
         </div>
         <div class="author-info">
           <div class="info-top">
-            <a>{{ accountInfo?.accountName }}</a>
+            <a @click="toMember">{{ accountInfo?.accountName }}</a>
             <a
               @mouseover="changeSvgColor('messageSolid')"
               @mouseleave="svgColorReturn"
+              @click="toLine"
               ><def-svg-icon
                 svg-name="messageSolid"
                 :svg-color="svgColors.messageSolid"
@@ -142,10 +143,25 @@
             {{ accountInfo?.accountBrief }}
           </div>
           <div class="info-bottom">
-            <el-button type="primary">
+            <el-button type="primary" v-if="!isFollowed" @click="clickFollow">
               <def-svg-icon svg-name="plus" svg-color="#ffffff"></def-svg-icon
               >&nbsp;&nbsp; 关注&nbsp;{{ accountInfo?.fansNum }}
             </el-button>
+
+            <el-dropdown v-else>
+              <el-button type="info">
+                <def-svg-icon
+                  svg-name="cancelFollow"
+                  svg-color="#ffffff"
+                ></def-svg-icon>
+                &nbsp;&nbsp; 已关注&nbsp;{{ accountInfo?.fansNum }}
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="clickCancelFollow">取消关注</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </div>
         </div>
       </div>
@@ -159,7 +175,7 @@
                   <th style="width: 60%">弹幕内容</th>
                   <th style="width: 25%">发送时间</th>
                 </tr>
-                <tr v-for="(item) in danmakuContent" :key="item.barrageId">
+                <tr v-for="item in danmakuContent" :key="item.barrageId">
                   <td>{{ timeConvert(parseInt(item.time.toString())) }}</td>
                   <td class="barrage-content">
                     {{ item.text }}
@@ -220,19 +236,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref,watch } from "vue";
-import { useRoute } from "vue-router";
+import { onMounted, reactive, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import type { Video } from "@/api/video/type";
-import type {AccountInfoData} from '@/api/account/type'
+import type { AccountInfoData } from "@/api/account/type";
 import { reqGetVideoInfoByUid } from "@/api/video";
-import {reqGetAccountInfoById} from '@/api/account'
-import type{BarrageData} from '@/api/barrage/type'
-import {reqGetVideoBarrage} from '@/api/barrage/index'
+import { reqGetAccountInfoById } from "@/api/account";
+import type { BarrageData } from "@/api/barrage/type";
+import { reqGetVideoBarrage } from "@/api/barrage/index";
 import { useAccountStore } from "@/stores/modules/account";
 import { timeConvert } from "@/utils/timeFormator";
+import { reqIsFollow, reqAddFollow,reqCancelFollow } from "@/api/follow";
+import type { FollowInfo } from "@/api/follow/type";
 
-const account=useAccountStore().myInfo;
+const account = useAccountStore().myInfo;
 const route = useRoute();
+const router = useRouter();
 
 const svgColors: any = reactive({
   like: "#61666D",
@@ -256,43 +275,95 @@ const videoInfo = ref<Video>();
 const getVideoInfo = async () => {
   const res = await reqGetVideoInfoByUid(Number(route.params.videoId.slice(2)));
   videoInfo.value = res.data;
-  getAccountInfo(videoInfo.value.uid)
+  getAccountInfo(videoInfo.value.uid);
 };
 
 onMounted(() => getVideoInfo());
 
 //获取投稿人相关信息
-const accountInfo = ref<AccountInfoData>()
-const getAccountInfo = async (uid:number)=>{
-  const res = await reqGetAccountInfoById(uid)
-  accountInfo.value = res.data
-}
-
+const accountInfo = ref<AccountInfoData>();
+const getAccountInfo = async (uid: number) => {
+  const res = await reqGetAccountInfoById(uid);
+  accountInfo.value = res.data;
+  isFollow(accountInfo.value.uid);
+};
 
 //获取视频弹幕列表
-const danmakuContent = ref<BarrageData[]>([])
+const danmakuContent = ref<BarrageData[]>([]);
 
-const getDanmakuList = async()=>{
-    const res = await reqGetVideoBarrage(Number(route.params.videoId.slice(2)))
-    danmakuContent.value = res.data
-    danmakuContent.value.forEach((item:BarrageData)=>{
-      if(item.uid===account?.uid)
-      item.isMe = true
-      else item.isMe = false
-    })
-}
-onMounted(()=>getDanmakuList())
+const getDanmakuList = async () => {
+  const res = await reqGetVideoBarrage(Number(route.params.videoId.slice(2)));
+  danmakuContent.value = res.data;
+  danmakuContent.value.forEach((item: BarrageData) => {
+    if (item.uid === account?.uid) item.isMe = true;
+    else item.isMe = false;
+  });
+};
+onMounted(() => getDanmakuList());
 
 //播放器元素
 const videoPlayer = ref<null | Element>(null);
 
-  watch(danmakuContent, (newDanmakuContent:BarrageData[]) => {
+watch(danmakuContent, (newDanmakuContent: BarrageData[]) => {
   if (videoPlayer.value && newDanmakuContent.length > 0) {
     // 更新播放器
     (videoPlayer.value as any).updateDanmaku(newDanmakuContent);
   }
 });
 
+//前往用户页面
+const toMember = () => {
+  router.push({
+    name: "memberHome",
+    params: { uid: accountInfo.value?.uid },
+  });
+};
+
+//前往私信页面
+const toLine = () => {
+  router.push({
+    name: "messageWhisper",
+    params: { uid: account?.uid },
+    query: { mid: accountInfo.value?.uid },
+  });
+};
+
+//查看是否已经关注
+const isFollowed = ref<boolean>(false);
+const isFollow = async (followedUid: number) => {
+  const res = await reqIsFollow(account!.uid, followedUid);
+  console.log(res);
+  isFollowed.value = res.data;
+};
+
+//点击关注按钮的回调
+//点击关注按钮的回调
+const follow = async () => {
+  const followInfo: FollowInfo = {
+    followedUid: accountInfo.value!.uid,
+    followerUid: account?.uid!,
+  };
+  await reqAddFollow(followInfo);
+};
+const clickFollow = () => {
+  follow().then(async () => {
+    await getAccountInfo(videoInfo.value!.uid);
+  });
+};
+
+//点击取消关注的回调
+const cancelFollow = async()=>{
+  const followInfo: FollowInfo = {
+    followedUid: accountInfo.value!.uid,
+    followerUid: account?.uid!,
+  };
+  await reqCancelFollow(followInfo);
+}
+const clickCancelFollow = () =>{
+  cancelFollow().then(async ()=>{
+    await getAccountInfo(videoInfo.value!.uid)
+  })
+}
 </script>
 
 <style scoped lang="scss">

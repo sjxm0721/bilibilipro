@@ -2,7 +2,7 @@
   <div style="margin:50px 20px;">
     <div class="container" v-infinite-scroll="load" :infinite-scroll-disabled="disabled">
       <div class="video" v-for="(item,index) in videoList" :key="index">
-        <def-video-item :videoBox ="item"></def-video-item>
+        <def-video-item :video ="item"></def-video-item>
       </div>
     </div>
   </div>
@@ -11,10 +11,10 @@
 <script setup lang="ts">
 import { reactive, ref,onMounted } from 'vue';
 import {reqGetVideoPageList} from '@/api/video/index'
-import type {VideoBox} from '@/api/video/type'
+import type {Video} from '@/api/video/type'
 
 //获取基础数据渲染
-const videoList = ref<VideoBox[]>([])
+const videoList = ref<Video[]>([])
 const reqData = reactive({
   page:1,
   pageSize:12
