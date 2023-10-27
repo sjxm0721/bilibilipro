@@ -127,6 +127,7 @@
           <div class="info-top">
             <a @click="toMember">{{ accountInfo?.accountName }}</a>
             <a
+              v-if="account?.uid!==accountInfo?.uid"
               @mouseover="changeSvgColor('messageSolid')"
               @mouseleave="svgColorReturn"
               @click="toLine"
@@ -142,7 +143,7 @@
           <div class="info-middle">
             {{ accountInfo?.accountBrief }}
           </div>
-          <div class="info-bottom">
+          <div class="info-bottom" v-if="account?.uid!==accountInfo?.uid">
             <el-button type="primary" v-if="!isFollowed" @click="clickFollow">
               <def-svg-icon svg-name="plus" svg-color="#ffffff"></def-svg-icon
               >&nbsp;&nbsp; 关注&nbsp;{{ accountInfo?.fansNum }}

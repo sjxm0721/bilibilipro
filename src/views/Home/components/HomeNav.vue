@@ -94,26 +94,52 @@
           </div>
         </div>
         <div class="nav-list nav-list-right">
-          <div class="shake-icon">
-            <def-svg-icon
-              svg-name="collection"
-              svg-width="20px"
-              svg-height="20px"
-              svg-color="#ffffff"
-            ></def-svg-icon
-            ><a>收藏</a>
-          </div>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <div class="shake-icon">
+                <def-svg-icon
+                  svg-name="collection"
+                  svg-width="20px"
+                  svg-height="20px"
+                  svg-color="#ffffff"
+                ></def-svg-icon
+                ><a style="color: #fff;">收藏</a>
+              </div>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>Action 1</el-dropdown-item>
+                <el-dropdown-item>Action 2</el-dropdown-item>
+                <el-dropdown-item>Action 3</el-dropdown-item>
+                <el-dropdown-item disabled>Action 4</el-dropdown-item>
+                <el-dropdown-item divided>Action 5</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
         <div class="nav-list nav-list-right">
-            <div class="shake-icon">
-            <def-svg-icon
-              svg-name="history"
-              svg-width="20px"
-              svg-height="20px"
-              svg-color="#ffffff"
-            ></def-svg-icon
-            ><a>历史</a>
-          </div>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <div class="shake-icon">
+                <def-svg-icon
+                  svg-name="history"
+                  svg-width="20px"
+                  svg-height="20px"
+                  svg-color="#ffffff"
+                ></def-svg-icon
+                ><a style="color: #fff">历史</a>
+              </div>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>Action 1</el-dropdown-item>
+                <el-dropdown-item>Action 2</el-dropdown-item>
+                <el-dropdown-item>Action 3</el-dropdown-item>
+                <el-dropdown-item disabled>Action 4</el-dropdown-item>
+                <el-dropdown-item divided>Action 5</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
         <div class="nav-list nav-list-right">
           <div class="shake-icon">

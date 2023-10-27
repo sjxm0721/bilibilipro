@@ -46,10 +46,12 @@ import { useRouter} from "vue-router";
 import type { Video } from "@/api/video/type";
 import { computed } from "vue";
 import {timeConvert} from '@/utils/timeFormator'
+import { reqClickVideo } from "@/api/video";
 const router = useRouter();
 const props = defineProps<{video:Video}>();
 
-const toVideo = () => {
+const toVideo = async () => {
+  await reqClickVideo(props.video.videoId);
   router.push({
     name:'video',
     params:{videoId:'BV'+props.video.videoId}

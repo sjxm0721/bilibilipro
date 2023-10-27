@@ -44,6 +44,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
+// import { reqClickVideo } from "@/api/video";
 
 const svgColor: any = ref("#9499A0");
 

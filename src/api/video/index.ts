@@ -25,4 +25,9 @@ export const reqGetVideoInfoByUid = (videoId: number) =>
     params: { videoId },
   });
 
+export const reqClickVideo = (videoId:number)=>
+  request.get<any,any>(API.VIDEO_CLICK_API,{
+    params:{videoId}
+  })
+
 

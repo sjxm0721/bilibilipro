@@ -47,26 +47,26 @@
       </div>
     </div>
     <div class="avatar">
-        <div v-if="accountStore.myInfo?.uid">
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              <img
-                :src="accountStore.myInfo?.avatar"
-              />
-            </span>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item @click="toMember">个人空间</el-dropdown-item>
-                <el-dropdown-item>修改密码</el-dropdown-item>
-                <el-dropdown-item divided @click="accountStore.logout">退出登陆</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </div>
-        <div v-else @click="accountStore.showLogin" class="to-login">
-          <span>登陆</span>
-        </div>
-       </div> 
+      <div v-if="accountStore.myInfo?.uid">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <img :src="accountStore.myInfo?.avatar" />
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="toMember">个人空间</el-dropdown-item>
+              <el-dropdown-item>修改密码</el-dropdown-item>
+              <el-dropdown-item divided @click="accountStore.logout"
+                >退出登陆</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+      <div v-else @click="accountStore.showLogin" class="to-login">
+        <span>登陆</span>
+      </div>
+    </div>
     <div class="col-right">
       <div class="nav-list nav-list-right">
         <div class="shake-icon">
@@ -102,26 +102,52 @@
         </div>
       </div>
       <div class="nav-list nav-list-right">
-        <div class="shake-icon">
-          <def-svg-icon
-            svg-name="collection"
-            svg-width="20px"
-            svg-height="20px"
-            svg-color="#000000"
-          ></def-svg-icon
-          ><a>收藏</a>
-        </div>
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <div class="shake-icon">
+              <def-svg-icon
+                svg-name="collection"
+                svg-width="20px"
+                svg-height="20px"
+                svg-color="#000000"
+              ></def-svg-icon
+              ><a style="color: #000">收藏</a>
+            </div>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item>Action 1</el-dropdown-item>
+              <el-dropdown-item>Action 2</el-dropdown-item>
+              <el-dropdown-item>Action 3</el-dropdown-item>
+              <el-dropdown-item disabled>Action 4</el-dropdown-item>
+              <el-dropdown-item divided>Action 5</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
       <div class="nav-list nav-list-right">
-        <div class="shake-icon">
-          <def-svg-icon
-            svg-name="history"
-            svg-width="20px"
-            svg-height="20px"
-            svg-color="#000000"
-          ></def-svg-icon
-          ><a>历史</a>
-        </div>
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <div class="shake-icon">
+              <def-svg-icon
+                svg-name="history"
+                svg-width="20px"
+                svg-height="20px"
+                svg-color="#000000"
+              ></def-svg-icon
+              ><a style="color: #000">历史</a>
+            </div>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item>Action 1</el-dropdown-item>
+              <el-dropdown-item>Action 2</el-dropdown-item>
+              <el-dropdown-item>Action 3</el-dropdown-item>
+              <el-dropdown-item disabled>Action 4</el-dropdown-item>
+              <el-dropdown-item divided>Action 5</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
       <div class="nav-list nav-list-right">
         <div class="shake-icon">
@@ -164,22 +190,22 @@ const toHome = () => {
 
 const toMember = () => {
   router.push({
-    name:'memberHome',
-    params:{uid:accountStore.myInfo?.uid}
+    name: "memberHome",
+    params: { uid: accountStore.myInfo?.uid },
   });
 };
 
 const toMessage = () => {
   router.push({
-    name:'messageResponse',
-    params:{uid:accountStore.myInfo?.uid}
+    name: "messageResponse",
+    params: { uid: accountStore.myInfo?.uid },
   });
 };
 
 const toDynamic = () => {
   router.push({
-    name:'dynamic',
-    params:{uid:accountStore.myInfo?.uid}
+    name: "dynamic",
+    params: { uid: accountStore.myInfo?.uid },
   });
 };
 
@@ -191,7 +217,6 @@ const searchHidden = () => {
   if (useRoute().fullPath.includes("/search")) return "hidden";
   else return "visible";
 };
-
 </script>
 
 <style scoped lang="scss">
@@ -324,12 +349,12 @@ const searchHidden = () => {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: #06AEEC;
+      background-color: #06aeec;
       text-align: center;
       cursor: pointer;
-      >span{
+      > span {
         line-height: 40px;
-        color:#fff;
+        color: #fff;
         font-weight: bold;
       }
     }

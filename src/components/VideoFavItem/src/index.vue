@@ -22,6 +22,7 @@ import type { FavList } from "@/api/fav/type";
 import { timeConvert } from "@/utils/timeFormator";
 import { useRouter } from "vue-router";
 import { computed } from "vue";
+import { reqClickVideo } from "@/api/video";
 
 const props = defineProps<{ fav: FavList }>();
 const router = useRouter();
@@ -32,7 +33,8 @@ const lastTime = computed(() => {
 
 
 
-const toVideo = () => {
+const toVideo = async () => {
+  await reqClickVideo(props.fav.videoId!)
   router.push({
     name: "video",
     params: { videoId: "BV" + props.fav.videoId },
