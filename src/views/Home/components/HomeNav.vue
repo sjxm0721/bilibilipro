@@ -72,15 +72,24 @@
           </div>
         </div>
         <div class="nav-list nav-list-right" @click="toMessage">
-          <div class="shake-icon">
-            <def-svg-icon
-              svg-name="message"
-              svg-width="20px"
-              svg-height="20px"
-              svg-color="#ffffff"
-            ></def-svg-icon
-            ><a>消息</a>
-          </div>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <div class="shake-icon">
+                <def-svg-icon
+                  svg-name="message"
+                  svg-width="20px"
+                  svg-height="20px"
+                  svg-color="#ffffff"
+                ></def-svg-icon
+                ><a style="color:#fff;">消息</a>
+              </div>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item v-for="count in 5" @click="changeNav(count-1)">{{ titleList[count-1] }}</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
         <div class="nav-list nav-list-right" @click="toDynamic">
           <div class="shake-icon">
@@ -103,16 +112,31 @@
                   svg-height="20px"
                   svg-color="#ffffff"
                 ></def-svg-icon
-                ><a style="color: #fff;">收藏</a>
+                ><a style="color: #fff">收藏</a>
               </div>
             </span>
             <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item>Action 1</el-dropdown-item>
-                <el-dropdown-item>Action 2</el-dropdown-item>
-                <el-dropdown-item>Action 3</el-dropdown-item>
-                <el-dropdown-item disabled>Action 4</el-dropdown-item>
-                <el-dropdown-item divided>Action 5</el-dropdown-item>
+              <el-dropdown-menu
+                style="max-height: 344px; overflow: auto"
+                v-if="favStore.historeFavInfo.length>0"
+              >
+                <el-dropdown-item
+                  v-for="item in favStore.historeFavInfo"
+                  :key="item.favId"
+                  style="white-space: normal !important;cursor: auto !important;"
+                >
+                  <div style="padding: 5px; width: 300px">
+                    <def-video-nav-item :favList="item"></def-video-nav-item>
+                  </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+              <el-dropdown-menu
+                v-else
+                style="width: 180px;height: 180px;overflow: hidden;"
+              >
+                  <div>
+                    <img src="@/assets/images/empty.jpg" style="width: 100%;height: 100%;object-fit: cover;">
+                  </div>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -175,9 +199,11 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { useAccountStore } from "@/stores/modules/account";
+import { useFavStore } from "@/stores/modules/fav";
 
 const accountStore = useAccountStore();
 const router = useRouter();
+const favStore = useFavStore();
 
 const toHome = () => {
   router.push("/");
@@ -207,9 +233,39 @@ const toDynamic = () => {
 const toSearch = () => {
   router.push("/search");
 };
+
+const messageList: string[] = [
+  "messageResponse",
+  "messageAt",
+  "messageLike",
+  "messageSys",
+  "messageWhisper",
+];
+
+const titleList: string[] = [
+  "回复我的",
+  "@ 我的",
+  "收到的赞",
+  "系统通知",
+  "我的消息"
+]
+
+const changeNav = (newNav: number) => {
+  router.push({
+    name: messageList[newNav],
+    params: { uid:accountStore.myInfo?.uid },
+  });
+};
 </script>
 
 <style scoped lang="scss">
+// :deep().el-dropdown-menu__item {
+  // white-space: normal !important;
+  // cursor: auto !important;
+// }
+:deep() .el-dropdown-menu__item:hover {
+  background-color: #eee !important;
+}
 .banner-logo img {
   width: 160px;
   height: 80px;

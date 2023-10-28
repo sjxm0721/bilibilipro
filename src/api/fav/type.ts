@@ -22,7 +22,9 @@ export interface FavList{
     name?:string,
     videoTitle?:string,
     lastTime?:number,
-    videoPoster:string
+    videoPoster:string,
+    fatherDicTitle?:string,
+    videoUName?:string
 }
 
 export interface FavListResponseData extends ResponseData{
@@ -30,9 +32,10 @@ export interface FavListResponseData extends ResponseData{
 }
 
 export interface FavPage{
+    uid:number,
     page:number,
     pageSize:number,
-    fatherDic:number
+    fatherDic?:number
 }
 
 export interface PageFavData{

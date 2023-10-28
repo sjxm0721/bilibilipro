@@ -16,6 +16,7 @@ export const reqGetFatherFavList = (uid:number) =>
 export const reqGetPageFavList = (favPage:FavPage)=>
     request.get<any,PageFavResponseData>(API.PAGE_FAV_LIST_API,{
         params:{
+            uid:favPage.uid,
             page:favPage.page,
             pageSize:favPage.pageSize,
             fatherDic:favPage.fatherDic
