@@ -81,12 +81,16 @@
                   svg-height="20px"
                   svg-color="#ffffff"
                 ></def-svg-icon
-                ><a style="color:#fff;">消息</a>
+                ><a style="color: #fff">消息</a>
               </div>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item v-for="count in 5" @click="changeNav(count-1)">{{ titleList[count-1] }}</el-dropdown-item>
+                <el-dropdown-item
+                  v-for="count in 5"
+                  @click="changeNav(count - 1)"
+                  >{{ titleList[count - 1] }}</el-dropdown-item
+                >
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -118,12 +122,15 @@
             <template #dropdown>
               <el-dropdown-menu
                 style="max-height: 344px; overflow: auto"
-                v-if="favStore.historeFavInfo.length>0"
+                v-if="favStore.historeFavInfo.length > 0"
               >
                 <el-dropdown-item
                   v-for="item in favStore.historeFavInfo"
                   :key="item.favId"
-                  style="white-space: normal !important;cursor: auto !important;"
+                  style="
+                    white-space: normal !important;
+                    cursor: auto !important;
+                  "
                 >
                   <div style="padding: 5px; width: 300px">
                     <def-video-nav-item :favList="item"></def-video-nav-item>
@@ -132,11 +139,14 @@
               </el-dropdown-menu>
               <el-dropdown-menu
                 v-else
-                style="width: 180px;height: 180px;overflow: hidden;"
+                style="width: 180px; height: 180px; overflow: hidden"
               >
-                  <div>
-                    <img src="@/assets/images/empty.jpg" style="width: 100%;height: 100%;object-fit: cover;">
-                  </div>
+                <div>
+                  <img
+                    src="@/assets/images/empty.jpg"
+                    style="width: 100%; height: 100%; object-fit: cover"
+                  />
+                </div>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -155,12 +165,35 @@
               </div>
             </span>
             <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item>Action 1</el-dropdown-item>
-                <el-dropdown-item>Action 2</el-dropdown-item>
-                <el-dropdown-item>Action 3</el-dropdown-item>
-                <el-dropdown-item disabled>Action 4</el-dropdown-item>
-                <el-dropdown-item divided>Action 5</el-dropdown-item>
+              <el-dropdown-menu
+                style="max-height: 344px; overflow: auto"
+                v-if="historyStore.historyPageList.length > 0"
+              >
+                <el-dropdown-item
+                  v-for="item in historyStore.historyPageList"
+                  :key="item.historyId"
+                  style="
+                    white-space: normal !important;
+                    cursor: auto !important;
+                  "
+                >
+                <div style="padding: 5px; width: 300px">
+                  <def-video-history-item
+                    :historyInfo="item"
+                  ></def-video-history-item>
+                </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+              <el-dropdown-menu
+                v-else
+                style="width: 180px; height: 180px; overflow: hidden"
+              >
+                <div>
+                  <img
+                    src="@/assets/images/empty.jpg"
+                    style="width: 100%; height: 100%; object-fit: cover"
+                  />
+                </div>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -200,10 +233,12 @@
 import { useRouter } from "vue-router";
 import { useAccountStore } from "@/stores/modules/account";
 import { useFavStore } from "@/stores/modules/fav";
+import { useHistoryStore } from "@/stores/modules/history";
 
 const accountStore = useAccountStore();
 const router = useRouter();
 const favStore = useFavStore();
+const historyStore = useHistoryStore();
 
 const toHome = () => {
   router.push("/");
@@ -247,21 +282,21 @@ const titleList: string[] = [
   "@ 我的",
   "收到的赞",
   "系统通知",
-  "我的消息"
-]
+  "我的消息",
+];
 
 const changeNav = (newNav: number) => {
   router.push({
     name: messageList[newNav],
-    params: { uid:accountStore.myInfo?.uid },
+    params: { uid: accountStore.myInfo?.uid },
   });
 };
 </script>
 
 <style scoped lang="scss">
 // :deep().el-dropdown-menu__item {
-  // white-space: normal !important;
-  // cursor: auto !important;
+// white-space: normal !important;
+// cursor: auto !important;
 // }
 :deep() .el-dropdown-menu__item:hover {
   background-color: #eee !important;

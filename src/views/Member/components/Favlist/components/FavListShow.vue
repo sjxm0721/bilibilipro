@@ -12,12 +12,22 @@
         <div class="title">{{ fatherFav.favTitle }}</div>
         <div class="author">创建者: {{ fatherFav.name }}</div>
         <div class="number-private">
-          {{ fatherFav.favNum }}个内容&nbsp;&nbsp;&nbsp;&nbsp;公开
+          {{ fatherFav.favNum }}个内容&nbsp;&nbsp;&nbsp;&nbsp;{{
+            fatherFav.isPublic === "1" ? "私密" : "公开"
+          }}
         </div>
+      </div>
+      <div class="top-btn" v-show="parseInt(route.params.uid as string) === accountStore.myInfo?.uid">
+          <el-popconfirm title="确定删除吗？" @confirm="deleteFatherFav(fatherFav.favId!)">
+          <template #reference>
+            <el-button  type="info">删除收藏夹</el-button>            
+          </template>
+        </el-popconfirm>
+       
       </div>
     </div>
     <div class="fav-video-show">
-      <div class="video-box" v-for="(item) in pageFavList" :key="item.favId">
+      <div class="video-box" v-for="item in pageFavList" :key="item.favId">
         <def-video-fav-item :fav="item"></def-video-fav-item>
       </div>
     </div>
@@ -30,7 +40,7 @@
           :background="true"
           :total="total"
         />
-            <!-- @current-change="handleCurrentChange" -->
+        <!-- @current-change="handleCurrentChange" -->
       </div>
     </div>
   </div>
@@ -40,27 +50,51 @@
 import { Collection } from "@element-plus/icons-vue";
 import type { FavList, FavPage } from "@/api/fav/type";
 import { onMounted, reactive, ref } from "vue";
-import {reqGetPageFavList} from '@/api/fav/index'
-const props = defineProps<{ fatherFav: FavList }>();
-
+import { reqDeleteFatherFav, reqGetPageFavList } from "@/api/fav/index";
+import { useRoute,useRouter } from "vue-router";
+import { useAccountStore } from "@/stores/modules/account";
+import { useFavStore } from "@/stores/modules/fav";
+const props = defineProps<{ fatherFav: FavList,getFatherFavList:Function }>();
+const accountStore = useAccountStore()
+const route = useRoute()
+const router = useRouter()
 const favPage = reactive<FavPage>({
   page: 1,
   pageSize: 10,
   fatherDic: props.fatherFav.favId as number,
 });
+const favStore = useFavStore()
 
 //获取输出视频列表数据
-const pageFavList = ref<FavList[]>()
-const total = ref<number>(0)
-const getPageFavList = async ()=>{
-  const res = await reqGetPageFavList(favPage)
-  pageFavList.value = res.data.record
-  total.value = res.data.total
+const pageFavList = ref<FavList[]>();
+const total = ref<number>(0);
+const getPageFavList = async () => {
+  const res = await reqGetPageFavList(favPage);
+  pageFavList.value = res.data.record;
+  total.value = res.data.total;
+};
+onMounted(() => getPageFavList());
+
+const deleteFatherFav = async (fatherFavId:number)=>{
+  const res = await reqDeleteFatherFav(fatherFavId)
+  if(res.code==200){
+    favStore.getFatherFavList()
+    const favPage:FavPage = {
+            uid:accountStore.myInfo!.uid,
+            page:1,
+            pageSize:10
+    }
+    favStore.getHistoreFavInfo(favPage)
+    favStore.getTotalFavVideo()
+    props.getFatherFavList().then(()=>{
+      getPageFavList()
+    })
+    router.push({
+      name:'memberFavlist',
+      params:{uid:accountStore.myInfo?.uid},
+    })
+  }
 }
-onMounted(()=>getPageFavList())
-
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -68,6 +102,7 @@ onMounted(()=>getPageFavList())
   .top-brief {
     display: flex;
     height: 119px;
+    position: relative;
     .poster-container {
       height: 119px;
       width: 190px;
@@ -109,6 +144,11 @@ onMounted(()=>getPageFavList())
         font-size: 0.9em;
         color: #99a2aa;
       }
+    }
+    .top-btn {
+      position: absolute;
+      right: 50px;
+      bottom: 0px;
     }
   }
 

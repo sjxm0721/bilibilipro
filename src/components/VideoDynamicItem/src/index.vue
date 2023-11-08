@@ -1,14 +1,14 @@
 <template>
   <div class="video-dynamic-component">
     <div class="left-image" @click="toVideo">
-      <img :src="poster"/>
+      <img :src="poster" />
       <div class="time-last">
         {{ timeConvert(lastTime) }}
       </div>
     </div>
     <div class="right-info">
       <div class="info-title" @click="toVideo">
-        {{title}}
+        {{ title }}
       </div>
       <div class="info-brief">
         {{ videoBrief }}
@@ -16,7 +16,7 @@
       <div class="info-num">
         <span style="margin-right: 5%"
           ><def-svg-icon svg-name="clickNum" svg-color="#9499A0"></def-svg-icon>
-          {{clickNum}}
+          {{ clickNum }}
         </span>
         <span
           ><def-svg-icon
@@ -34,21 +34,31 @@
 import { useRouter } from "vue-router";
 import { timeConvert } from "@/utils/timeFormator";
 import { reqClickVideo } from "@/api/video";
+import type { HistoryPostInfo } from "@/api/history/type";
+import { useAccountStore } from "@/stores/modules/account";
+import { useHistoryStore } from "@/stores/modules/history";
 const router = useRouter();
+const accountStore = useAccountStore();
+const historyStore = useHistoryStore()
 const props = defineProps<{
-  videoId:number,
-  clickNum:number,
-  barrageNum:number,
-  poster:string,
-  videoBrief:string,
-  title:string,
-  lastTime:number
-}>()
-const toVideo =async () => {
-  await reqClickVideo(props.videoId)
+  videoId: number;
+  clickNum: number;
+  barrageNum: number;
+  poster: string;
+  videoBrief: string;
+  title: string;
+  lastTime: number;
+}>();
+const toVideo = async () => {
+  await reqClickVideo(props.videoId);
+  let historyPostInfo: HistoryPostInfo = {
+    uid: accountStore.myInfo?.uid!,
+    videoId: props.videoId!,
+  };
+  historyStore.addHistoryPageList(historyPostInfo)
   router.push({
-    name:'video',
-    params:{videoId:'BV'+props.videoId}
+    name: "video",
+    params: { videoId: "BV" + props.videoId },
   });
 };
 </script>
@@ -58,6 +68,7 @@ const toVideo =async () => {
   display: flex;
   justify-content: space-between;
   font-size: 1em;
+  height: 100%;
   .left-image {
     font-size: 1em;
     cursor: pointer;
@@ -65,7 +76,7 @@ const toVideo =async () => {
     overflow: hidden;
     position: relative;
     width: 36%;
-    img{
+    img {
       width: 100%;
       height: 100%;
       object-fit: cover;

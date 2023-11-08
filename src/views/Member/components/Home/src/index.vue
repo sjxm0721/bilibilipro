@@ -3,7 +3,9 @@
     <div class="container-left">
       <div class="home-video">
         <div class="video-nav">
-          <span class="label">{{ account?.uid===memberInfo?.uid?'我的视频':'TA的视频' }}</span>
+          <span class="label">{{
+            account?.uid === memberInfo?.uid ? "我的视频" : "TA的视频"
+          }}</span>
           <span class="label-show-num">{{ videoHomePageResult?.total }}</span>
           <div
             class="order-type"
@@ -47,14 +49,25 @@
       </div>
       <div class="home-favlist">
         <div class="favlist-nav">
-          <span class="label">{{account?.uid===memberInfo?.uid?'我的收藏':'TA的收藏'}}</span>
-          <span class="label-show-num">{{ fatherFavList?.length }}</span>
-          <div class="more-fav" v-show="fatherFavList?.length!>=4" @click="toFav">
+          <span class="label">{{
+            account?.uid === memberInfo?.uid ? "我的收藏" : "TA的收藏"
+          }}</span>
+          <span class="label-show-num">{{ fatherFavList.length }}</span>
+          <div
+            class="more-fav"
+            v-show="fatherFavList.length!>=4"
+            @click="toFav()"
+          >
             <span>更多</span>
           </div>
         </div>
         <div class="fav-body">
-          <def-fav-list v-for="(item) in fatherFavList" :key="item.favId" :fatherFav="item"></def-fav-list>
+          <def-fav-list
+            v-for="item in fatherFavList"
+            :key="item.favId"
+            :fatherFav="item"
+            @click="toFav(item.favId)"
+          ></def-fav-list>
         </div>
       </div>
       <!-- <div class="home-like">
@@ -161,19 +174,18 @@ import { onMounted, ref } from "vue";
 import type { VideoPage } from "@/api/member/type";
 import { reqMemberVideoPage } from "@/api/member/index";
 import type { PageVideoData } from "@/api/video/type";
-import { useRoute,useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/modules/member";
+import { useAccountStore } from "@/stores/modules/account";
 import type { FavList } from "@/api/fav/type";
 import { reqGetFatherFavList } from "@/api/fav";
-import { useAccountStore } from "@/stores/modules/account";
 
-const accountStore = useAccountStore()
-const account = accountStore.myInfo
+const accountStore = useAccountStore();
+const account = accountStore.myInfo;
 const memberStore = useMemberStore();
 const memberInfo = memberStore.memberInfo;
 const route = useRoute();
-const router = useRouter()
-
+const router = useRouter();
 
 const videoHomePage = ref<VideoPage>({
   uid: Number(route.params.uid as string),
@@ -195,32 +207,32 @@ const getVideoHomePage = async () => {
   videoHomePageResult.value = res.data;
 };
 
-onMounted(() => getVideoHomePage());
+onMounted(() => {
+  getVideoHomePage();
+  getFatherFavList();
+});
 
-//获取首页收藏夹列表
-const fatherFavList = ref<FavList[]>()
-const getFatherFavList = async ()=>{
-  const res = await reqGetFatherFavList(parseInt(route.params.uid as string))
-  fatherFavList.value = res.data
-}
-onMounted(()=>getFatherFavList())
+const fatherFavList = ref<FavList[]>([]);
+const getFatherFavList = async () => {
+  const res = await reqGetFatherFavList(parseInt(route.params.uid as string));
+  fatherFavList.value = res.data;
+};
 
 //点击更多跳转
-const toVideo = ()=>{
+const toVideo = () => {
   router.push({
-    name:'memberVideo',
-    params:{uid:memberInfo?.uid}
-  })
-}
+    name: "memberVideo",
+    params: { uid: memberInfo?.uid },
+  });
+};
 
-const toFav = ()=>{
+const toFav = (favId?: number) => {
   router.push({
-    name:'memberFavlist',
-    params:{uid:memberInfo?.uid}
-  })
-}
-
-
+    name: "memberFavlist",
+    params: { uid: memberInfo?.uid },
+    query: { favId },
+  });
+};
 </script>
 
 <style scoped lang="scss">
@@ -254,13 +266,14 @@ const toFav = ()=>{
       max-height: 520px;
       margin-top: 20px;
       display: grid;
+      justify-content: space-between;
       grid-template-columns: 23% 23% 23% 23%;
-      grid-column-gap: 2%;
       overflow: hidden;
       border-bottom: 1px solid rgba($color: #9499a0, $alpha: 0.3);
       .video {
         margin-bottom: 20px;
         font-size: 12px;
+        height: 165px;
       }
     }
     .home-video {

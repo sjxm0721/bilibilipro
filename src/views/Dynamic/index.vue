@@ -6,20 +6,20 @@
       <div class="dynamic-left">
         <div class="box top">
           <div class="user-info-head">
-            <img src="@/assets/images/avatar.jpg" />
-            <span>不知出远子</span>
+            <img :src="accountStore.myInfo?.avatar" />
+            <span>{{ accountStore.myInfo?.accountName }}</span>
           </div>
           <div class="user-info-content">
             <div>
-              <div class="info-num">159</div>
+              <div class="info-num">{{ accountStore.myInfo?.followNum }}</div>
               <div class="info-label">关注</div>
             </div>
             <div>
-              <div class="info-num">5</div>
+              <div class="info-num">{{ accountStore.myInfo?.fansNum }}</div>
               <div class="info-label">粉丝</div>
             </div>
             <div>
-              <div class="info-num">49</div>
+              <div class="info-num">{{ accountStore.myInfo?.dynamicNum }}</div>
               <div class="info-label">动态</div>
             </div>
           </div>
@@ -30,7 +30,7 @@
           <div class="title-box">分享动态</div>
           <div class="input-box">
             <el-input
-              v-model="input"
+              v-model="dynamicPostData.text"
               placeholder="有什么想和大家分享的？"
               type="textarea"
               style="margin: 20px 0 10px"
@@ -39,7 +39,9 @@
             />
           </div>
           <div class="publish-button">
-            <el-button type="primary" size="large">发布</el-button>
+            <el-button type="primary" size="large" @click="publishDynamic"
+              >发布</el-button
+            >
           </div>
         </div>
         <div class="box middle-nav">
@@ -52,11 +54,11 @@
                 svg-color="#2FBCEF"
               ></def-svg-icon>
             </div>
-            <div style="margin-top: 10px; color: #1296DB;">动态</div>
+            <div style="margin-top: 10px; color: #1296db">动态</div>
           </div>
         </div>
         <div class="dynamic-show">
-          <DynamicContent></DynamicContent>
+          <DynamicContent ref="dynamicContent"></DynamicContent>
         </div>
       </div>
       <div class="dynamic-right">
@@ -139,11 +141,35 @@
 <script setup lang="ts">
 import DynamicNav from "../../views/Dynamic/components/DynamicNav.vue";
 import DynamicContent from "./components/DynamicContent.vue";
-import { ref} from "vue";
-const input = ref("");
+import { useAccountStore } from "@/stores/modules/account";
+import { reactive, ref } from "vue";
+import type { DynamicPostData } from "@/api/dynamic/type";
+import { reqPublishDynamic } from "@/api/dynamic";
+import { ElMessage } from "element-plus";
 
+const dynamicContent = ref();
 
+const accountStore = useAccountStore();
+const dynamicPostData = reactive<DynamicPostData>({
+  uid: accountStore.myInfo?.uid!,
+  text: "",
+});
 
+const publishDynamic = async () => {
+  if (dynamicPostData.text === "") {
+    ElMessage({
+      type: "error",
+      message: "文本内容不能为空",
+    });
+  } else {
+    const res = await reqPublishDynamic(dynamicPostData);
+    if (res.code == 200) {
+      accountStore.getMyInfo();
+      dynamicContent.value!.getDynamicPageInfo(true);
+      dynamicPostData.text = "";
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -243,8 +269,8 @@ const input = ref("");
           display: inline-block;
           padding: 14px;
           border-radius: 50%;
-          background-color: #DFF6FD;
-          border: 1px solid #06AEEC;
+          background-color: #dff6fd;
+          border: 1px solid #06aeec;
         }
       }
     }

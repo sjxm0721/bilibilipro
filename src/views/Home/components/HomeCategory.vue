@@ -4,7 +4,7 @@
       <el-col :span="3">
         <div class="category-left">
           <div class="left-box">
-            <div class="left-icon1">
+            <div class="left-icon1" @click="toDynamic">
               <def-svg-icon
                 svg-name="dynamic"
                 svg-height="25px"
@@ -102,9 +102,12 @@
 import { onMounted, reactive, ref } from "vue";
 import type { Category } from "@/api/category/type";
 import { reqGetHomeCategory } from "@/api/category/index";
+import { useRouter } from "vue-router";
+import { useAccountStore } from "@/stores/modules/account";
 
+const accountStore = useAccountStore()
 const homeCategory = ref<Category[]>();
-
+const router = useRouter()
 const svgColors: any = reactive({
   specolumn: "#707070",
   activity: "#707070",
@@ -134,6 +137,13 @@ const getHomeCategory = async () => {
   }
 };
 onMounted(() => getHomeCategory());
+
+const toDynamic = () => {
+  router.push({
+    name: "dynamic",
+    params: { uid: accountStore.myInfo?.uid },
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -150,11 +160,11 @@ onMounted(() => getHomeCategory());
     display: flex;
     flex-direction: row;
     .left-box {
-      cursor: pointer;
       width: 45%;
       margin-right: 15px;
       .left-icon1,
       .left-icon2 {
+        cursor: pointer;
         display: inline-block;
         padding: 14px;
         border-radius: 50%;

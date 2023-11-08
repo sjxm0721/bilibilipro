@@ -23,6 +23,9 @@ dependencies:
   '@types/js-cookie':
     specifier: ^3.0.4
     version: registry.npmmirror.com/@types/js-cookie@3.0.4
+  '@types/lodash':
+    specifier: ^4.14.200
+    version: registry.npmmirror.com/@types/lodash@4.14.200
   '@vueuse/core':
     specifier: ^10.4.1
     version: registry.npmmirror.com/@vueuse/core@10.4.1(vue@3.3.4)
@@ -41,6 +44,9 @@ dependencies:
   js-cookie:
     specifier: ^3.0.4
     version: registry.npmmirror.com/js-cookie@3.0.4
+  lodash:
+    specifier: ^4.17.21
+    version: registry.npmmirror.com/lodash@4.17.21
   nplayer:
     specifier: ^1.0.15
     version: registry.npmmirror.com/nplayer@1.0.15
@@ -595,13 +601,13 @@ packages:
     name: '@types/lodash-es'
     version: 4.17.9
     dependencies:
-      '@types/lodash': registry.npmmirror.com/@types/lodash@4.14.198
+      '@types/lodash': registry.npmmirror.com/@types/lodash@4.14.200
     dev: false
 
-  registry.npmmirror.com/@types/lodash@4.14.198:
-    resolution: {integrity: sha512-trNJ/vtMZYMLhfN45uLq4ShQSw0/S7xCTLLVM+WM1rmFpba/VS42jVUgaO3w/NOLiWR/09lnYk0yMaA/atdIsg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/lodash/-/lodash-4.14.198.tgz}
+  registry.npmmirror.com/@types/lodash@4.14.200:
+    resolution: {integrity: sha512-YI/M/4HRImtNf3pJgbF+W6FrXovqj+T+/HpENLTooK9PnkacBsDpeP3IpHab40CClUfhNmdM2WTNP2sa2dni5Q==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/lodash/-/lodash-4.14.200.tgz}
     name: '@types/lodash'
-    version: 4.14.198
+    version: 4.14.200
     dev: false
 
   registry.npmmirror.com/@types/node@20.6.2:
@@ -1601,7 +1607,7 @@ packages:
       '@element-plus/icons-vue': registry.npmmirror.com/@element-plus/icons-vue@2.1.0(vue@3.3.4)
       '@floating-ui/dom': registry.npmmirror.com/@floating-ui/dom@1.5.3
       '@popperjs/core': registry.npmmirror.com/@sxzz/popperjs-es@2.11.7
-      '@types/lodash': registry.npmmirror.com/@types/lodash@4.14.198
+      '@types/lodash': registry.npmmirror.com/@types/lodash@4.14.200
       '@types/lodash-es': registry.npmmirror.com/@types/lodash-es@4.17.9
       '@vueuse/core': registry.npmmirror.com/@vueuse/core@9.13.0(vue@3.3.4)
       async-validator: registry.npmmirror.com/async-validator@4.2.5

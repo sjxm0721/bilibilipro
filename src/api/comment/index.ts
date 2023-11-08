@@ -4,7 +4,8 @@ import type { CommentPageInfo, CommentPageResponseData, ReplyCommentInfo } from 
 
 enum API{
     COMMENT_PAGE_API = "/comment/page",
-    REPLY_COMMENT_API = "/comment/reply"
+    REPLY_COMMENT_API = "/comment/reply",
+    DELETE_REPLY_API = "/comment/delete"
 }
 
 export const reqGetCommentPageList = (pageInfo:CommentPageInfo)=>
@@ -21,3 +22,10 @@ export const reqGetCommentPageList = (pageInfo:CommentPageInfo)=>
 
 export const reqReplyComment = (replyCommentInfo:ReplyCommentInfo)=>
         request.post<any,any>(API.REPLY_COMMENT_API,replyCommentInfo)
+
+export const reqDeleteComment = (commentId:number)=>
+        request.delete<any,any>(API.DELETE_REPLY_API,{
+            params:{
+                commentId
+            }
+        })

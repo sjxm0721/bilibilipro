@@ -11,7 +11,7 @@
     <div class="right-info">
       <div class="info-title" @click="toVideo">
         <!-- {{title}} -->
-        kkkk可挖离开多久啊无聊多久挖来的恐惧啊无聊的恐惧挖到卡为井底蛙大家挖空了多久挖空了多久挖ieouwqeuqwewqj就离开多久啊无聊多久挖
+        到了娃大王大王离开多久来打我看多久挖来的家务劳动等多久啊无聊的
       </div>
       <div class="info-author" @mouseover="changeSvgColor" @mouseleave="svgColorReturn">
         <def-svg-icon svg-name="up" :svg-color="svgColor"></def-svg-icon>
@@ -81,6 +81,7 @@ const toVideo=()=>{
 .video-panel-item-content {
   display: flex;
   justify-content: space-between;
+  height:100%;
   .left-image {
     cursor: pointer;
     border-radius: 3%;
@@ -107,6 +108,9 @@ const toVideo=()=>{
   }
   .right-info {
     width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     .info-title {
       height:2.4em;
       cursor: pointer;
@@ -123,8 +127,12 @@ const toVideo=()=>{
       }
     }
     .info-author {
-        margin:2% 0;
-        display: inline-block;
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+      word-break: break-word;
+      -webkit-line-clamp: 1;
       cursor: pointer;
       color: #9499A0;
       &:hover {

@@ -98,7 +98,7 @@ const getLoginToken = async () => {
   accountInfo.accountId = ""
   accountInfo.password = ""
   setToken(result.data as string)
-  accountStore.getMyInfo(result.data as string);
+  accountStore.getInfo();
   accountStore.hideLogin()
 };
 </script>

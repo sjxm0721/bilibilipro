@@ -1,7 +1,11 @@
 <template>
   <div class="member-video-container">
     <div class="left-nav">
-      <div class="fav-list-add" @click="showEdit = true" v-show="account?.uid===memberInfo?.uid">
+      <div
+        class="fav-list-add"
+        @click="showEdit = true"
+        v-show="account?.uid === memberInfo?.uid"
+      >
         <div style="margin-right: 20px; font-size: 15px; color: #99a2aa">
           新建收藏夹
         </div>
@@ -11,13 +15,15 @@
       </div>
       <el-menu default-active="2" class="el-menu-vertical-demo">
         <el-sub-menu :index="route.params.uid.toString()">
-          <template #title>{{ account?.uid===memberInfo?.uid?'我的创建':'TA的创建'}}</template>
+          <template #title>{{
+            account?.uid === memberInfo?.uid ? "我的创建" : "TA的创建"
+          }}</template>
           <el-menu-item
             v-for="item in fatherFavList"
             :key="item.favId"
             :index="item.favId?.toString()"
             @click.native="changeFatherFav(item)"
-            :class="{'is-active':fatherFavChosed===item}"
+            :class="{ 'is-active': fatherFavChosed === item }"
           >
             <el-icon><Collection /></el-icon>
             {{ item.favTitle }}</el-menu-item
@@ -26,7 +32,11 @@
       </el-menu>
     </div>
     <div class="right-show" v-if="fatherFavChosed">
-      <FavListShow :fatherFav="fatherFavChosed" :key="fatherFavChosed.favId" />
+      <FavListShow
+        :fatherFav="fatherFavChosed"
+        :getFatherFavList="getFatherFavList"
+        :key="route.fullPath"
+      />
     </div>
   </div>
   <div class="edit-mask" v-show="showEdit">
@@ -81,7 +91,9 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm(formRef)"> 提交 </el-button>
+          <el-button type="primary" @click="submitForm(formRef)">
+            提交
+          </el-button>
           <el-button @click="cancelEdit">取消</el-button>
         </el-form-item>
       </el-form>
@@ -92,21 +104,24 @@
 <script setup lang="ts">
 import { Collection, CirclePlusFilled, Plus } from "@element-plus/icons-vue";
 import FavListShow from "@/views/Member/components/Favlist/components/FavListShow.vue";
-import { onMounted, reactive, ref } from "vue";
+import { reactive, ref, watch } from "vue";
 import type { FavListPostInfo, FavList } from "@/api/fav/type.ts";
 import type { FormRules, FormInstance } from "element-plus";
 import { useAccountStore } from "@/stores/modules/account";
 import type { UploadProps } from "element-plus";
 import { ElMessage } from "element-plus";
-import { reqGetFatherFavList, reqAddFatherFav } from "@/api/fav";
-import { useRoute } from "vue-router";
+import { reqAddFatherFav, reqGetFatherFavList } from "@/api/fav";
+import { useRoute, useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/modules/member";
+import { useFavStore } from "@/stores/modules/fav";
 
 const memberInfo = useMemberStore().memberInfo;
 const account = useAccountStore().myInfo;
-const formRef = ref<FormInstance>()
+const formRef = ref<FormInstance>();
 const route = useRoute();
+const router = useRouter();
 const showEdit = ref<boolean>(false);
+const favStore = useFavStore();
 const favListForm = reactive<FavListPostInfo>({
   uid: account!.uid,
   isDic: "1",
@@ -163,23 +178,29 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
 };
 
 //获取文件夹列表数据
-const fatherFavList = ref<FavList[]>();
+const fatherFavList = ref<FavList[]>([]);
 const getFatherFavList = async () => {
   const res = await reqGetFatherFavList(parseInt(route.params.uid as string));
   fatherFavList.value = res.data;
-  fatherFavChosed.value = fatherFavList.value[0];
 };
-onMounted(() => getFatherFavList());
 
 //选择的文件夹
 const fatherFavChosed = ref<FavList>();
 const changeFatherFav = (fatherFav: FavList) => {
-  fatherFavChosed.value = fatherFav;
+  const favId = fatherFav.favId;
+  router.push({
+    name: "memberFavlist",
+    params: { uid: memberInfo?.uid },
+    query: { favId },
+  });
 };
 
 //新建收藏夹
 const addFatherFav = async () => {
-  await reqAddFatherFav(favListForm);
+  const res = await reqAddFatherFav(favListForm);
+  if (res.code == 200) {
+    favStore.getFatherFavList();
+  }
 };
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
@@ -187,11 +208,12 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       //提交
       addFatherFav().then(() => {
-        getFatherFavList();
-        showEdit.value = false;
-        favListForm.favPoster = "";
-        favListForm.favTitle = "";
-        favListForm.isPublic = "0";
+        getFatherFavList().then(() => {
+          showEdit.value = false;
+          favListForm.favPoster = "";
+          favListForm.favTitle = "";
+          favListForm.isPublic = "0";
+        });
       });
     } else {
       ElMessage({
@@ -202,6 +224,26 @@ const submitForm = (formEl: FormInstance | undefined) => {
     }
   });
 };
+
+const pathChoose = (newPath: string) => {
+  if (route.query.favId === undefined) {
+    fatherFavChosed.value = fatherFavList.value[0];
+  } else {
+    fatherFavChosed.value = fatherFavList.value.filter(
+      (item) => item.favId === parseInt(newPath as string)
+    )[0];
+  }
+};
+
+watch(
+  () => route.query.favId,
+  (newFullPath) => {
+    getFatherFavList().then(() => {
+      pathChoose(newFullPath as string);
+    });
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped lang="scss">

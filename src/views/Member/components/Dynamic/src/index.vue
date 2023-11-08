@@ -15,9 +15,9 @@
 
 <script setup lang="ts">
 import MemberDynamicContent from './MemberDynamicContent.vue';
-import { useRoute } from 'vue-router';
-const route = useRoute()
-console.log(route.params.uid)
+// import { useRoute } from 'vue-router';
+// const route = useRoute()
+// console.log(route.params.uid)
 
 
 </script>

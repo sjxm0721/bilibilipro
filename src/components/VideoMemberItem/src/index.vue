@@ -32,10 +32,14 @@ import {timeConvert} from '@/utils/timeFormator'
   import { useRouter } from 'vue-router';
   import {computed} from 'vue'
   import { reqClickVideo } from "@/api/video";
+  import { useAccountStore } from "@/stores/modules/account";
+  import type { HistoryPostInfo } from "@/api/history/type";
+  import { useHistoryStore } from "@/stores/modules/history";
 
+  const historyStore = useHistoryStore()
 const props = defineProps<{video:Video}>();
 const router=useRouter()
-
+const accountStore = useAccountStore()
 
 const lastTime = computed(()=>{
   return timeConvert(props.video?.lastTime)
@@ -47,6 +51,11 @@ const postTime =computed(()=>{
   
   const toVideo=async ()=>{
       await reqClickVideo(props.video.videoId)
+      let historyPostInfo:HistoryPostInfo = {
+        uid:accountStore.myInfo?.uid!,
+        videoId:props.video.videoId!
+      }
+      historyStore.addHistoryPageList(historyPostInfo)
       router.push({
         name:'video',
         params:{videoId:'BV'+props.video.videoId}
@@ -62,9 +71,11 @@ const postTime =computed(()=>{
     justify-content: space-between;
     flex-direction: column;
     .top-image {
+      font-size: 1em;
       cursor: pointer;
       height:60%;
-      border-radius: 3%;
+      width: 100%;
+      border-radius: 0.5em;
       overflow: hidden;
       position: relative;
       img{

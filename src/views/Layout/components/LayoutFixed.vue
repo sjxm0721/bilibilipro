@@ -163,14 +163,37 @@
             </div>
           </span>
           <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>Action 1</el-dropdown-item>
-              <el-dropdown-item>Action 2</el-dropdown-item>
-              <el-dropdown-item>Action 3</el-dropdown-item>
-              <el-dropdown-item disabled>Action 4</el-dropdown-item>
-              <el-dropdown-item divided>Action 5</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
+              <el-dropdown-menu
+                style="max-height: 344px; overflow: auto"
+                v-if="historyStore.historyPageList.length > 0"
+              >
+                <el-dropdown-item
+                  v-for="item in historyStore.historyPageList"
+                  :key="item.historyId"
+                  style="
+                    white-space: normal !important;
+                    cursor: auto !important;
+                  "
+                >
+                <div style="padding: 5px; width: 300px">
+                  <def-video-history-item
+                    :historyInfo="item"
+                  ></def-video-history-item>
+                </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+              <el-dropdown-menu
+                v-else
+                style="width: 180px; height: 180px; overflow: hidden"
+              >
+                <div>
+                  <img
+                    src="@/assets/images/empty.jpg"
+                    style="width: 100%; height: 100%; object-fit: cover"
+                  />
+                </div>
+              </el-dropdown-menu>
+            </template>
         </el-dropdown>
       </div>
       <div class="nav-list nav-list-right">
@@ -204,11 +227,13 @@ import { useScroll } from "@vueuse/core";
 import { ref } from "vue";
 import { useAccountStore } from "@/stores/modules/account";
 import { useFavStore } from "@/stores/modules/fav";
+import { useHistoryStore } from "@/stores/modules/history";
 const { y } = useScroll(window);
 const routePath = ref(useRoute().fullPath);
 const router = useRouter();
 const accountStore = useAccountStore();
 const favStore = useFavStore()
+const historyStore = useHistoryStore()
 
 const toHome = () => {
   router.push("/");

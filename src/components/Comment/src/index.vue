@@ -60,6 +60,7 @@
         <CommentBody
           :commentData="item"
           :refreshCommentList="refreshCommentList"
+          :refreshDeletedCommentList="refreshDeletedCommentList"
         ></CommentBody>
       </div>
     </div>
@@ -81,9 +82,12 @@ const accountStore = useAccountStore();
 const account = accountStore.myInfo;
 
 const props = defineProps<{
-  videoId: number;
-  dynamicId: number;
+  videoId?: number;
+  dynamicId?: number;
+  refreshDynamicList?:Function
 }>();
+
+
 
 const hoverOrder = ref(-1);
 
@@ -140,7 +144,11 @@ const publishFatherComment = async () => {
       });
       replyCommentInfo.content = "";
       pageInfo.page = 1
-      getCommentList();
+      getCommentList().then(()=>{
+        if(props.dynamicId!==null){
+          props.refreshDynamicList!(props.dynamicId)
+        }
+      })
     })
     .catch(() => {
       ElMessage({
@@ -167,7 +175,17 @@ const load = async ()=>{
   }
 }
 
-//发表子评论后重新更新评论列表
+//删除评论后重新更新评论列表
+const refreshDeletedCommentList=async (totalFatherId:number)=>{
+  commentList.value!.record = commentList.value!.record.filter((item)=>{
+    return item.commentId!==totalFatherId
+  })
+  commentList.value!.total = commentList.value!.total-1
+  if(props.dynamicId!==null){
+    props.refreshDynamicList!(props.dynamicId)
+  }
+}
+
 const refreshCommentList=async (totalFatherId:number)=>{
   let num:number
   let len:number = (commentList.value?.record as CommentData[]).length

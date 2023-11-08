@@ -32,3 +32,9 @@ export interface PageDynamic{
 export interface DynamicPageResponseData extends ResponseData{
     data:PageDynamic
 }
+
+export interface DynamicPostData {
+    uid:number,
+    text:string,
+    videoId?:number
+}

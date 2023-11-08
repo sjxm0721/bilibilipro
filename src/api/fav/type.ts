@@ -8,6 +8,12 @@ export interface FavListPostInfo{
     isPublic:string,
 }
 
+export interface FavVideoPostInfo{
+    uid:number,
+    videoId:number,
+    fatherDic:number
+}
+
 export interface FavList{
     favId?:number,
     uid:number,
@@ -32,7 +38,7 @@ export interface FavListResponseData extends ResponseData{
 }
 
 export interface FavPage{
-    uid:number,
+    uid?:number,
     page:number,
     pageSize:number,
     fatherDic?:number

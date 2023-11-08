@@ -25,11 +25,9 @@
       </div>
       <div id="shadow"></div>
     </div>
-    <div class="center-title" @click="toVideo">
-      <a>
-        {{ video?.title }}
-      </a>
-    </div>
+    <a class="center-title" @click="toVideo">
+      {{ video?.title }}
+    </a>
     <div class="bottom-info">
       <a class="author">
         {{ video?.accountName }}
@@ -42,31 +40,40 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter} from "vue-router";
+import { useRouter } from "vue-router";
 import type { Video } from "@/api/video/type";
 import { computed } from "vue";
-import {timeConvert} from '@/utils/timeFormator'
+import { timeConvert } from "@/utils/timeFormator";
 import { reqClickVideo } from "@/api/video";
+import type { HistoryPostInfo } from "@/api/history/type";
+import { useAccountStore } from "@/stores/modules/account";
+import { useHistoryStore } from "@/stores/modules/history";
+
 const router = useRouter();
-const props = defineProps<{video:Video}>();
+const props = defineProps<{ video: Video }>();
+const accountStore = useAccountStore();
+const historyStore = useHistoryStore();
 
 const toVideo = async () => {
   await reqClickVideo(props.video.videoId);
+  let historyPostInfo: HistoryPostInfo = {
+    uid: accountStore.myInfo?.uid!,
+    videoId: props.video.videoId!,
+  };
+  historyStore.addHistoryPageList(historyPostInfo);
   router.push({
-    name:'video',
-    params:{videoId:'BV'+props.video.videoId}
+    name: "video",
+    params: { videoId: "BV" + props.video.videoId },
   });
-}
+};
 
-const lastTime = computed(()=>{
-  return timeConvert(props.video?.lastTime)
-}) 
+const lastTime = computed(() => {
+  return timeConvert(props.video?.lastTime);
+});
 
-const postTime =computed(()=>{
-  return props.video?.postTime.split(" ")[0]
-})
-
-
+const postTime = computed(() => {
+  return props.video?.postTime.split(" ")[0];
+});
 </script>
 
 <style lang="scss" scoped>
@@ -74,9 +81,6 @@ const postTime =computed(()=>{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  border-radius: 3%;
-  overflow: hidden;
   font-size: 1em;
   .top-pic {
     font-size: 1em;
@@ -84,22 +88,23 @@ const postTime =computed(()=>{
     width: 100%;
     position: relative;
     cursor: pointer;
+    border-radius: 0.5em;
+    overflow: hidden;
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 3%;
     }
     .video-attr {
       position: absolute;
       color: #fff;
-      bottom: 3%;
+      bottom: 4%;
       display: flex;
       align-items: center;
       z-index: 999;
       font-size: 1em;
       svg {
-        margin-right: 0.2em;
+        margin-right: 0.3em;
       }
       &:nth-child(2) {
         left: 5%;
@@ -121,8 +126,6 @@ const postTime =computed(()=>{
       opacity: 0.3;
       background-image: linear-gradient(to top, #000, #f0f0f0);
       position: absolute;
-      border-bottom-left-radius: 5%;
-      border-bottom-right-radius: 5%;
       bottom: 0;
     }
   }
@@ -135,14 +138,11 @@ const postTime =computed(()=>{
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-wrap: break-word;
-    font-size: 1em;
+    font-size: 1.2em;
     line-height: 1.7em;
-    a {
-      font-size: 1.2em;
-      cursor: pointer;
-      &:hover {
-        color: #05aae6;
-      }
+    cursor: pointer;
+    &:hover {
+      color: #05aae6;
     }
   }
   .bottom-info {
@@ -158,7 +158,7 @@ const postTime =computed(()=>{
     }
     .author {
       cursor: pointer;
-      width:60%;
+      width: 60%;
       overflow: hidden;
       display: -webkit-box;
       -webkit-line-clamp: 1;

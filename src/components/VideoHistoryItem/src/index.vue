@@ -1,46 +1,44 @@
 <template>
-    <div class="video-nav-item-content">
+    <div class="video-history-item-content">
       <div class="left-image" @click="toVideo">
-        <img :src="favList.videoPoster" />
+        <img :src="historyInfo.videoPoster" />
         <div class="time-last">
-          {{ timeConvert(favList.lastTime!) }}          
+          {{ timeConvert(historyInfo.lastTime!) }}          
         </div>
       </div>
       <div class="right-info">
         <div class="info-title" @click="toVideo">
-          {{ favList.videoTitle }}
+          {{ historyInfo.videoTitle }}
         </div>
         <div class="info-author" @mouseover="changeSvgColor" @mouseleave="svgColorReturn">
           <def-svg-icon svg-name="up" :svg-color="svgColor" svg-width="1.2em"></def-svg-icon>
-          {{ favList.videoUName }}
+          {{ historyInfo.accountName }}
         </div>
         <div class="info-source">
-            来自: {{ favList.fatherDicTitle }}
+            浏览于: {{ historyInfo.createTime }}
         </div>
       </div>
     </div>
   </template>
   
   <script setup lang="ts">
-  import type { FavList } from "@/api/fav/type";
-import { ref } from "vue";
+  import type { HistoryInfo,HistoryPostInfo } from "@/api/history/type";
+  import { ref } from "vue";
   import { useRouter } from 'vue-router';
   import { timeConvert } from "@/utils/timeFormator";
   import { reqClickVideo } from "@/api/video";
   import { useAccountStore } from "@/stores/modules/account";
-  import type { HistoryPostInfo } from "@/api/history/type";
   import { useHistoryStore } from "@/stores/modules/history";
 
-
-  const historyStore = useHistoryStore()
-
-  const props = defineProps<{favList:FavList}>()
+  const props = defineProps<{historyInfo:HistoryInfo}>()
   
   const svgColor: any = ref("#9499A0");
 
   const router=useRouter()
 
   const accountStore = useAccountStore()
+
+  const historyStore = useHistoryStore()
 
   const changeSvgColor = () => {
     svgColor.value = "#05AAE6";
@@ -51,15 +49,15 @@ import { ref } from "vue";
   };
   
   const toVideo=async ()=>{
-      await reqClickVideo(props.favList.videoId!)
+      await reqClickVideo(props.historyInfo.videoId!)
       let historyPostInfo:HistoryPostInfo = {
         uid:accountStore.myInfo?.uid!,
-        videoId:props.favList.videoId!
+        videoId:props.historyInfo.videoId!
       }
       historyStore.addHistoryPageList(historyPostInfo)
       router.push({
         name:'video',
-        params:{videoId:'BV'+props.favList.videoId}
+        params:{videoId:'BV'+props.historyInfo.videoId}
       })
   }
 
@@ -67,7 +65,7 @@ import { ref } from "vue";
   </script>
   
   <style scoped lang="scss">
-  .video-nav-item-content {
+  .video-history-item-content {
     display: flex;
     justify-content: space-between;
     .left-image {

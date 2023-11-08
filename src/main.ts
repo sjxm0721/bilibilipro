@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
+
 //引入pinia仓库以及持久化
 import { createPinia } from 'pinia';
 import  piniaPluginPersistedstate  from 'pinia-plugin-persistedstate';
