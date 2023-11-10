@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="search-container">
-      <input type="text" placeholder="请输入搜索内容" />
+      <input type="text" placeholder="请输入搜索内容" v-model="input" @keyup.enter="toSearch"/>
       <div class="search-icon" @click="toSearch">
         <def-svg-icon svg-name="search"></def-svg-icon>
       </div>
@@ -216,6 +216,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAccountStore } from "@/stores/modules/account";
 import { useFavStore } from "@/stores/modules/fav";
@@ -225,6 +226,7 @@ const router = useRouter();
 const accountStore = useAccountStore();
 const favStore = useFavStore()
 const historyStore = useHistoryStore()
+const input = ref<string>('')
 
 const toHome = () => {
   router.push("/");
@@ -252,7 +254,10 @@ const toDynamic = () => {
 };
 
 const toSearch = () => {
-  router.push("/search");
+  router.push({
+    name:'search',
+    query:{keyword:input.value}
+  });
 };
 
 const messageList: string[] = [

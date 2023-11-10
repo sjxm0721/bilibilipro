@@ -7,6 +7,13 @@ export interface PageInfoData{
     key?:string
 }
 
+export interface VideoSearchPageData{
+    page:number,
+    pageSize:number,
+    order:number,
+    searchContent:string
+}
+
 export interface Video{
     videoId:number,
     title:string,

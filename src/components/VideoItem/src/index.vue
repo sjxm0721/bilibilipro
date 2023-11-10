@@ -82,6 +82,7 @@ const postTime = computed(() => {
   flex-direction: column;
   justify-content: space-between;
   font-size: 1em;
+  height: 100%;
   .top-pic {
     font-size: 1em;
     height: 64%;

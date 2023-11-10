@@ -8,8 +8,10 @@
         type="text"
         placeholder="输入关键词搜索"
         class="search-input"
+        @keyup.enter="searchVideo"
+        v-model="videoSearchPageData.searchContent"
       />
-      <el-button type="primary" size="large" class="search-button"
+      <el-button type="primary" size="large" class="search-button" @click="searchVideo"
         >搜索</el-button
       >
     </div>
@@ -28,126 +30,68 @@
       <div
         class="order-box"
         @click="orderChange(0)"
-        :class="{ 'active-order': activeOrder === 0 }"
+        :class="{ 'active-order': videoSearchPageData.order === 0 }"
       >
         综合排序
       </div>
       <div
         class="order-box"
         @click="orderChange(1)"
-        :class="{ 'active-order': activeOrder === 1 }"
+        :class="{ 'active-order': videoSearchPageData.order === 1 }"
       >
         最多播放
       </div>
       <div
         class="order-box"
         @click="orderChange(2)"
-        :class="{ 'active-order': activeOrder === 2 }"
+        :class="{ 'active-order': videoSearchPageData.order === 2 }"
       >
         最新发布
       </div>
       <div
         class="order-box"
         @click="orderChange(3)"
-        :class="{ 'active-order': activeOrder === 3 }"
+        :class="{ 'active-order': videoSearchPageData.order === 3 }"
       >
         最多弹幕
       </div>
       <div
         class="order-box"
         @click="orderChange(4)"
-        :class="{ 'active-order': activeOrder === 4 }"
+        :class="{ 'active-order': videoSearchPageData.order === 4 }"
       >
         最多收藏
       </div>
     </div>
-    <div class="main-content">
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
-      </div>
-      <div class="content-box">
-        <def-video-item></def-video-item>
+    <div class="main-content" v-if="videoPageList.length>0">
+      <div class="content-box" v-for="item in videoPageList" :key="item.videoId">
+        <def-video-item :video="item"></def-video-item>
       </div>
     </div>
+    <div v-else style="height: 400px;">
+      <img src="@/assets/images/empty.jpg" style="height: 100%;object-fit: contain;">
+    </div>
     <div class="search-pagination">
-        <el-pagination background layout="prev, pager, next" :total="1000" />
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="total === undefined ? 0 :total"
+        v-model:current-page="videoSearchPageData.page"
+        v-model:page-size="videoSearchPageData.pageSize"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { TabPaneName } from 'element-plus'
+import { ref, reactive, onMounted } from "vue";
+import type { TabPaneName } from "element-plus";
+import { useRoute } from "vue-router";
+import type { Video, VideoSearchPageData } from "@/api/video/type";
+import { reqSearchVideo } from "@/api/video";
 
+const route = useRoute();
 const searchStyle = ref(0);
 const searchFocus = () => {
   searchStyle.value = 1;
@@ -163,11 +107,37 @@ const navChange = (name: TabPaneName) => {
   activeNav.value = name.toString();
 };
 
-const activeOrder = ref(0);
 
+
+const videoSearchPageData = reactive<VideoSearchPageData>({
+  page: 1,
+  pageSize: 25,
+  order: 0,
+  searchContent: route.query.keyword as string,
+});
+
+
+const videoPageList = ref<Video[]>([])
+const total = ref<number>()
+const searchVideo = async ()=>{
+  const res = await reqSearchVideo(videoSearchPageData)
+  videoPageList.value = res.data.record
+  total.value = res.data.total
+}
+
+onMounted(()=>searchVideo())
+
+//选择的排序发生变化时
 const orderChange = (newOrder: number) => {
-  activeOrder.value = newOrder;
+  videoSearchPageData.order = newOrder;
+  searchVideo()
 };
+
+//当前页面发生变化
+const handleCurrentChange=(page:number)=>{
+  videoSearchPageData.page = page
+  searchVideo()
+}
 </script>
 
 <style scoped lang="scss">
@@ -255,9 +225,9 @@ const orderChange = (newOrder: number) => {
       margin-bottom: 30px;
     }
   }
-  .search-pagination{
+  .search-pagination {
     width: 30%;
-    margin:20px auto;
+    margin: 20px auto;
   }
 }
 </style>

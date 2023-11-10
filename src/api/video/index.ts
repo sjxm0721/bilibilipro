@@ -5,13 +5,15 @@ import type {
   PageResponseData,
   HomeSuggestResponseData,
   VideoInfoResponseData,
+  VideoSearchPageData,
 } from "./type";
 
 enum API {
   PAGE_API = "/video/page",
   HOME_SUGGEST_API = "/video/homesuggest",
   VIDEO_INFO_API = "/video/info",
-  VIDEO_CLICK_API = "/video/click"
+  VIDEO_CLICK_API = "/video/click",
+  VIDEO_SEARCH_API = "/video/search"
 }
 
 export const reqGetVideoPageList = (data: PageInfoData) =>
@@ -28,6 +30,16 @@ export const reqGetVideoInfoByUid = (videoId: number) =>
 export const reqClickVideo = (videoId:number)=>
   request.get<any,any>(API.VIDEO_CLICK_API,{
     params:{videoId}
+  })
+
+export const reqSearchVideo = (videoSearchPageData:VideoSearchPageData)=>
+  request.get<any,PageResponseData>(API.VIDEO_SEARCH_API,{
+    params:{
+      page:videoSearchPageData.page,
+      pageSize:videoSearchPageData.pageSize,
+      order:videoSearchPageData.order,
+      searchContent:videoSearchPageData.searchContent
+    }
   })
 
 

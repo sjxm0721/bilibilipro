@@ -29,10 +29,13 @@
           ><a>下载客户端</a>
         </div>
       </div>
-      <div class="search-container">
-        <input type="text" placeholder="请输入搜索内容" />
+      <div class="search-container" :class="{'search-focus':isFocus===true}">
+        <input type="text" placeholder="请输入搜索内容" v-model="input" @keyup.enter="toSearch" @focus="isFocus=true" @blur="isFocus=false"/>
         <div class="search-icon" @click="toSearch">
           <def-svg-icon svg-name="search"></def-svg-icon>
+        </div>
+        <div class="search-suggest" v-show="isFocus">
+          <def-search></def-search>
         </div>
       </div>
       <div class="avatar">
@@ -234,11 +237,13 @@ import { useRouter } from "vue-router";
 import { useAccountStore } from "@/stores/modules/account";
 import { useFavStore } from "@/stores/modules/fav";
 import { useHistoryStore } from "@/stores/modules/history";
+import { ref } from "vue";
 
 const accountStore = useAccountStore();
 const router = useRouter();
 const favStore = useFavStore();
 const historyStore = useHistoryStore();
+const input = ref<string>('')
 
 const toHome = () => {
   router.push("/");
@@ -266,7 +271,10 @@ const toDynamic = () => {
 };
 
 const toSearch = () => {
-  router.push("/search");
+  router.push({
+    name:'search',
+    query:{keyword:input.value}
+  });
 };
 
 const messageList: string[] = [
@@ -291,13 +299,12 @@ const changeNav = (newNav: number) => {
     params: { uid: accountStore.myInfo?.uid },
   });
 };
+
+const isFocus = ref<boolean>(false)
+
 </script>
 
 <style scoped lang="scss">
-// :deep().el-dropdown-menu__item {
-// white-space: normal !important;
-// cursor: auto !important;
-// }
 :deep() .el-dropdown-menu__item:hover {
   background-color: #eee !important;
 }
@@ -363,6 +370,10 @@ const changeNav = (newNav: number) => {
       }
     }
   }
+  .search-focus{
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+  }
   .search-container {
     position: relative;
     display: flex;
@@ -399,6 +410,14 @@ const changeNav = (newNav: number) => {
 
     &:hover {
       background-color: #fff;
+    }
+
+    .search-suggest{
+      position: absolute;
+      background-color: #fff;
+      width: 100%;
+      top:100%;
+      z-index: 999999999999;
     }
   }
   .avatar {
