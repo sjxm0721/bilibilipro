@@ -1,12 +1,14 @@
 import { defineStore } from "pinia";
 import WebSocketClass from "@/utils/websocketClass";
 import { useAccountStore } from "./account";
+import { useMessageStore } from "./message";
 import type { message } from "@/utils/websocketClass.ts";
 import { ref } from "vue";
 
 export const useWebSocketStore = defineStore("websocket", () => {
   const socket = ref<WebSocketClass | null>(null);
   const historyMessages = ref<{ [key: string]: message[] }>({});
+  const messageStore = useMessageStore()
   const initializeWebSocket = () => {
     const account = useAccountStore().myInfo;
     socket.value = new WebSocketClass(
@@ -42,6 +44,10 @@ export const useWebSocketStore = defineStore("websocket", () => {
     
           historyMessages.value[key].push(messageTmp);
         }
+        else if(type === "1"){
+          //点赞消息
+          messageStore.AddLikeMessage(messageTmp)
+        }
       }
     });
 
@@ -61,6 +67,8 @@ export const useWebSocketStore = defineStore("websocket", () => {
       socket.value.close();
     }
   };
+
+  
 
   const sendMessage = (data: string) => {
     if (socket.value) {

@@ -29,13 +29,23 @@
           ><a>下载客户端</a>
         </div>
       </div>
-      <div class="search-container" :class="{'search-focus':isFocus===true}">
-        <input type="text" placeholder="请输入搜索内容" v-model="input" @keyup.enter="toSearch" @focus="isFocus=true" @blur="isFocus=false"/>
-        <div class="search-icon" @click="toSearch">
+      <div
+        class="search-container"
+        ref="refSearchSuggest"
+        :class="{ 'search-focus': isSearchSuggestVisible === true }"
+      >
+        <input
+          type="text"
+          placeholder="请输入搜索内容"
+          v-model="input"
+          @focus="showSearchSuggest"
+        />
+        <!-- @keyup.enter="toSearch" -->
+        <div class="search-icon" @click="toSearch(input)">
           <def-svg-icon svg-name="search"></def-svg-icon>
         </div>
-        <div class="search-suggest" v-show="isFocus">
-          <def-search></def-search>
+        <div class="search-suggest" v-show="isSearchSuggestVisible&&y<50">
+          <def-search :toSearch="toSearch"></def-search>
         </div>
       </div>
       <div class="avatar">
@@ -180,11 +190,11 @@
                     cursor: auto !important;
                   "
                 >
-                <div style="padding: 5px; width: 300px">
-                  <def-video-history-item
-                    :historyInfo="item"
-                  ></def-video-history-item>
-                </div>
+                  <div style="padding: 5px; width: 300px">
+                    <def-video-history-item
+                      :historyInfo="item"
+                    ></def-video-history-item>
+                  </div>
                 </el-dropdown-item>
               </el-dropdown-menu>
               <el-dropdown-menu
@@ -235,15 +245,20 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { useAccountStore } from "@/stores/modules/account";
+import { useScroll } from "@vueuse/core";
 import { useFavStore } from "@/stores/modules/fav";
 import { useHistoryStore } from "@/stores/modules/history";
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
+import { useSearchStore } from "@/stores/modules/search";
 
+const searchStore = useSearchStore()
 const accountStore = useAccountStore();
 const router = useRouter();
 const favStore = useFavStore();
 const historyStore = useHistoryStore();
-const input = ref<string>('')
+const input = ref<string>("");
+
+const { y } = useScroll(window);
 
 const toHome = () => {
   router.push("/");
@@ -270,11 +285,15 @@ const toDynamic = () => {
   });
 };
 
-const toSearch = () => {
+const toSearch = (searchContent:string) => {
   router.push({
-    name:'search',
-    query:{keyword:input.value}
+    name: "search",
+    query: { keyword: searchContent },
   });
+  searchContent = searchContent.trim()
+  if(searchContent !== ''){
+    searchStore.addSearchHistory(searchContent)
+  }
 };
 
 const messageList: string[] = [
@@ -300,8 +319,41 @@ const changeNav = (newNav: number) => {
   });
 };
 
-const isFocus = ref<boolean>(false)
+//搜索框历史记录与热点的呈现
+const isSearchSuggestVisible = ref<boolean>(false);
 
+const showSearchSuggest = () => {
+  isSearchSuggestVisible.value = true;
+};
+
+const hideSearchSuggest = () => {
+  isSearchSuggestVisible.value = false;
+};
+
+//搜索框事件监听器
+
+const refSearchSuggest = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+  document.addEventListener("click", handleDocumentClick);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", handleDocumentClick);
+});
+
+const handleDocumentClick = (event: MouseEvent) => {
+  const searchSuggestElement = refSearchSuggest.value;
+  if (
+    searchSuggestElement &&
+    !searchSuggestElement.contains(event.target as Node)
+  ) {
+    hideSearchSuggest();
+  }
+};
+
+//获取热搜列表
+onMounted(()=>searchStore.getSearchHotList())
 </script>
 
 <style scoped lang="scss">
@@ -370,9 +422,10 @@ const isFocus = ref<boolean>(false)
       }
     }
   }
-  .search-focus{
+  .search-focus {
     border-bottom-left-radius: 0px !important;
     border-bottom-right-radius: 0px !important;
+    opacity: 1 !important;
   }
   .search-container {
     position: relative;
@@ -381,7 +434,8 @@ const isFocus = ref<boolean>(false)
     width: 20%;
     height: 42px;
     width: 250px;
-    background-color: #dee8eb;
+    background-color: #e3e0e8;
+    opacity: .9;
     border-radius: 8px;
     border: none;
     input {
@@ -391,7 +445,7 @@ const isFocus = ref<boolean>(false)
       padding: 8px;
       border: none;
       border-radius: 6px;
-      background-color: #dee8eb;
+      background-color: #e3e0e8;
       &:focus {
         background-color: #d3dde0;
       }
@@ -412,12 +466,16 @@ const isFocus = ref<boolean>(false)
       background-color: #fff;
     }
 
-    .search-suggest{
+    .search-suggest {
       position: absolute;
       background-color: #fff;
       width: 100%;
-      top:100%;
+      top: 100%;
       z-index: 999999999999;
+      -webkit-font-smoothing: antialiased;
+      max-height: 640px;
+      overflow-y: auto;
+      border: 1px solid #E3E5E7;
     }
   }
   .avatar {

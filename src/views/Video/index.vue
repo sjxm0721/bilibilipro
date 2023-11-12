@@ -128,7 +128,7 @@
         </div>
       </div>
       <div class="video-comment" v-if="videoInfo">
-        <def-comment :videoId="videoInfo?.videoId"></def-comment>
+        <def-comment :videoId="videoInfo?.videoId" :key="$route.fullPath"></def-comment>
       </div>
     </div>
     <div class="container-right">
@@ -140,7 +140,7 @@
           <div class="info-top">
             <a @click="toMember">{{ accountInfo?.accountName }}</a>
             <a
-              v-if="account?.uid !== accountInfo?.uid"
+              v-if="accountStore.myInfo?.uid !== accountInfo?.uid"
               @mouseover="changeSvgColor('messageSolid')"
               @mouseleave="svgColorReturn"
               @click="toLine"
@@ -158,7 +158,7 @@
           <div class="info-middle">
             {{ accountInfo?.accountBrief }}
           </div>
-          <div class="info-bottom" v-if="account?.uid !== accountInfo?.uid">
+          <div class="info-bottom" v-if="accountStore.myInfo?.uid !== accountInfo?.uid">
             <el-button type="primary" v-if="!isFollowed" @click="clickFollow">
               <def-svg-icon svg-name="plus" svg-color="#ffffff"></def-svg-icon
               >&nbsp;&nbsp; 关注&nbsp;{{ accountInfo?.fansNum }}
@@ -339,7 +339,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch} from "vue";
+import { reactive, ref, watch} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { Video } from "@/api/video/type";
 import type { AccountInfoData } from "@/api/account/type";
@@ -357,6 +357,8 @@ import { ElMessage } from "element-plus";
 import { throttle } from "lodash";
 import { useLikeStore } from "@/stores/modules/like";
 import { useFavStore } from "@/stores/modules/fav";
+import type {message} from '@/utils/websocketClass'
+import { useWebSocketStore } from "@/stores/modules/websocket";
 import type {
   FavListPostInfo,
   FavList,
@@ -366,9 +368,10 @@ import type {
 import { reqAddFatherFav, reqAddFavVideo,reqDeleteFavVideo } from "@/api/fav";
 
 const favStore = useFavStore();
-const account = useAccountStore().myInfo;
+const accountStore = useAccountStore();
 const route = useRoute();
 const router = useRouter();
+const websocketStore = useWebSocketStore()
 
 const svgColors: any = reactive({
   like: false,
@@ -395,7 +398,6 @@ const getVideoInfo = async () => {
   getAccountInfo(videoInfo.value.uid);
 };
 
-onMounted(() => getVideoInfo());
 
 //获取投稿人相关信息
 const accountInfo = ref<AccountInfoData>();
@@ -412,11 +414,10 @@ const getDanmakuList = async () => {
   const res = await reqGetVideoBarrage(Number(route.params.videoId.slice(2)));
   danmakuContent.value = res.data;
   danmakuContent.value.forEach((item: BarrageData) => {
-    if (item.uid === account?.uid) item.isMe = true;
+    if (item.uid === accountStore.myInfo?.uid) item.isMe = true;
     else item.isMe = false;
   });
 };
-onMounted(() => getDanmakuList());
 
 //播放器元素
 const videoPlayer = ref<null | Element>(null);
@@ -440,7 +441,7 @@ const toMember = () => {
 const toLine = () => {
   router.push({
     name: "messageWhisper",
-    params: { uid: account?.uid },
+    params: { uid: accountStore.myInfo?.uid },
     query: { mid: accountInfo.value?.uid },
   });
 };
@@ -448,16 +449,15 @@ const toLine = () => {
 //查看是否已经关注
 const isFollowed = ref<boolean>(false);
 const isFollow = async (followedUid: number) => {
-  const res = await reqIsFollow(account!.uid, followedUid);
+  const res = await reqIsFollow(accountStore.myInfo!.uid, followedUid);
   isFollowed.value = res.data;
 };
 
 //点击关注按钮的回调
-//点击关注按钮的回调
 const follow = async () => {
   const followInfo: FollowInfo = {
     followedUid: accountInfo.value!.uid,
-    followerUid: account?.uid!,
+    followerUid: accountStore.myInfo?.uid!,
   };
   await reqAddFollow(followInfo);
 };
@@ -471,7 +471,7 @@ const clickFollow = () => {
 const cancelFollow = async () => {
   const followInfo: FollowInfo = {
     followedUid: accountInfo.value!.uid,
-    followerUid: account?.uid!,
+    followerUid: accountStore.myInfo?.uid!,
   };
   await reqCancelFollow(followInfo);
 };
@@ -482,6 +482,14 @@ const clickCancelFollow = () => {
 };
 
 //点击点赞按钮的回调
+const likeMessage = reactive<message>({
+  isSystem:"0",
+  fromUid:accountStore.myInfo?.uid,
+  toUid:undefined,
+  isAll:false,
+  type:"1",
+  videoId:undefined
+})
 const likeStore = useLikeStore();
 const isLiked = ref<boolean>(false);
 watch(videoInfo, (newVideoInfo) => {
@@ -496,7 +504,7 @@ watch(videoInfo, (newVideoInfo) => {
 });
 const clickLike = throttle(async (status: boolean) => {
   let likePostData: LikePostData = {
-    fromUid: account?.uid!,
+    fromUid: accountStore.myInfo?.uid!,
     toUid: accountInfo.value?.uid!,
     type: "0",
     videoId: videoInfo.value?.videoId,
@@ -510,7 +518,8 @@ const clickLike = throttle(async (status: boolean) => {
         type: "success",
         message: "取消点赞成功",
       });
-      likeStore.getLikeList(account?.uid!, "0").then(() => {
+      
+      likeStore.getLikeList(accountStore.myInfo?.uid!, "0").then(() => {
         getVideoInfo();
       });
     } else {
@@ -527,7 +536,10 @@ const clickLike = throttle(async (status: boolean) => {
         type: "success",
         message: "点赞成功",
       });
-      likeStore.getLikeList(account?.uid!, "0").then(() => {
+      likeMessage.videoId = videoInfo.value?.videoId
+      likeMessage.toUid = accountInfo.value?.uid
+      websocketStore.sendMessage(JSON.stringify(likeMessage))
+      likeStore.getLikeList(accountStore.myInfo?.uid!, "0").then(() => {
         getVideoInfo();
       });
     } else {
@@ -550,7 +562,7 @@ const bgFavChosed: string = "../src/assets/images/favChosed.jpg";
 const bgCheckbox: string = "../src/assets/images/checkbox.jpg";
 //父收藏
 const favListForm = reactive<FavListPostInfo>({
-  uid: account!.uid,
+  uid: accountStore.myInfo!.uid,
   isDic: "1",
   favTitle: "",
   favPoster: "../src/assets/images/basicFavPoster.jpg",
@@ -558,7 +570,7 @@ const favListForm = reactive<FavListPostInfo>({
 });
 //子收藏
 const favVideoPostInfo = reactive<FavVideoPostInfo>({
-  uid: account!.uid,
+  uid: accountStore.myInfo!.uid,
   videoId: -1,
   fatherDic: -1,
 });
@@ -601,7 +613,7 @@ const changeFatherFav = (fatherFav: FavList) => {
 };
 
 const favPage: FavPage = {
-  uid: account?.uid!,
+  uid: accountStore.myInfo?.uid!,
   page: 1,
   pageSize: 10,
 };
@@ -639,7 +651,7 @@ const addVideo2Fav = async () => {
 
 //删除收藏夹视频
 const deleteVideoFromFav =async ()=>{
-  const res = await reqDeleteFavVideo(account?.uid!,videoInfo.value?.videoId!)
+  const res = await reqDeleteFavVideo(accountStore.myInfo?.uid!,videoInfo.value?.videoId!)
   if(res.code==200){
     favStore.getFatherFavList();
     favStore.getHistoreFavInfo(favPage);
@@ -648,6 +660,17 @@ const deleteVideoFromFav =async ()=>{
     })
   }
 }
+
+watch(()=>route.params.videoId,
+  (newValue)=>{
+    if(newValue!==null){
+      getVideoInfo()
+      getDanmakuList()
+    }
+  },{
+    immediate:true
+  }
+)
 </script>
 
 <style scoped lang="scss">

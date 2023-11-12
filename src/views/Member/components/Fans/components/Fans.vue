@@ -7,11 +7,11 @@
       <div class="member-container">
         <ul>
           <li class="list-item" v-for="(item) in memberStore.fansPageList" :key="item.followId">
-            <div class="list-avatar">
+            <div class="list-avatar" @click="toMember(item.followerUid)">
               <img :src="item.followerAvatar" />
             </div>
             <div class="list-intro">
-              <div id="name">{{ item.followerName }}</div>
+              <div id="name" @click="toMember(item.followerUid)">{{ item.followerName }}</div>
               <div id="brief">{{ item.followerBrief }}</div>
             </div>
             <div class="list-button">
@@ -51,7 +51,7 @@ const pageInfo = reactive<FollowPageInfo>({
   pageSize:8,
   uid:parseInt(route.params.uid as string)
 })
-const account = useAccountStore().myInfo
+const accountStore = useAccountStore()
 
 //获取关注列表分页数据
 onMounted(()=>memberStore.getFansPageList(pageInfo))
@@ -61,10 +61,18 @@ onMounted(()=>memberStore.getFansPageList(pageInfo))
 const toLine = (mid:number)=>{
   router.push({
     name:'messageWhisper',
-    params:{uid:account?.uid},
+    params:{uid:accountStore.myInfo?.uid},
     query:{mid}
   })
 }
+
+//前往粉丝用户页面
+const toMember = (uid:number) => {
+  router.push({
+    name: "memberHome",
+    params: { uid },
+  });
+};
 
 
 </script>
@@ -100,6 +108,10 @@ const toLine = (mid:number)=>{
               font-size: 1.3em;
               font-family: Arial, Helvetica, sans-serif;
               line-height: 2em;
+              cursor: pointer;
+              &:hover{
+                color:#00AEEC;
+              }
             }
             #brief {
               font-size: 0.9em;

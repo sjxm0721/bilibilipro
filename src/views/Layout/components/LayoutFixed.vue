@@ -40,10 +40,28 @@
         ><a>下载客户端</a>
       </div>
     </div>
-    <div class="search-container" :style="{ visibility: searchHidden() }">
-      <input type="text" placeholder="请输入搜索内容" v-model="input" @keyup.enter="toSearch"/>
-      <div class="search-icon" @click="toSearch">
+    <div
+      class="search-container"
+      ref="refSearchSuggest"
+      :class="{
+        'search-focus':
+          isSearchSuggestVisible === true
+      }"
+      v-show="y > 50 || routePath !== '/'"
+      :style="{ visibility: searchHidden() }"
+    >
+      <!-- @keyup.enter="toSearch" -->
+      <input
+        type="text"
+        placeholder="请输入搜索内容"
+        v-model="input"
+        @focus="showSearchSuggest"
+      />
+      <div class="search-icon" @click="toSearch(input)">
         <def-svg-icon svg-name="search"></def-svg-icon>
+      </div>
+      <div class="search-suggest" v-show="isSearchSuggestVisible">
+        <def-search :toSearch="toSearch"></def-search>
       </div>
     </div>
     <div class="avatar">
@@ -81,23 +99,27 @@
       </div>
       <div class="nav-list nav-list-right" @click="toMessage">
         <el-dropdown>
-            <span class="el-dropdown-link">
-              <div class="shake-icon">
-                <def-svg-icon
-                  svg-name="message"
-                  svg-width="20px"
-                  svg-height="20px"
-                  svg-color="#000"
-                ></def-svg-icon
-                ><a style="color:black;">消息</a>
-              </div>
-            </span>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item v-for="count in 5" @click="changeNav(count-1)">{{ titleList[count-1] }}</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
+          <span class="el-dropdown-link">
+            <div class="shake-icon">
+              <def-svg-icon
+                svg-name="message"
+                svg-width="20px"
+                svg-height="20px"
+                svg-color="#000"
+              ></def-svg-icon
+              ><a style="color: black">消息</a>
+            </div>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                v-for="count in 5"
+                @click="changeNav(count - 1)"
+                >{{ titleList[count - 1] }}</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
       <div class="nav-list nav-list-right" @click="toDynamic">
         <div class="shake-icon">
@@ -124,29 +146,32 @@
             </div>
           </span>
           <template #dropdown>
-              <el-dropdown-menu
-                style="max-height: 344px; overflow: auto"
-                v-if="favStore.historeFavInfo.length>0"
+            <el-dropdown-menu
+              style="max-height: 344px; overflow: auto"
+              v-if="favStore.historeFavInfo.length > 0"
+            >
+              <el-dropdown-item
+                v-for="item in favStore.historeFavInfo"
+                :key="item.favId"
+                style="white-space: normal !important; cursor: auto !important"
               >
-                <el-dropdown-item
-                  v-for="item in favStore.historeFavInfo"
-                  :key="item.favId"
-                  style="white-space: normal !important;cursor: auto !important;"
-                >
-                  <div style="padding: 5px; width: 300px">
-                    <def-video-nav-item :favList="item"></def-video-nav-item>
-                  </div>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-              <el-dropdown-menu
-                v-else
-                style="width: 180px;height: 180px;overflow: hidden;"
-              >
-                  <div>
-                    <img src="@/assets/images/empty.jpg" style="width: 100%;height: 100%;object-fit: cover;">
-                  </div>
-              </el-dropdown-menu>
-            </template>
+                <div style="padding: 5px; width: 300px">
+                  <def-video-nav-item :favList="item"></def-video-nav-item>
+                </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+            <el-dropdown-menu
+              v-else
+              style="width: 180px; height: 180px; overflow: hidden"
+            >
+              <div>
+                <img
+                  src="@/assets/images/empty.jpg"
+                  style="width: 100%; height: 100%; object-fit: cover"
+                />
+              </div>
+            </el-dropdown-menu>
+          </template>
         </el-dropdown>
       </div>
       <div class="nav-list nav-list-right">
@@ -163,37 +188,34 @@
             </div>
           </span>
           <template #dropdown>
-              <el-dropdown-menu
-                style="max-height: 344px; overflow: auto"
-                v-if="historyStore.historyPageList.length > 0"
+            <el-dropdown-menu
+              style="max-height: 344px; overflow: auto"
+              v-if="historyStore.historyPageList.length > 0"
+            >
+              <el-dropdown-item
+                v-for="item in historyStore.historyPageList"
+                :key="item.historyId"
+                style="white-space: normal !important; cursor: auto !important"
               >
-                <el-dropdown-item
-                  v-for="item in historyStore.historyPageList"
-                  :key="item.historyId"
-                  style="
-                    white-space: normal !important;
-                    cursor: auto !important;
-                  "
-                >
                 <div style="padding: 5px; width: 300px">
                   <def-video-history-item
                     :historyInfo="item"
                   ></def-video-history-item>
                 </div>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-              <el-dropdown-menu
-                v-else
-                style="width: 180px; height: 180px; overflow: hidden"
-              >
-                <div>
-                  <img
-                    src="@/assets/images/empty.jpg"
-                    style="width: 100%; height: 100%; object-fit: cover"
-                  />
-                </div>
-              </el-dropdown-menu>
-            </template>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+            <el-dropdown-menu
+              v-else
+              style="width: 180px; height: 180px; overflow: hidden"
+            >
+              <div>
+                <img
+                  src="@/assets/images/empty.jpg"
+                  style="width: 100%; height: 100%; object-fit: cover"
+                />
+              </div>
+            </el-dropdown-menu>
+          </template>
         </el-dropdown>
       </div>
       <div class="nav-list nav-list-right">
@@ -224,17 +246,20 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
 import { useScroll } from "@vueuse/core";
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useAccountStore } from "@/stores/modules/account";
 import { useFavStore } from "@/stores/modules/fav";
 import { useHistoryStore } from "@/stores/modules/history";
+import { useSearchStore } from "@/stores/modules/search";
+
 const { y } = useScroll(window);
 const routePath = ref(useRoute().fullPath);
 const router = useRouter();
 const accountStore = useAccountStore();
-const favStore = useFavStore()
-const historyStore = useHistoryStore()
-const input = ref<string>('')
+const favStore = useFavStore();
+const historyStore = useHistoryStore();
+const input = ref<string>("");
+const searchStore = useSearchStore();
 
 const toHome = () => {
   router.push("/");
@@ -261,13 +286,16 @@ const toDynamic = () => {
   });
 };
 
-const toSearch = () => {
+const toSearch = (searchContent: string) => {
   router.push({
-    name:'search',
-    query:{keyword:input.value}
+    name: "search",
+    query: { keyword: searchContent },
   });
+  searchContent = searchContent.trim();
+  if (searchContent !== "") {
+    searchStore.addSearchHistory(searchContent);
+  }
 };
-
 
 const searchHidden = () => {
   if (useRoute().fullPath.includes("/search")) return "hidden";
@@ -287,15 +315,51 @@ const titleList: string[] = [
   "@ 我的",
   "收到的赞",
   "系统通知",
-  "我的消息"
-]
+  "我的消息",
+];
 
 const changeNav = (newNav: number) => {
   router.push({
     name: messageList[newNav],
-    params: { uid:accountStore.myInfo?.uid },
+    params: { uid: accountStore.myInfo?.uid },
   });
 };
+
+//搜索框历史记录与热点的呈现
+const isSearchSuggestVisible = ref<boolean>(false);
+
+const showSearchSuggest = () => {
+  isSearchSuggestVisible.value = true;
+};
+
+const hideSearchSuggest = () => {
+  isSearchSuggestVisible.value = false;
+};
+
+//搜索框事件监听器
+
+const refSearchSuggest = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+  document.addEventListener("click", handleDocumentClick);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", handleDocumentClick);
+});
+
+const handleDocumentClick = (event: MouseEvent) => {
+  const searchSuggestElement = refSearchSuggest.value;
+  if (
+    searchSuggestElement &&
+    !searchSuggestElement.contains(event.target as Node)
+  ) {
+    hideSearchSuggest();
+  }
+};
+
+//获取热搜列表
+onMounted(() => searchStore.getSearchHotList());
 </script>
 
 <style scoped lang="scss">
@@ -377,6 +441,11 @@ const changeNav = (newNav: number) => {
       }
     }
   }
+  .search-focus {
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    opacity: 1 !important;
+  }
   .search-container {
     flex-shrink: 0;
     position: relative;
@@ -413,6 +482,18 @@ const changeNav = (newNav: number) => {
 
     &:hover {
       background-color: #fff;
+    }
+
+    .search-suggest {
+      position: absolute;
+      background-color: #fff;
+      width: 100%;
+      top: 100%;
+      z-index: 999999999999;
+      -webkit-font-smoothing: antialiased;
+      max-height: 640px;
+      overflow-y: auto;
+      border: 1px solid #e3e5e7;
     }
   }
   .avatar {

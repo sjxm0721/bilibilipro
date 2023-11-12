@@ -113,7 +113,10 @@ import type { LikePostData } from "@/api/like/type";
 import { useLikeStore } from "@/stores/modules/like";
 import { reqAddLike, reqCancelLike } from "@/api/like";
 import { useMemberStore } from "@/stores/modules/member";
+import type{message} from '@/utils/websocketClass'
+import { useWebSocketStore } from "@/stores/modules/websocket";
 
+const websocketStore = useWebSocketStore()
 const memberStore = useMemberStore();
 const likeStore = useLikeStore();
 const accountStore = useAccountStore();
@@ -178,6 +181,16 @@ const publishChildrenComment = async () => {
     });
 };
 
+
+//点赞相关
+const likeMessage = reactive<message>({
+  isSystem:"0",
+  fromUid:account?.uid,
+  toUid:props.commentData.uid,
+  isAll:false,
+  type:"1",
+  commentId:props.commentData.commentId
+})
 let isLiked = computed(() => {
   return likeStore.commentLikeList.some((likeList) => {
     return (
@@ -224,6 +237,7 @@ const clickLike = throttle(async (status: boolean) => {
         type: "success",
         message: "点赞成功",
       });
+      websocketStore.sendMessage(JSON.stringify(likeMessage))
       likeStore.getLikeList(account?.uid!, "2").then(() => {
         console.log(memberStore.memberInfo?.uid, props.commentData.uid);
         if (memberStore.memberInfo !== null) {

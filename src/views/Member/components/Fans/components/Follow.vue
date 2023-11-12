@@ -7,15 +7,15 @@
     <div class="member-container">
       <ul>
         <li class="list-item" v-for="(item) in memberStore.followPageList" :key="item.followId">
-          <div class="list-avatar">
+          <div class="list-avatar" @click="toMember(item.followedUid)">
             <img :src="item.followedAvatar" />
           </div>
           <div class="list-intro">
-            <div id="name">{{ item.followedName }}</div>
+            <div id="name" @click="toMember(item.followedUid)">{{ item.followedName }}</div>
             <div id="brief">{{ item.followedBrief }}</div>
           </div>
           <div class="list-button">
-            <el-dropdown v-show="memberStore.memberInfo?.uid===account?.uid">
+            <el-dropdown v-show="memberStore.memberInfo?.uid===accountStore.myInfo?.uid">
                 <el-button type="info" size="small"> 已关注 </el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
@@ -55,7 +55,7 @@ import { reqCancelFollow } from '@/api/follow';
 const memberStore = useMemberStore()
 const route = useRoute()
 const router = useRouter()
-const account = useAccountStore().myInfo
+const accountStore = useAccountStore()
 const pageInfo = reactive<FollowPageInfo>({
   page:1,
   pageSize:8,
@@ -69,7 +69,7 @@ onMounted(()=>memberStore.getFollowPageList(pageInfo))
 const toLine = (mid:number)=>{
   router.push({
     name:'messageWhisper',
-    params:{uid:account?.uid},
+    params:{uid:accountStore.myInfo!.uid},
     query:{mid}
   })
 }
@@ -78,13 +78,21 @@ const toLine = (mid:number)=>{
 const cancelFollow = async (followedUid:number)=>{
   const followInfo: FollowInfo = {
     followedUid,
-    followerUid: account?.uid!,
+    followerUid: accountStore.myInfo!.uid!,
   };
   await reqCancelFollow(followInfo);
   pageInfo.page = 1
   memberStore.getMemberInfo(parseInt(route.params.uid as string))
   memberStore.getFollowPageList(pageInfo);
 }
+
+//前往粉丝用户页面
+const toMember = (uid:number) => {
+  router.push({
+    name: "memberHome",
+    params: { uid },
+  });
+};
 
 </script>
 
@@ -119,6 +127,10 @@ const cancelFollow = async (followedUid:number)=>{
             font-size: 1.3em;
             font-family: Arial, Helvetica, sans-serif;
             line-height: 2em;
+            cursor: pointer;
+            &:hover{
+              color:#00AEEC;
+            }
           }
           #brief {
             font-size: 0.9em;

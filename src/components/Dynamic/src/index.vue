@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed,reactive } from "vue";
 import type { DynamicData } from "@/api/dynamic/type";
 import { useLikeStore } from "@/stores/modules/like";
 import { throttle } from "lodash";
@@ -96,7 +96,10 @@ import { reqCancelLike, reqAddLike } from "@/api/like";
 import { ElMessage } from "element-plus";
 import { useMemberStore } from "@/stores/modules/member";
 import { reqDeleteDynamic } from "@/api/dynamic";
+import type{message} from "@/utils/websocketClass"
+import { useWebSocketStore } from "@/stores/modules/websocket";
 
+const websocketStore = useWebSocketStore()
 const memberStore = useMemberStore();
 const props = defineProps<{
   dynamicData: DynamicData;
@@ -128,6 +131,14 @@ const svgColorReturn = () => {
 };
 
 //点赞相关
+const likeMessage = reactive<message>({
+  isSystem:"0",
+  fromUid:account?.uid,
+  toUid:props.dynamicData.uid,
+  isAll:false,
+  type:"1",
+  dynamicId:props.dynamicData.dynamicId
+})
 let isLiked = computed(() => {
   return likeStore.dynamicLikeList.some((likeList) => {
     return (
@@ -175,6 +186,7 @@ const clickLike = throttle(async (status: boolean) => {
         type: "success",
         message: "点赞成功",
       });
+      websocketStore.sendMessage(JSON.stringify(likeMessage))
       likeStore.getLikeList(account?.uid!, "1").then(() => {
         if (memberStore.memberInfo !== null) {
           if (memberStore.memberInfo.uid === props.dynamicData.uid) {

@@ -2,7 +2,7 @@
   <div class="show-video-container">
     <div class="right-video">
       <div class="video-nav">
-        <span class="label">{{ account?.uid===memberInfo?.uid?'我的视频':'TA的视频' }}</span>
+        <span class="label">{{ accountStore.myInfo?.uid===memberStore.memberInfo?.uid?'我的视频':'TA的视频' }}</span>
         <div
           class="order-type"
           @click="changeOrder(0)"
@@ -59,8 +59,8 @@ import { reqMemberVideoPage } from "@/api/member";
 import {useAccountStore} from '@/stores/modules/account'
 import { useMemberStore } from "@/stores/modules/member";
 
-const account = useAccountStore().myInfo
-const memberInfo = useMemberStore().memberInfo
+const accountStore = useAccountStore()
+const memberStore = useMemberStore()
 
 const route = useRoute();
 

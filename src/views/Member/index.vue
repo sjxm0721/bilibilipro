@@ -130,7 +130,7 @@
         </div>
       </div>
       <div class="container-body">
-        <router-view />
+        <router-view :key="$route.fullPath" />
       </div>
     </div>
   </div>
@@ -138,7 +138,7 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
-import { ref, onMounted, watch, onUnmounted } from "vue";
+import { ref, watch, onUnmounted } from "vue";
 import { useMemberStore } from "@/stores/modules/member";
 import { useAccountStore } from "@/stores/modules/account";
 import { reqAddFollow, reqIsFollow,reqCancelFollow } from "@/api/follow";
@@ -210,9 +210,16 @@ const getUserInfo = () => {
   });
 };
 
-onMounted(() => {
-  getUserInfo();
-});
+
+watch(
+  ()=>route.params.uid,
+  (newValue)=>{
+    if(newValue!==null){
+      getUserInfo()
+    }
+  },
+  {immediate:true}
+)
 
 watch(
   () => route.fullPath,

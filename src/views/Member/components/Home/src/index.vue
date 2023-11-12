@@ -4,7 +4,7 @@
       <div class="home-video">
         <div class="video-nav">
           <span class="label">{{
-            account?.uid === memberInfo?.uid ? "我的视频" : "TA的视频"
+            accountStore.myInfo?.uid === memberStore.memberInfo?.uid ? "我的视频" : "TA的视频"
           }}</span>
           <span class="label-show-num">{{ videoHomePageResult?.total }}</span>
           <div
@@ -50,7 +50,7 @@
       <div class="home-favlist">
         <div class="favlist-nav">
           <span class="label">{{
-            account?.uid === memberInfo?.uid ? "我的收藏" : "TA的收藏"
+            accountStore.myInfo?.uid === memberStore.memberInfo?.uid ? "我的收藏" : "TA的收藏"
           }}</span>
           <span class="label-show-num">{{ fatherFavList.length }}</span>
           <div
@@ -162,8 +162,8 @@
     <div class="container-right">
       <div style="margin: 20px">个人资料</div>
       <div class="personal-info">
-        <div>UID&nbsp;&nbsp;&nbsp;{{ memberInfo?.uid }}</div>
-        <div>生日&nbsp;&nbsp;&nbsp;{{ memberInfo?.birthday }}</div>
+        <div>UID&nbsp;&nbsp;&nbsp;{{ memberStore.memberInfo?.uid }}</div>
+        <div>生日&nbsp;&nbsp;&nbsp;{{ memberStore.memberInfo?.birthday }}</div>
       </div>
     </div>
   </div>
@@ -181,9 +181,7 @@ import type { FavList } from "@/api/fav/type";
 import { reqGetFatherFavList } from "@/api/fav";
 
 const accountStore = useAccountStore();
-const account = accountStore.myInfo;
 const memberStore = useMemberStore();
-const memberInfo = memberStore.memberInfo;
 const route = useRoute();
 const router = useRouter();
 
@@ -222,14 +220,14 @@ const getFatherFavList = async () => {
 const toVideo = () => {
   router.push({
     name: "memberVideo",
-    params: { uid: memberInfo?.uid },
+    params: { uid: memberStore.memberInfo?.uid },
   });
 };
 
 const toFav = (favId?: number) => {
   router.push({
     name: "memberFavlist",
-    params: { uid: memberInfo?.uid },
+    params: { uid: memberStore.memberInfo?.uid },
     query: { favId },
   });
 };

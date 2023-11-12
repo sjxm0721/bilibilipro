@@ -4,7 +4,7 @@
       <div
         class="fav-list-add"
         @click="showEdit = true"
-        v-show="account?.uid === memberInfo?.uid"
+        v-show="accountStore.myInfo?.uid === memberStore.memberInfo?.uid"
       >
         <div style="margin-right: 20px; font-size: 15px; color: #99a2aa">
           新建收藏夹
@@ -16,7 +16,7 @@
       <el-menu default-active="2" class="el-menu-vertical-demo">
         <el-sub-menu :index="route.params.uid.toString()">
           <template #title>{{
-            account?.uid === memberInfo?.uid ? "我的创建" : "TA的创建"
+            accountStore.myInfo?.uid === memberStore.memberInfo?.uid ? "我的创建" : "TA的创建"
           }}</template>
           <el-menu-item
             v-for="item in fatherFavList"
@@ -115,15 +115,15 @@ import { useRoute, useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/modules/member";
 import { useFavStore } from "@/stores/modules/fav";
 
-const memberInfo = useMemberStore().memberInfo;
-const account = useAccountStore().myInfo;
+const memberStore = useMemberStore();
+const accountStore = useAccountStore();
 const formRef = ref<FormInstance>();
 const route = useRoute();
 const router = useRouter();
 const showEdit = ref<boolean>(false);
 const favStore = useFavStore();
 const favListForm = reactive<FavListPostInfo>({
-  uid: account!.uid,
+  uid: accountStore.myInfo!.uid,
   isDic: "1",
   favTitle: "",
   favPoster: "",
@@ -190,7 +190,7 @@ const changeFatherFav = (fatherFav: FavList) => {
   const favId = fatherFav.favId;
   router.push({
     name: "memberFavlist",
-    params: { uid: memberInfo?.uid },
+    params: { uid: memberStore.memberInfo?.uid },
     query: { favId },
   });
 };

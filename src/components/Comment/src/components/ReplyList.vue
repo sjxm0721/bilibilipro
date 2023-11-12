@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
 import type { CommentData } from "@/api/comment/type";
-import { ref,computed } from "vue";
+import { ref,computed,reactive } from "vue";
 import { ElMessage } from "element-plus";
 import { throttle } from "lodash";
 import { useAccountStore } from "@/stores/modules/account";
@@ -76,7 +76,10 @@ import type { LikePostData } from "@/api/like/type";
 import { reqAddLike,reqCancelLike } from "@/api/like";
 import { useMemberStore } from "@/stores/modules/member";
 import { reqDeleteComment } from "@/api/comment";
+import type{message} from '@/utils/websocketClass'
+import { useWebSocketStore } from "@/stores/modules/websocket";
 
+const websocketStore = useWebSocketStore()
 const likeStore = useLikeStore()
 const account = useAccountStore().myInfo
 const props = defineProps<{ replyData: CommentData; clickReplyButton: Function ;refreshCommentList:Function}>();
@@ -92,6 +95,14 @@ const svgColorReturn = () => {
 };
 
 //点赞按钮的回调
+const likeMessage = reactive<message>({
+  isSystem:"0",
+  fromUid:account?.uid,
+  toUid:props.replyData.uid,
+  isAll:false,
+  type:"1",
+  commentId:props.replyData.commentId
+})
 let isLiked = computed(()=>{
    return likeStore.commentLikeList.some((likeList) => {
       return (
@@ -137,6 +148,7 @@ const clickLike=throttle(async(status:boolean)=>{
         type: "success",
         message: "点赞成功",
       });
+      websocketStore.sendMessage(JSON.stringify(likeMessage))
       likeStore.getLikeList(account?.uid!, "2").then(()=>{
         if(memberStore.memberInfo!==null){
           if(memberStore.memberInfo.uid === props.replyData.uid){

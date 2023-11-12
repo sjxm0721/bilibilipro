@@ -14,7 +14,12 @@ export interface message{
   commentId?:number,
   barrageId?:number,
   isAll?:boolean,
-  isSystem:string
+  isSystem:string,
+  videoPoster?:string,
+  barrageText?:string,
+  commentContent?:string,
+  dynamicText?:string,
+  postTime?:string,
 }
 
 interface SocketOptions{
