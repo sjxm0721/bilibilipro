@@ -57,7 +57,7 @@
         &nbsp;&nbsp;&nbsp;
         <span
           class="reply-button"
-          @click="clickReplyButton(replyData.commentId, replyData.accountName)"
+          @click="clickReplyButton(replyData.commentId,replyData.uid,replyData.accountName)"
           >回复</span
         >
       </div>

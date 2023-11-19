@@ -34,6 +34,7 @@
             :videoId="videoInfo?.videoId"
             :getDanmakuList="getDanmakuList"
             ref="videoPlayer"
+            :key="videoInfo.videoId"
           ></def-video-player>
         </div>
         <div class="video-sl">
@@ -85,50 +86,14 @@
         <div class="video-desc">
           {{ videoInfo?.videoBrief }}
         </div>
-        <div class="video-tags">
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>dwaldwajdlakwdalwkdj</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
-          </div>
-          <div class="video-tag">
-            <el-tag class="ml-2" type="info" round>Tag 4</el-tag>
+        <div class="video-tags" v-if="videoInfo">
+          <div class="video-tag" v-for="(item) in videoInfo.categoryTags" :key="item.categoryId">
+            <el-tag class="ml-2" type="info" round>{{ item.name }}</el-tag>
           </div>
         </div>
       </div>
       <div class="video-comment" v-if="videoInfo">
-        <def-comment :videoId="videoInfo?.videoId" :key="$route.fullPath"></def-comment>
+        <def-comment :videoId="videoInfo?.videoId" :key="videoInfo.videoId" :toUid="videoInfo.uid"></def-comment>
       </div>
     </div>
     <div class="container-right">

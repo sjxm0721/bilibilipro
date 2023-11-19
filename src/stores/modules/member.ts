@@ -35,7 +35,6 @@ export const useMemberStore = defineStore("member", () => {
   const getMemberInfo = async (uid: number) => {
     const result = await reqGetAccountInfoById(uid);
     memberInfo.value = result.data;
-    console.log("111", memberInfo.value);
   };
 
   const clearMemberInfo = () => {

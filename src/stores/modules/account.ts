@@ -39,8 +39,6 @@ export const useAccountStore = defineStore(
     };
     const getInfo = async () => {
       getMyInfo().then(() => {
-        //获取聊天信息
-        websocketStore.initializeWebSocket()
         //获取收藏夹历史
         const favPage: FavPage = {
           uid: myInfo.value!.uid,
@@ -62,9 +60,10 @@ export const useAccountStore = defineStore(
         likeStore.getLikeList(myInfo.value!.uid, "1");
         likeStore.getLikeList(myInfo.value!.uid, "2");
         likeStore.getLikeList(myInfo.value!.uid, "3");
-        setTimeout(()=>{
-          messageStore.getHistoryLikeList()
-        },100)
+        //获取消息信息
+        websocketStore.initializeWebSocket().then(()=>{
+          messageStore.getMessageList()
+        })
       });
     };
     const clearMyInfo = () => {
@@ -74,7 +73,7 @@ export const useAccountStore = defineStore(
     const logout = () => {
       clearMyInfo();
       removeToken();
-      messageStore.clearLikeMessages();
+      messageStore.clearMessages();
       websocketStore.closeWebSocket();
       favStore.clearFavInfo();
       historyStore.clearHistoryPageInfo();

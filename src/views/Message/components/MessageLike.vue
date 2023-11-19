@@ -1,5 +1,5 @@
 <template>
-  <div class="message-like-container">
+  <div class="message-like-container" v-if="messageStore.likeMessages.length>0">
     <ul>
       <li v-for="(item, index) in messageStore.likeMessages" :key="index">
         <div class="avatar" @click="toMember(item.fromUid!)">
@@ -29,11 +29,17 @@
       </li>
     </ul>
   </div>
+  <div class="like-nothing-container" v-else>
+    <div class="nothing">
+      <img src="@/assets/images/empty.jpg" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useMessageStore } from "@/stores/modules/message";
 import type { message } from "@/utils/websocketClass";
+import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter()
@@ -70,6 +76,10 @@ const toMember = (uid:number) => {
     params: { uid },
   });
 };
+
+onMounted(()=>{
+  messageStore.setLikeMessageRead()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -145,6 +155,24 @@ const toMember = (uid:number) => {
           line-height: 15px;
         }
       }
+    }
+  }
+}
+
+.like-nothing-container {
+  background-color: #fff;
+  border-radius: 5px;
+  .nothing {
+    height: 256px;
+    width: 100%;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    img {
+      height: 100%;
+      object-fit: contain;
     }
   }
 }

@@ -1,6 +1,7 @@
 import { useAccountStore } from "@/stores/modules/account"
 
 export interface message{
+  messageId?:number,
   fromUid?:number,
   fromName?:string,
   fromAvatar?:string,
@@ -15,11 +16,13 @@ export interface message{
   barrageId?:number,
   isAll?:boolean,
   isSystem:string,
+  isRead?:string,
   videoPoster?:string,
   barrageText?:string,
   commentContent?:string,
   dynamicText?:string,
   postTime?:string,
+  nowCommentId?:number
 }
 
 interface SocketOptions{

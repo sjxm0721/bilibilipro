@@ -79,6 +79,7 @@
     <div class="comment-body" v-if="showComment">
       <def-comment
         :dynamicId="dynamicData.dynamicId"
+        :toUid="dynamicData.uid"
         :refreshDynamicList="props.refreshDynamicList"
       ></def-comment>
     </div>

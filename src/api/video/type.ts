@@ -1,4 +1,5 @@
 import { ResponseData } from "../account/type";
+import { Category } from "../category/type";
 
 export interface PageInfoData{
     page:number,
@@ -28,7 +29,7 @@ export interface Video{
     likeNum:number,
     coinNum:number,
     favNum:number,
-    tags:string[],
+    categoryTags:Category[],
     commentNum:number,
     poster:string,
     inSuggest:boolean,
@@ -52,3 +53,12 @@ export interface VideoInfoResponseData extends ResponseData{
     data:Video
 }
 
+export interface VideoRuleForm {
+    poster: string;
+    title: string;
+    videoBrief: string;
+    tags: string[];
+    src: string;
+    lastTime: number;
+    uid:number
+  }

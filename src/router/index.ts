@@ -143,6 +143,11 @@ let router = createRouter({
       name: "dynamic",
       component: () => import("../views/Dynamic/index.vue"),
     },
+    {
+      path:"/upload/:uid",
+      name:"upload",
+      component: () => import("../views/Upload/index.vue")
+    }
   ],
   scrollBehavior() {
     return {

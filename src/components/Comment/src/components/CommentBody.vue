@@ -58,7 +58,7 @@
           <span
             class="reply-button"
             @click="
-              clickReplyButton(commentData.commentId, commentData.accountName)
+              clickReplyButton(commentData.commentId,commentData.uid,commentData.accountName)
             "
             >回复</span
           >
@@ -142,11 +142,14 @@ let replyCommentInfo = reactive<ReplyCommentInfo>({
   uid: account?.uid as number,
   content: "",
   fatherId: undefined,
+  accountName:"",
+  fatherUid:props.commentData.uid,
   totalFatherId: props.commentData.commentId,
 });
 
-const clickReplyButton = (commentId: number, accountName: string) => {
+const clickReplyButton = (commentId: number,uid:number,accountName: string) => {
   replyCommentInfo.fatherId = commentId;
+  replyCommentInfo.fatherUid = uid
   replyCommentInfo.accountName = accountName;
   showInput.value = true;
 };
@@ -162,23 +165,36 @@ const cancelReply = () => {
 };
 
 //发表子评论
+const commentMessage = reactive<message>({
+  isSystem:"0",
+  fromUid:accountStore.myInfo?.uid,
+  toUid:undefined,
+  isAll:false,
+  type:"3",
+  commentId:undefined,
+  nowCommentId:undefined
+})
 const publishChildrenComment = async () => {
-  await reqReplyComment(replyCommentInfo)
-    .then(() => {
-      ElMessage({
+  const res = await reqReplyComment(replyCommentInfo)
+  if(res.code==200){
+    ElMessage({
         type: "success",
         message: "发表评论成功",
       });
+      commentMessage.nowCommentId = res.data
+      commentMessage.toUid = replyCommentInfo.fatherUid
+      commentMessage.commentId = replyCommentInfo.fatherId
+      websocketStore.sendMessage(JSON.stringify(commentMessage))
       clearRCInfo();
       props.refreshCommentList(replyCommentInfo.totalFatherId);
       showInput.value = false;
-    })
-    .catch(() => {
-      ElMessage({
+  }
+  else{
+    ElMessage({
         type: "error",
         message: "发表评论失败",
       });
-    });
+  }
 };
 
 

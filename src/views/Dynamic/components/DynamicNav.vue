@@ -102,11 +102,24 @@
             </div>
           </span>
           <template #dropdown>
-            <el-dropdown-menu>
+            <el-dropdown-menu style="width: 120px">
               <el-dropdown-item
                 v-for="count in 5"
                 @click="changeNav(count - 1)"
-                >{{ titleList[count - 1] }}</el-dropdown-item
+                >{{ titleList[count - 1] }}
+                <span
+                    class="notify-num"
+                    style="position: absolute; right: 10px"
+                    v-show="messageStore.likeNotRead !== 0 && count === 3"
+                    >{{ messageStore.likeNotRead }}</span
+                  >
+                  <span
+                    class="notify-num"
+                    style="position: absolute; right: 10px"
+                    v-show="messageStore.commentNotRead !== 0 && count === 1"
+                    >{{ messageStore.commentNotRead }}</span
+                  >
+                </el-dropdown-item
               >
             </el-dropdown-menu>
           </template>
@@ -221,7 +234,7 @@
         </div>
       </div>
     </div>
-    <div class="contribute-atc">
+    <div class="contribute-atc" @click="toUpload">
       <el-button type="success"
         ><def-svg-icon
           svg-name="upload"
@@ -241,7 +254,9 @@ import { useFavStore } from "@/stores/modules/fav";
 import { useHistoryStore } from "@/stores/modules/history";
 import { ref,onMounted,onUnmounted} from "vue";
 import { useSearchStore } from "@/stores/modules/search";
+import { useMessageStore } from "@/stores/modules/message";
 
+const messageStore = useMessageStore()
 const searchStore = useSearchStore()
 const router = useRouter();
 const accountStore = useAccountStore();
@@ -284,6 +299,13 @@ const toSearch = (searchContent: string) => {
     searchStore.addSearchHistory(searchContent);
   }
 };
+
+const toUpload = () => {
+  router.push({
+    name: "upload",
+    params: {uid:accountStore.myInfo?.uid}
+  })
+}
 
 const messageList: string[] = [
   "messageResponse",
@@ -349,6 +371,16 @@ onMounted(() => searchStore.getSearchHotList());
 <style scoped lang="scss">
 :deep() .el-dropdown-menu__item:hover {
   background-color: #eee !important;
+}
+:deep() .el-dropdown-menu__item .notify-num {
+  background-color: #fa5a57;
+  line-height: 16px;
+  height: 16px;
+  font-size: 12px;
+  border-radius: 10px;
+  width: 28px;
+  text-align: center;
+  color: #fff;
 }
 .nav-container {
   height: 70px;

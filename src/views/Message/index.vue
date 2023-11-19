@@ -10,13 +10,13 @@
         <div class="main-content">
           <ul>
             <li @click="changeNav(0)" :class="{ choosed: choosedNav === 0 }">
-              回复我的
+              回复我的 <span class="notify notify-number" v-show="messageStore.commentNotRead!==0">{{ messageStore.commentNotRead }}</span>
             </li>
             <li @click="changeNav(1)" :class="{ choosed: choosedNav === 1 }">
-              @ 我的
+              @ 我的 
             </li>
             <li @click="changeNav(2)" :class="{ choosed: choosedNav === 2 }">
-              收到的赞
+              收到的赞 <span class="notify notify-number" v-show="messageStore.likeNotRead!==0">{{ messageStore.likeNotRead }}</span> 
             </li>
             <li @click="changeNav(3)" :class="{ choosed: choosedNav === 3 }">
               系统通知
@@ -43,7 +43,9 @@
 import MessageNav from "./components/MessageNav.vue";
 import { useRoute, useRouter } from "vue-router";
 import { computed, ref, watch } from "vue";
+import { useMessageStore } from "@/stores/modules/message";
 
+const messageStore = useMessageStore()
 const route = useRoute();
 const router = useRouter();
 const uid = route.params.uid;
@@ -125,6 +127,8 @@ const title = computed(()=>titleList[choosedNav.value])
         line-height: 60px;
       }
       .main-content {
+        width: 100%;
+        padding: 0 0 0 20px;
         ul {
           .choosed {
             color: #2faee3;
@@ -145,6 +149,20 @@ const title = computed(()=>titleList[choosedNav.value])
               width: 20px;
               content: "\25cf";
               transform: translateY(-3%);
+            }
+            .notify-number{
+              background-color: #fb7299;
+              line-height: 16px;
+              height: 16px;
+              font-size: 12px;
+              border-radius: 10px;
+              width: 28px;
+            }
+            .notify{
+              display: inline-block;
+              text-align: center;
+              color: #fff;
+              transition: width 200ms,height 200ms;
             }
           }
         }

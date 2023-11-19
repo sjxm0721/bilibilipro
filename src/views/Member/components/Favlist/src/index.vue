@@ -63,7 +63,7 @@
         <el-form-item label="收藏夹封面" prop="favPoster">
           <el-upload
             class="avatar-uploader"
-            action="/api/user/common/upload"
+            action="/api/user/common/uploadPic"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -202,7 +202,7 @@ const addFatherFav = async () => {
     favStore.getFatherFavList();
   }
 };
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm =  (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {

@@ -6,6 +6,7 @@ import type {
   HomeSuggestResponseData,
   VideoInfoResponseData,
   VideoSearchPageData,
+  VideoRuleForm
 } from "./type";
 
 enum API {
@@ -13,7 +14,8 @@ enum API {
   HOME_SUGGEST_API = "/video/homesuggest",
   VIDEO_INFO_API = "/video/info",
   VIDEO_CLICK_API = "/video/click",
-  VIDEO_SEARCH_API = "/video/search"
+  VIDEO_SEARCH_API = "/video/search",
+  VIDEO_ADD_API = "/video/add"
 }
 
 export const reqGetVideoPageList = (data: PageInfoData) =>
@@ -41,5 +43,8 @@ export const reqSearchVideo = (videoSearchPageData:VideoSearchPageData)=>
       searchContent:videoSearchPageData.searchContent
     }
   })
+
+export const reqAddVideo = (data:VideoRuleForm) =>
+  request.post<any,any>(API.VIDEO_ADD_API,data)
 
 

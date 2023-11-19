@@ -9,12 +9,13 @@
 import Danmaku, { DanmakuPluginOption } from "@nplayer/danmaku";
 import { Popover, Icon } from "nplayer";
 import Hls from "hls.js";
-import {ref,onMounted} from "vue";
+import {ref,reactive, onMounted} from "vue";
 import bilibiliSvg from "@/utils/bilibiliSvg";
 import type{BarragePostData,BarrageData} from '@/api/barrage/type'
 import { BulletOption } from "@nplayer/danmaku/dist/src/ts/danmaku/bullet";
 import { useAccountStore } from "@/stores/modules/account"
 import {reqSendBarrage} from '@/api/barrage/index'
+
 
 let player: any = null;
 const account = useAccountStore().myInfo
@@ -66,7 +67,7 @@ registerIcon("cog", bilibiliSvg.createIcon(bilibiliSvg.cog));
 registerIcon("webEnterFullscreen", bilibiliSvg.createIcon(bilibiliSvg.webFull));
 registerIcon("enterFullscreen", bilibiliSvg.createIcon(bilibiliSvg.full));
 
-const playerOptions = {
+const playerOptions = reactive({
   poster: props.poster,
   posterEnable: true,
   controls: [
@@ -97,7 +98,7 @@ const playerOptions = {
   volumeProgressBg: "rgba(35,173,229, 1)",
   progressDot: bilibiliSvg.createIcon(bilibiliSvg.dot, true)(),
   posterPlayEl: bilibiliSvg.createIcon(bilibiliSvg.playBig)(),
-};
+});
 
 const setPlayer = (p: any) => {
   player = p;
@@ -109,8 +110,7 @@ const setPlayer = (p: any) => {
     player.danmaku.items = danmakuContent.value
   }
 
-
-onMounted(() => {
+const prepareVideo = () => {
   const hls = new Hls();
   hls.on(Hls.Events.MEDIA_ATTACHED, function () {
     hls.on(Hls.Events.MANIFEST_PARSED, function () {
@@ -160,6 +160,7 @@ onMounted(() => {
 
     // 绑定 video 元素成功的时候，去加载视频
     hls.loadSource(props.src as string);
+
   });
 
 
@@ -188,7 +189,11 @@ onMounted(() => {
 
   hls.attachMedia(player.video)
 
-});
+};
+
+onMounted(()=>{
+  prepareVideo()
+})
 
 //发送弹幕的回调
 const sendBarrage = async(danmaku:BarragePostData)=>{

@@ -17,6 +17,10 @@ export interface CommentData{
     responseName:string
 }
 
+export interface CommentReplyResponseData extends ResponseData{
+    data:number
+}
+
 export interface PageComment{
     record:CommentData[],
     total:number
@@ -39,4 +43,5 @@ export interface ReplyCommentInfo{
     fatherId?:number,
     totalFatherId?:number,
     accountName?:string
+    fatherUid?:number
 }

@@ -5,7 +5,7 @@ import { getToken} from './auth'
 
 let request = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_API,
-    timeout:5000
+    timeout:500000
 })
 
 //配置请求拦截器

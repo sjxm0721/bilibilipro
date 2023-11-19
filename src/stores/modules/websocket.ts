@@ -8,58 +8,64 @@ import { ref } from "vue";
 export const useWebSocketStore = defineStore("websocket", () => {
   const socket = ref<WebSocketClass | null>(null);
   const historyMessages = ref<{ [key: string]: message[] }>({});
-  const messageStore = useMessageStore()
+  const messageStore = useMessageStore();
   const initializeWebSocket = () => {
-    const account = useAccountStore().myInfo;
-    socket.value = new WebSocketClass(
-      `ws://localhost:8080/websocket/${account?.uid}`,
-      {
-        heartbeatInterval: 30000,
-        reconnectInterval: 5000,
-        maxReconnectAttempts: 5,
-      }
-    );
-    // 添加WebSocket事件监听
-    socket.value.on("open", (event: Event) => {
-      // 处理WebSocket连接已打开事件
-      console.log("已经连接上ws服务器", event);
-    });
+    return new Promise((resolve, reject) => {
+      const account = useAccountStore().myInfo;
+      socket.value = new WebSocketClass(
+        `ws://localhost:8080/websocket/${account?.uid}`,
+        {
+          heartbeatInterval: 30000,
+          reconnectInterval: 5000,
+          maxReconnectAttempts: 5,
+        }
+      );
+      // 添加WebSocket事件监听
+      socket.value.on("open", (event: Event) => {
+        // 处理WebSocket连接已打开事件
+        console.log("已经连接上ws服务器", event);
+        resolve(event);
+      });
 
-    socket.value.on("message", (data: string) => {
-      // 处理WebSocket消息事件
-      const messageTmp: message = JSON.parse(data);
-      const isSystem = messageTmp.isSystem;
-      const type = messageTmp.type;
-      if (isSystem === "1") {
-        //系统消息
-      } else {
-        //普通消息
-        if (type === "0") {
-          const fromUid:number = messageTmp.fromUid!;
-          const toUid:number = messageTmp.toUid!;
-          const key = fromUid < toUid ? `${fromUid}-${toUid}`:`${toUid}-${fromUid}`
-          if (!historyMessages.value[key]) {
-            historyMessages.value[key] = [];
+      socket.value.on("message", (data: string) => {
+        // 处理WebSocket消息事件
+        const messageTmp: message = JSON.parse(data);
+        const isSystem = messageTmp.isSystem;
+        const type = messageTmp.type;
+        if (isSystem === "1") {
+          //系统消息
+        } else {
+          //普通消息
+          if (type === "0") {
+            const fromUid: number = messageTmp.fromUid!;
+            const toUid: number = messageTmp.toUid!;
+            const key =
+              fromUid < toUid ? `${fromUid}-${toUid}` : `${toUid}-${fromUid}`;
+            if (!historyMessages.value[key]) {
+              historyMessages.value[key] = [];
+            }
+
+            historyMessages.value[key].push(messageTmp);
+          } else if (type === "1") {
+            //点赞消息
+            messageStore.addLikeMessage(messageTmp);
+          } else if (type === "3") {
+            //评论消息
+            messageStore.addCommentMessage(messageTmp);
           }
-    
-          historyMessages.value[key].push(messageTmp);
         }
-        else if(type === "1"){
-          //点赞消息
-          messageStore.AddLikeMessage(messageTmp)
-        }
-      }
-    });
+      });
 
+      socket.value.on("error", (event: Event) => {
+        // 处理WebSocket错误事件
+        console.log("ws服务器错误", event);
+        reject();
+      });
 
-    socket.value.on("error", (event: Event) => {
-      // 处理WebSocket错误事件
-      console.log("ws服务器错误", event);
-    });
-
-    socket.value.on("close", (event: Event) => {
-      // 处理WebSocket连接关闭事件
-      console.log("ws连接已经关闭", event);
+      socket.value.on("close", (event: Event) => {
+        // 处理WebSocket连接关闭事件
+        console.log("ws连接已经关闭", event);
+      });
     });
   };
   const closeWebSocket = () => {
@@ -67,8 +73,6 @@ export const useWebSocketStore = defineStore("websocket", () => {
       socket.value.close();
     }
   };
-
-  
 
   const sendMessage = (data: string) => {
     if (socket.value) {

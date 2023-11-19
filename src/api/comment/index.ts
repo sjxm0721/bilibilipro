@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-import type { CommentPageInfo, CommentPageResponseData, ReplyCommentInfo } from "./type";
+import type { CommentPageInfo, CommentPageResponseData, CommentReplyResponseData, ReplyCommentInfo } from "./type";
 
 enum API{
     COMMENT_PAGE_API = "/comment/page",
@@ -21,7 +21,7 @@ export const reqGetCommentPageList = (pageInfo:CommentPageInfo)=>
         })
 
 export const reqReplyComment = (replyCommentInfo:ReplyCommentInfo)=>
-        request.post<any,any>(API.REPLY_COMMENT_API,replyCommentInfo)
+        request.post<any,CommentReplyResponseData>(API.REPLY_COMMENT_API,replyCommentInfo)
 
 export const reqDeleteComment = (commentId:number)=>
         request.delete<any,any>(API.DELETE_REPLY_API,{
