@@ -2,23 +2,31 @@
   <div class="message-box-container">
     <div class="message-area">
       <div
-        :class="{
-          'message-box-right': item.fromUid === account?.uid,
-          'message-box-left': item.toUid === account?.uid,
-        }"
         v-for="(item, index) in websocketStore.historyMessages[messageKey]"
         :key="index"
       >
-        <div class="avatar">
-          <img :src="item.fromAvatar" />
+        <div class="msg-time" v-show="item.showTime">
+          <div>
+            <span class="time">{{ formatPostTime(item.showTime!) }}</span>
+          </div>
         </div>
         <div
           :class="{
-            'content-right': item.fromUid === account?.uid,
-            'content-left': item.toUid === account?.uid,
+            'message-box-right': item.fromUid === account?.uid,
+            'message-box-left': item.toUid === account?.uid,
           }"
         >
-          {{ item.content }}
+          <div class="avatar">
+            <img :src="item.fromAvatar" />
+          </div>
+          <div
+            :class="{
+              'content-right': item.fromUid === account?.uid,
+              'content-left': item.toUid === account?.uid,
+            }"
+          >
+            {{ item.content }}
+          </div>
         </div>
       </div>
     </div>
@@ -38,7 +46,7 @@
 
 <script setup lang="ts">
 import { useWebSocketStore } from "@/stores/modules/websocket";
-import { onMounted, onUnmounted, ref} from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import type { message } from "@/utils/websocketClass.ts";
 import { useAccountStore } from "@/stores/modules/account";
 import { useRoute } from "vue-router";
@@ -55,43 +63,86 @@ const messageInfo = ref<message>({
   type: "0",
   isAll: false,
 });
-const messageKey = account?.uid!< parseInt(route.query.mid as string)! ? `${account?.uid!}-${parseInt(route.query.mid as string)!}`:`${parseInt(route.query.mid as string)!}-${account?.uid!}`
+const messageKey =
+  account?.uid! < parseInt(route.query.mid as string)!
+    ? `${account?.uid!}-${parseInt(route.query.mid as string)!}`
+    : `${parseInt(route.query.mid as string)!}-${account?.uid!}`;
 
-onMounted(()=>{
+onMounted(() => {
   const historyMessage: message = {
     fromUid: account?.uid,
     toUid: parseInt(route.query.mid as string),
     isSystem: "0",
     isAll: true,
-    type: "0",
+    type: "0"
   };
   websocketStore.sendMessage(JSON.stringify(historyMessage));
-})
+});
 
 const sendPrivateMsg = () => {
-  const msg: string = JSON.stringify(messageInfo.value);
+  
   let msgMore = {
     fromName: account?.accountName,
     fromAvatar: account?.avatar,
   };
-  const msgTmp = { ...messageInfo.value, ...msgMore };
+  const msgTmp: message = { ...messageInfo.value, ...msgMore };
+  var currentDate = new Date();
+  var formattedDate = currentDate
+    .toLocaleString("zh-CN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZone: "Asia/Shanghai",
+    })
+    .replace(/ /, "T").replace(/\//g, '-');
+  const timeTmp = formattedDate.slice(0,16)
+  msgTmp.postTime = formattedDate;
+  const msg: string = JSON.stringify(messageInfo.value);
   websocketStore.sendMessage(msg);
-  if(!websocketStore.historyMessages[messageKey]){
-    websocketStore.historyMessages[messageKey]=[]
+  if (!websocketStore.historyMessages[messageKey]) {
+    websocketStore.historyMessages[messageKey] = [];
   }
-  websocketStore.historyMessages[messageKey].push(msgTmp)
+  if (!websocketStore.timeList[timeTmp]) {
+    websocketStore.timeList[timeTmp] = true;
+    msgTmp.showTime = timeTmp;
+  }
+  websocketStore.historyMessages[messageKey].push(msgTmp);
   messageInfo.value.content = "";
 };
 
-onUnmounted(()=>{
-  websocketStore.historyMessages[messageKey] = []
-})
+const formatPostTime = (time: string) => {
+  return new Date(time).toLocaleString("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
+onUnmounted(() => {
+  websocketStore.historyMessages[messageKey] = [];
+  websocketStore.timeList = {};
+});
 </script>
 
 <style scoped lang="scss">
 .message-box-container {
   .message-area {
+    .msg-time {
+      padding: 16px 0 0;
+      text-align: center;
+      .time {
+        color: #999;
+        font-size: 12px;
+        line-height: 22px;
+        margin: 0 10px;
+      }
+    }
     .message-box-left,
     .message-box-right {
       margin: 20px;
@@ -100,6 +151,7 @@ onUnmounted(()=>{
           width: 40px;
           height: 40px;
           border-radius: 50%;
+          object-fit: cover;
         }
       }
       .content-left,

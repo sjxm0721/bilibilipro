@@ -35,7 +35,7 @@
       <FavListShow
         :fatherFav="fatherFavChosed"
         :getFatherFavList="getFatherFavList"
-        :key="route.fullPath"
+        :key="(fatherFavChosed.favId)"
       />
     </div>
   </div>
@@ -163,7 +163,15 @@ const cancelEdit = () => {
 };
 
 const handleAvatarSuccess: UploadProps["onSuccess"] = (response) => {
-  favListForm.favPoster = response.data;
+  if(response.code === 505){
+    ElMessage({
+      type:'error',
+      message:'图片上传失败'
+    })
+  }
+  else{
+    favListForm.favPoster = response.data;
+  }
 };
 
 const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
@@ -237,10 +245,12 @@ const pathChoose = (newPath: string) => {
 
 watch(
   () => route.query.favId,
-  (newFullPath) => {
-    getFatherFavList().then(() => {
-      pathChoose(newFullPath as string);
+  (newValue) => {
+    if(newValue!==null&&route.params.uid!==undefined){
+      getFatherFavList().then(() => {
+      pathChoose(newValue as string);
     });
+    }
   },
   { immediate: true }
 );
@@ -305,6 +315,7 @@ watch(
 .avatar-uploader .avatar {
   width: 144px;
   height: 90px;
+  object-fit: cover;
   display: block;
 }
 </style>

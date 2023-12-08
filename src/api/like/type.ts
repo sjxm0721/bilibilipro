@@ -28,3 +28,9 @@ export interface LikePostData{
     barrageId?:number,
     status:string
 }
+
+export interface LikeVideoPage{
+    page:number,
+    pageSize:number,
+    uid:number
+}

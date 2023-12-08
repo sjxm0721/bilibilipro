@@ -6,8 +6,8 @@
       <div class="dynamic-left">
         <div class="box top">
           <div class="user-info-head">
-            <img :src="accountStore.myInfo?.avatar" />
-            <span>{{ accountStore.myInfo?.accountName }}</span>
+            <img :src="accountStore.myInfo?.avatar" @click="toMember"/>
+            <span @click="toMember">{{ accountStore.myInfo?.accountName }}</span>
           </div>
           <div class="user-info-content">
             <div>
@@ -64,7 +64,7 @@
       <div class="dynamic-right">
         <div class="box top">
           <div class="banner-image">
-            <img src="@/assets/images/dynamicBanner.jpg" />
+            <img src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/dynamicBanner.jpg" />
           </div>
         </div>
         <div class="topic-list box">
@@ -146,7 +146,9 @@ import { reactive, ref } from "vue";
 import type { DynamicPostData } from "@/api/dynamic/type";
 import { reqPublishDynamic } from "@/api/dynamic";
 import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
 
+const router = useRouter()
 const dynamicContent = ref();
 
 const accountStore = useAccountStore();
@@ -170,6 +172,14 @@ const publishDynamic = async () => {
     }
   }
 };
+
+//前往用户界面
+const toMember = ()=>{
+  router.push({
+    name: "memberHome",
+    params: { uid: accountStore.myInfo!.uid },
+  });
+}
 </script>
 
 <style lang="scss" scoped>
@@ -179,7 +189,7 @@ const publishDynamic = async () => {
     bottom: 0;
     height: 100vh;
     width: 100%;
-    background-image: url("@/assets/images/dynamicBg.jpg");
+    background-image: url("https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/dynamicBg.jpg");
     background-size: cover;
     z-index: 0;
   }
@@ -207,6 +217,7 @@ const publishDynamic = async () => {
         width: 50px;
         height: 50px;
         border-radius: 50%;
+        object-fit: cover;
         cursor: pointer;
       }
       width: 18%;
@@ -245,6 +256,7 @@ const publishDynamic = async () => {
       img {
         width: 50px;
         height: 50px;
+        object-fit: cover;
         border-radius: 50%;
         cursor: pointer;
       }

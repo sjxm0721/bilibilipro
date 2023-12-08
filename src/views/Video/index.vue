@@ -171,47 +171,8 @@
         </el-collapse>
       </div>
       <div class="video-list">
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
-        </div>
-        <div class="other-video">
-          <def-video-panel-item></def-video-panel-item>
+        <div class="other-video" v-for="(item) in videoList" :key="item.videoId">
+          <def-video-panel-item :video="item"></def-video-panel-item>
         </div>
       </div>
     </div>
@@ -306,9 +267,9 @@
 <script setup lang="ts">
 import { reactive, ref, watch} from "vue";
 import { useRoute, useRouter } from "vue-router";
-import type { Video } from "@/api/video/type";
+import type { PageInfoData, Video } from "@/api/video/type";
 import type { AccountInfoData } from "@/api/account/type";
-import { reqGetVideoInfoByUid } from "@/api/video";
+import { reqGetVideoInfoByUid, reqGetVideoPageList } from "@/api/video";
 import { reqGetAccountInfoById } from "@/api/account";
 import type { BarrageData } from "@/api/barrage/type";
 import { reqGetVideoBarrage } from "@/api/barrage/index";
@@ -359,6 +320,9 @@ const svgColorReturn = () => {
 const videoInfo = ref<Video>();
 const getVideoInfo = async () => {
   const res = await reqGetVideoInfoByUid(Number(route.params.videoId.slice(2)));
+  if(res.code===504){
+    router.replace("/404")
+  }
   videoInfo.value = res.data;
   getAccountInfo(videoInfo.value.uid);
 };
@@ -523,14 +487,14 @@ const clickCoin = () => {
 
 //收藏视频相关
 const showFav = ref<boolean>(false);
-const bgFavChosed: string = "../src/assets/images/favChosed.jpg";
-const bgCheckbox: string = "../src/assets/images/checkbox.jpg";
+const bgFavChosed: string = "https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/favChecked.jpg";
+const bgCheckbox: string = "https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/checkbox.jpg";
 //父收藏
 const favListForm = reactive<FavListPostInfo>({
   uid: accountStore.myInfo!.uid,
   isDic: "1",
   favTitle: "",
-  favPoster: "../src/assets/images/basicFavPoster.jpg",
+  favPoster: "https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/basicFavPoster.jpg",
   isPublic: "0",
 });
 //子收藏
@@ -626,16 +590,32 @@ const deleteVideoFromFav =async ()=>{
   }
 }
 
+//获取右侧视频列表数据
+const pageInfo = reactive<PageInfoData>({
+  page:1,
+  pageSize:15,
+})
+const videoList = ref<Video[]>([])
+const getVideoList = async ()=>{
+  const res = await reqGetVideoPageList(pageInfo)
+  videoList.value = res.data.record
+}
+
+
 watch(()=>route.params.videoId,
   (newValue)=>{
-    if(newValue!==null){
+    if(newValue!==undefined){
       getVideoInfo()
       getDanmakuList()
+      getVideoList()
     }
   },{
     immediate:true
   }
 )
+
+
+
 </script>
 
 <style scoped lang="scss">
@@ -646,7 +626,7 @@ watch(()=>route.params.videoId,
   height: 100%;
   left: 0;
   top: 0;
-  z-index: 99999;
+  z-index: 1997;
   .dialog-fav-bomb {
     position: absolute;
     left: 50%;
@@ -724,7 +704,7 @@ watch(()=>route.params.videoId,
               padding: 0 34px;
               border: 1px solid #9499a0;
               border-radius: 4px;
-              background: url("@/assets/images/addGroup.jpg") no-repeat 10px
+              background: url("https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/addGroup.jpg") no-repeat 10px
                 center;
               font-size: 12px;
               color: #61666d;
@@ -820,6 +800,7 @@ watch(()=>route.params.videoId,
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    object-fit: cover;
   }
   .container-left {
     width: 70%;

@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { Collection } from "@element-plus/icons-vue";
 import type { FavList, FavPage } from "@/api/fav/type";
-import { onMounted, reactive, ref } from "vue";
+import { reactive, ref ,watch} from "vue";
 import { reqDeleteFatherFav, reqGetPageFavList } from "@/api/fav/index";
 import { useRoute,useRouter } from "vue-router";
 import { useAccountStore } from "@/stores/modules/account";
@@ -61,9 +61,10 @@ const router = useRouter()
 const favPage = reactive<FavPage>({
   page: 1,
   pageSize: 10,
-  fatherDic: props.fatherFav.favId as number,
+  fatherDic:props.fatherFav.favId
 });
 const favStore = useFavStore()
+
 
 //获取输出视频列表数据
 const pageFavList = ref<FavList[]>();
@@ -73,7 +74,6 @@ const getPageFavList = async () => {
   pageFavList.value = res.data.record;
   total.value = res.data.total;
 };
-onMounted(() => getPageFavList());
 
 const deleteFatherFav = async (fatherFavId:number)=>{
   const res = await reqDeleteFatherFav(fatherFavId)
@@ -95,6 +95,16 @@ const deleteFatherFav = async (fatherFavId:number)=>{
     })
   }
 }
+
+watch(
+  () => props.fatherFav.favId,
+  (newValue) => {
+    if(newValue!==undefined){
+      getPageFavList()
+    }
+  },
+  {immediate:true}
+);
 </script>
 
 <style lang="scss" scoped>

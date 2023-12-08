@@ -62,3 +62,10 @@ export interface VideoRuleForm {
     lastTime: number;
     uid:number
   }
+
+export interface bilibiliUploadType{
+    videoType:string,
+    bid:string,
+    pnum?:number,
+    sessData?:string
+  }

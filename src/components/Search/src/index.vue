@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { useSearchStore } from '@/stores/modules/search';
-import { localClear, localRemove } from '@/utils/localStorageUtil';
+import { localRemove } from '@/utils/localStorageUtil';
 import { onMounted } from 'vue';
 
 const props = defineProps<{toSearch:Function}>()

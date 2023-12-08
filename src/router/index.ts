@@ -1,24 +1,28 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import { useAccountStore } from "@/stores/modules/account";
 
 let router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       path: "/",
-      component: () => import("../views/Layout/index.vue"), // 这里直接指定组件对象
+      component: () => import("../views/Layout/index.vue"), 
       children: [
         {
-          path: "", // 子路由的路径
-          component: () => import("../views/Home/index.vue"), // 子路由对应的组件
+          path: "", 
+          meta:{requireAuth:false},
+          component: () => import("../views/Home/index.vue"), 
         },
         {
           path: "video/:videoId",
           name: "video",
+          meta:{requireAuth:true},
           component: () => import("../views/Video/index.vue"),
         },
         {
-          path: "member/:uid",
+          path: "member/:uid?",
           component: () => import("../views/Member/index.vue"),
+          meta:{requireAuth:true},
           children: [
             {
               path: "home",
@@ -96,12 +100,14 @@ let router = createRouter({
         {
           path: "search",
           name: "search",
+          meta:{requireAuth:true},
           component: () => import("../views/Search/index.vue"),
         },
       ],
     },
     {
-      path: "/message/:uid",
+      path: "/message/:uid?",
+      meta:{requireAuth:true,uidNeeded:true},
       component: () => import("../views/Message/index.vue"),
       children:[
         {
@@ -139,14 +145,26 @@ let router = createRouter({
       ]
     },
     {
-      path: "/dynamic/:uid",
+      path: "/dynamic/:uid?",
       name: "dynamic",
+      meta:{requireAuth:true,uidNeeded:true},
       component: () => import("../views/Dynamic/index.vue"),
     },
     {
-      path:"/upload/:uid",
+      path:"/upload/:uid?",
       name:"upload",
+      meta:{requireAuth:true,uidNeeded:true},
       component: () => import("../views/Upload/index.vue")
+    },
+    {
+      path:"/404",
+      name:"404",
+      meta:{requireAuth:false},
+      component: () => import("../views/404/index.vue")
+    },
+    {
+      path:"/:pathMatch(.*)",
+      redirect: '/404'     
     }
   ],
   scrollBehavior() {
@@ -156,5 +174,30 @@ let router = createRouter({
     };
   },
 });
+
+router.beforeEach((to, _ , next) => {
+  const accountStore = useAccountStore()
+  if (to.meta.requireAuth) {
+    if (accountStore.myInfo!==null) {
+      if(to.meta.uidNeeded){
+        if(parseInt(to.params.uid as string) !== accountStore.myInfo.uid){
+          router.replace("/404")
+        }
+        else{
+          next();
+        }
+      }
+      else{
+        next()
+      }
+    }
+    else {
+      accountStore.logout()
+    }
+  } else {
+    next();
+  }
+});
+
 
 export default router;

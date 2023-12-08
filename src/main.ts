@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
+import 'element-plus/dist/index.css'
+
 
 //引入pinia仓库以及持久化
 import { createPinia } from 'pinia';

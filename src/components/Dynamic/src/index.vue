@@ -27,12 +27,12 @@
       </el-dropdown>
     </div>
     <div style="display: flex; font-size: 1em; justify-content: space-between">
-      <div class="avatar">
+      <div class="avatar" @click="toMember">
         <img :src="dynamicData.avatar" />
       </div>
       <div class="main-content">
         <div>
-          <span class="user">{{ dynamicData.accountName }}</span>
+          <span class="user" @click="toMember">{{ dynamicData.accountName }}</span>
         </div>
         <div class="publish-time">{{ dynamicData.postTime }}</div>
         <div class="dynamic-body">
@@ -99,7 +99,9 @@ import { useMemberStore } from "@/stores/modules/member";
 import { reqDeleteDynamic } from "@/api/dynamic";
 import type{message} from "@/utils/websocketClass"
 import { useWebSocketStore } from "@/stores/modules/websocket";
+import { useRouter } from "vue-router";
 
+const router = useRouter()
 const websocketStore = useWebSocketStore()
 const memberStore = useMemberStore();
 const props = defineProps<{
@@ -224,6 +226,14 @@ const deleteDynamic = async ()=>{
       accountStore.getMyInfo()
   }
 }
+
+//前往用户界面
+const toMember = ()=>{
+  router.push({
+    name: "memberHome",
+    params: { uid: props.dynamicData.uid },
+  });
+}
 </script>
 
 <style scoped lang="scss">
@@ -243,6 +253,7 @@ const deleteDynamic = async ()=>{
       width: 50px;
       height: 50px;
       border-radius: 50%;
+      object-fit: cover;
       cursor: pointer;
     }
   }

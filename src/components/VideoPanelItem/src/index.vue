@@ -1,29 +1,24 @@
 <template>
   <div class="video-panel-item-content">
     <div class="left-image" @click="toVideo">
-      <img src="@/assets/images/lian.jpg" />
-      <img :src="itemPicture">
+      <img :src="video.poster">
       <div class="time-last">
-        <!-- {{ videoTime }} -->
-        07:21
+        {{ timeConvert(video.lastTime) }}
       </div>
     </div>
     <div class="right-info">
       <div class="info-title" @click="toVideo">
-        <!-- {{title}} -->
-        到了娃大王大王离开多久来打我看多久挖来的家务劳动等多久啊无聊的
+        {{ video.title }}
       </div>
-      <div class="info-author" @mouseover="changeSvgColor" @mouseleave="svgColorReturn">
+      <div class="info-author" @mouseover="changeSvgColor" @mouseleave="svgColorReturn" @click="toMember">
         <def-svg-icon svg-name="up" :svg-color="svgColor"></def-svg-icon>
-        <!-- {{ author}} -->
-        不知出远子
+        {{ video.accountName }}
       </div>
       <div class="info-num">
         <span style="margin-right: 5%"
           ><def-svg-icon svg-name="clickNum" svg-color="#9499A0"></def-svg-icon
           >
-            <!-- {{clickNum}} -->
-          114514
+            {{video.clickNum}}
           </span
         >
         <span
@@ -32,8 +27,7 @@
             svg-color="#9499A0"
           ></def-svg-icon
           >
-          <!-- {{ barrageNum }} -->
-          11037
+          {{ video.barrageNum }}
           </span
         >
       </div>
@@ -42,9 +36,18 @@
 </template>
 
 <script setup lang="ts">
+import type{ Video } from "@/api/video/type";
+import { timeConvert } from "@/utils/timeFormator";
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
-// import { reqClickVideo } from "@/api/video";
+import { reqClickVideo } from "@/api/video";
+import type { HistoryPostInfo } from "@/api/history/type";
+import { useAccountStore } from "@/stores/modules/account";
+import { useHistoryStore } from "@/stores/modules/history";
+
+const accountStore = useAccountStore()
+
+const historyStore = useHistoryStore()
 
 const svgColor: any = ref("#9499A0");
 
@@ -57,24 +60,30 @@ const svgColorReturn = () => {
 };
 
 const router=useRouter()
-defineProps({
-  itemPicture: String,
-  clickNum: {
-    type: Number,
-    default: 0,
-  },
-  barrageNum: {
-    type: Number,
-    default: 0,
-  },
-  videoTime: String,
-  title: String,
-  author: String,
-});
 
-const toVideo=()=>{
-    router.push("/video/BV1")
+const props = defineProps<{video:Video}>()
+
+const toVideo=async ()=>{
+      await reqClickVideo(props.video.videoId!)
+      let historyPostInfo:HistoryPostInfo = {
+        uid:accountStore.myInfo?.uid!,
+        videoId:props.video.videoId!
+      }
+      historyStore.addHistoryPageList(historyPostInfo)
+      router.push({
+        name:'video',
+        params:{videoId:'BV'+props.video.videoId}
+      })
+  }
+
+   //前往用户页面
+  const toMember = () =>{
+  router.push({
+    name: "memberHome",
+    params: { uid: props.video.uid },
+  });
 }
+
 </script>
 
 <style scoped lang="scss">

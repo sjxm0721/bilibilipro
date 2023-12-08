@@ -23,10 +23,10 @@
       </el-dropdown>
     </div>
     <div class="avatar-small">
-      <img :src="replyData.avatar" />
+      <img :src="replyData.avatar" @click="toMember"/>
     </div>
     <div class="reply-content">
-      <span class="user-name">{{ replyData.accountName }}</span
+      <span class="user-name" @click="toMember">{{ replyData.accountName }}</span
       >&nbsp;&nbsp;
       <span v-if="replyData.responseName"
         >回复&nbsp;&nbsp;<span class="response-name">{{
@@ -78,6 +78,7 @@ import { useMemberStore } from "@/stores/modules/member";
 import { reqDeleteComment } from "@/api/comment";
 import type{message} from '@/utils/websocketClass'
 import { useWebSocketStore } from "@/stores/modules/websocket";
+import { useRouter } from "vue-router";
 
 const websocketStore = useWebSocketStore()
 const likeStore = useLikeStore()
@@ -85,6 +86,7 @@ const account = useAccountStore().myInfo
 const props = defineProps<{ replyData: CommentData; clickReplyButton: Function ;refreshCommentList:Function}>();
 const svgColor = ref<boolean>(false);
 const memberStore = useMemberStore()
+const router = useRouter()
 
 const changeSvgColor = () => {
   svgColor.value = true;
@@ -179,6 +181,14 @@ const deleteComment = async ()=>{
     props.refreshCommentList(props.replyData.totalFatherId)
   }
 }
+
+//前往用户界面
+const toMember = ()=>{
+  router.push({
+    name: "memberHome",
+    params: { uid: props.replyData.uid },
+  });
+}
 </script>
 
 <style scoped lang="scss">
@@ -198,6 +208,7 @@ const deleteComment = async ()=>{
       width: 30px;
       height: 30px;
       border-radius: 50%;
+      object-fit: cover;
     }
   }
   .reply-content {

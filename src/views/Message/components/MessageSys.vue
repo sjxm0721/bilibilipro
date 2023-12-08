@@ -1,7 +1,7 @@
 <template>
     <div class="sys-container">
         <div class="nothing">
-            <img src="@/assets/images/empty.jpg">
+            <img src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg">
         </div>
     </div>
 </template>

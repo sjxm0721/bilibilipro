@@ -22,7 +22,10 @@ export interface message{
   commentContent?:string,
   dynamicText?:string,
   postTime?:string,
-  nowCommentId?:number
+  nowCommentId?:number,
+  showTime?:string,
+  videoUrl?:string,
+  videoLastTime?:number
 }
 
 interface SocketOptions{

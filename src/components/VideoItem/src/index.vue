@@ -29,7 +29,7 @@
       {{ video?.title }}
     </a>
     <div class="bottom-info">
-      <a class="author">
+      <a class="author" @click="toMember">
         {{ video?.accountName }}
       </a>
       <a class="post-time">
@@ -67,6 +67,13 @@ const toVideo = async () => {
   });
 };
 
+const toMember = () =>{
+  router.push({
+    name: "memberHome",
+    params: { uid: props.video.uid },
+  });
+}
+
 const lastTime = computed(() => {
   return timeConvert(props.video?.lastTime);
 });
@@ -83,6 +90,7 @@ const postTime = computed(() => {
   justify-content: space-between;
   font-size: 1em;
   height: 100%;
+  width: 100%;
   .top-pic {
     font-size: 1em;
     height: 64%;

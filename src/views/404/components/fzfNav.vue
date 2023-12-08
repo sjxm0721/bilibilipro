@@ -66,14 +66,14 @@
                 <el-dropdown-item @click="toMember">个人空间</el-dropdown-item>
                 <el-dropdown-item>修改密码</el-dropdown-item>
                 <el-dropdown-item divided @click="accountStore.logout"
-                  >退出登录</el-dropdown-item
+                  >退出登陆</el-dropdown-item
                 >
               </el-dropdown-menu>
             </template>
           </el-dropdown>
         </div>
         <div v-else @click="accountStore.showLogin" class="to-login">
-          <span>登录</span>
+          <span>登陆</span>
         </div>
       </div>
       <div class="col-right">
@@ -146,7 +146,7 @@
                   svg-height="20px"
                   svg-color="#000000"
                 ></def-svg-icon
-                ><a style="color: black">收藏</a>
+                ><a style="color: #000">收藏</a>
               </div>
             </span>
             <template #dropdown>
@@ -248,16 +248,16 @@
   </template>
   
   <script setup lang="ts">
-  import { ref, onMounted, onUnmounted } from "vue";
   import { useRouter } from "vue-router";
   import { useAccountStore } from "@/stores/modules/account";
   import { useFavStore } from "@/stores/modules/fav";
   import { useHistoryStore } from "@/stores/modules/history";
+  import { ref,onMounted,onUnmounted} from "vue";
   import { useSearchStore } from "@/stores/modules/search";
   import { useMessageStore } from "@/stores/modules/message";
   
   const messageStore = useMessageStore()
-  const searchStore = useSearchStore();
+  const searchStore = useSearchStore()
   const router = useRouter();
   const accountStore = useAccountStore();
   const favStore = useFavStore();
@@ -330,6 +330,7 @@
     });
   };
   
+  
   //搜索框历史记录与热点的呈现
   const isSearchSuggestVisible = ref<boolean>(false);
   
@@ -395,7 +396,7 @@
   
     &.fixed {
       position: fixed;
-      z-index: 1998;
+      z-index: 999999;
       left: 0;
       top: 0;
     }
@@ -488,7 +489,7 @@
         background-color: #fff;
         width: 100%;
         top: 100%;
-        z-index: 1999;
+        z-index: 999999999999;
         -webkit-font-smoothing: antialiased;
         max-height: 640px;
         overflow-y: auto;

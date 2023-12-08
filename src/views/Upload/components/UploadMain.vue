@@ -1,5 +1,6 @@
 <template>
   <div class="upload-main-container clearfix">
+    <vue3-progress />
     <div class="head-title">投稿</div>
     <div class="body-upload">
       <el-tabs v-model="activeName" class="demo-tabs">
@@ -67,30 +68,106 @@
                   ></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="submitForm(formRef)"> 投稿 </el-button>
+                  <el-button type="primary" @click="submitForm(formRef)">
+                    投稿
+                  </el-button>
                 </el-form-item>
               </el-form>
             </div>
             <div class="right">
               <div class="video-src-upload">
-                <el-upload
-                  class="upload-demo"
-                  drag
-                  action="/api/user/common/uploadVideo"
-                  multiple
-                  :on-success="handleVideoSuccess"
-                  :before-upload="beforeVideoUpload"
-                >
-                  <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-                  <div class="el-upload__text">
-                    Drop file here or <em>click to upload</em>
+                <div>
+                  <div style="margin: 30px 0">
+                    <el-radio-group v-model="uploadType" size="large">
+                      <el-radio-button label="file"
+                        >本地文件上传</el-radio-button
+                      >
+                      <el-radio-button label="bilibili"
+                        >从bilibili获取资源</el-radio-button
+                      >
+                    </el-radio-group>
                   </div>
-                  <template #tip>
-                    <div class="el-upload__tip">
-                      mp4 files with a size less than 300MB
+                </div>
+                <div v-if="uploadType === 'file'">
+                  <el-upload
+                    class="upload-demo"
+                    drag
+                    action="/api/user/common/uploadVideo"
+                    :headers="headers"
+                    multiple
+                    :on-success="handleVideoSuccess"
+                    :before-upload="beforeVideoUpload"
+                  >
+                    <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                    <div class="el-upload__text">
+                      Drop file here or <em>click to upload</em>
                     </div>
-                  </template>
-                </el-upload>
+                    <template #tip>
+                      <div class="el-upload__tip">
+                        mp4 files with a size less than 300MB
+                      </div>
+                    </template>
+                  </el-upload>
+                </div>
+                <div v-else-if="uploadType === 'bilibili'">
+                  <div style="color: #06aeec; font-size: 15px; margin: 5px">
+                    bilibili视频下载
+                  </div>
+                  <div class="bilibili-form">
+                    <el-form
+                      ref="formBlRef"
+                      :inline="true"
+                      :rules="bilibiliUploadRules"                      :model="bilibiliUpload"
+                      class="demo-form-inline"
+                    >
+                      <el-form-item label="视频资源" prop="bid">
+                        <el-input
+                          v-model="bilibiliUpload.bid"
+                          placeholder="请输入资源"
+                          class="input-with-select"
+                        >
+                          <template #prepend>
+                            <el-select
+                              v-model="bilibiliUpload.videoType"
+                              placeholder="类型"
+                              style="width: 115px"
+                            >
+                              <el-option label="视频av" value="1" />
+                              <el-option label="视频bv" value="2" />
+                              <el-option label="课程" value="3" />
+                              <el-option label="番剧" value="4" />
+                            </el-select>
+                          </template>
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item label="分P号" prop="pnum"> 
+                        <el-input-number v-model="bilibiliUpload.pnum" :min="0" :precision="0">
+                        </el-input-number>
+                        <span class="notify">若视频存在分P，请输入分P号</span>
+                      </el-form-item>
+                      <el-form-item label="SessData" prop="sessData">
+                        <el-input v-model="bilibiliUpload.sessData"></el-input>
+                        <span class="notify">若为会员资源，请输入b站大会员账号的SessData</span>
+                       </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" @click="submitBlForm(formBlRef)">确定</el-button>
+                      </el-form-item>
+                    </el-form>
+                  </div>
+                </div>
+                <div
+                  style="font-size: 16px; margin: 20px 0 10px; color: #606266"
+                >
+                  文件处理中：
+                </div>
+                <el-progress
+                  :percentage="percentage"
+                  :stroke-width="15"
+                  striped
+                  striped-flow
+                  :duration="20"
+                  :status="progressStatus"
+                />
               </div>
             </div>
           </div>
@@ -101,7 +178,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import type { UploadProps } from "element-plus";
 import { UploadFilled } from "@element-plus/icons-vue";
@@ -111,13 +188,23 @@ import { onMounted } from "vue";
 import type { Category } from "@/api/category/type";
 import { reqGetHomeCategory } from "@/api/category";
 import { useAccountStore } from "@/stores/modules/account";
-import type { VideoRuleForm } from "@/api/video/type";
-import { reqAddVideo } from "@/api/video/index";
+import type { VideoRuleForm,bilibiliUploadType } from "@/api/video/type";
+import { reqAddVideo, reqDlBiliVideo } from "@/api/video/index";
+import { useWebSocketStore } from "@/stores/modules/websocket";
+import type { message } from "@/utils/websocketClass";
+import { getToken } from "@/utils/auth";
+import type { DynamicPostData } from "@/api/dynamic/type";
+import { reqPublishDynamic } from "@/api/dynamic";
 
 const accountStore = useAccountStore();
+const websocket = useWebSocketStore();
+
+//视频上传方式，默认为文件上传
+const uploadType = ref<string>("file");
 
 const formSize = ref("default");
 const formRef = ref<FormInstance>();
+const formBlRef = ref<FormInstance>()
 const videoRuleForm = reactive<VideoRuleForm>({
   poster: "",
   title: "",
@@ -127,6 +214,49 @@ const videoRuleForm = reactive<VideoRuleForm>({
   lastTime: 0,
   uid: accountStore.myInfo!.uid,
 });
+
+
+
+const bilibiliUpload = reactive<bilibiliUploadType>({
+  videoType: "", //哪种类型视频
+  bid: "", //对应b站视频编号
+  pnum: 0, //分P编号
+  sessData: "", //b站用户个人sessData
+});
+
+const bilibiliUploadRules = reactive<FormRules<bilibiliUploadType>>({
+  videoType:[{required:true,message:"请选择视频类型",trigger:"blur"}],
+  bid:[{required:true,message:"请输入视频资源号",trigger:"blur"}]
+})
+
+//下载bili资源
+const dlBiliVideo = async (data: bilibiliUploadType) => {
+  await reqDlBiliVideo(data);
+};
+
+const submitBlForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      //提交
+      dlBiliVideo(bilibiliUpload).then(() => {
+        ElMessage({
+          type: "success",
+          message: "获取b站资源成功",
+        });
+        bilibiliUpload.bid = "";
+        bilibiliUpload.pnum = 0;
+        bilibiliUpload.videoType = "";
+        bilibiliUpload.sessData = "";
+      });
+    } else {
+      ElMessage({
+        type: "error",
+        message: "获取b站资源失败",
+      });
+    }
+  });
+};
 
 const videoRules = reactive<FormRules<VideoRuleForm>>({
   poster: [{ required: true, message: "请上传视频封面", trigger: "blur" }],
@@ -175,7 +305,15 @@ onMounted(() => getHomeCategory());
 
 //上传视频封面相关
 const handlePosterSuccess: UploadProps["onSuccess"] = (response) => {
-  videoRuleForm.poster = response.data;
+  if(response.code === 505){
+    ElMessage({
+      type:'error',
+      message:'图片上传失败'
+    })
+  }
+  else{
+    videoRuleForm.poster = response.data;
+  }
 };
 
 const beforePosterUpload: UploadProps["beforeUpload"] = (rawFile) => {
@@ -190,37 +328,56 @@ const beforePosterUpload: UploadProps["beforeUpload"] = (rawFile) => {
 };
 
 //上传视频资源相关
-const handleVideoSuccess: UploadProps["onSuccess"] = (response) => {
-  videoRuleForm.src = response.data.src;
-  videoRuleForm.lastTime = response.data.lastTime;
+const handleVideoSuccess: UploadProps["onSuccess"] = (response:any) => {
+  if(response.code===504){
+    ElMessage({
+      type:'error',
+      message:'视频上传失败，请重新上传'
+    })
+  }
+  else{
+    progressUp.value = true;
+  }
 };
 
 const beforeVideoUpload: UploadProps["beforeUpload"] = (rawFile) => {
   if (rawFile.type !== "video/mp4") {
-    console.log(rawFile.type);
-    ElMessage.error("video must be MP4 format!");
+    ElMessage({
+      type:'error',
+      message:'video must be MP4 format!'
+    })
     return false;
   } else if (rawFile.size / 1024 / 1024 > 300) {
-    ElMessage.error("video picture size can not exceed 300MB!");
+    ElMessage.error("video size can not exceed 300MB!");
     return false;
   }
   return true;
 };
 
+const dynamicPostData = reactive<DynamicPostData>({
+  uid: accountStore.myInfo?.uid!,
+  text: "我刚刚发布了新的作品,快来看看吧!",
+  videoId:undefined
+});
 const addVideo = async (data: VideoRuleForm) => {
-  await reqAddVideo(data);
+  const res = await reqAddVideo(data);
+  if(res.code === 200){
+    dynamicPostData.videoId = res.data;
+    await reqPublishDynamic(dynamicPostData);
+  }
 };
 
-const submitForm =  (formEl: FormInstance | undefined) => {
+//上传视频
+const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
       //提交
       addVideo(videoRuleForm).then(() => {
         ElMessage({
-          type:'success',
-          message:'上传视频成功'
-        })
+          type: "success",
+          message: "上传视频成功",
+        });
         videoRuleForm.poster = "";
         videoRuleForm.title = "";
         videoRuleForm.videoBrief = "";
@@ -238,6 +395,47 @@ const submitForm =  (formEl: FormInstance | undefined) => {
 };
 
 const activeName = ref("Video");
+
+//控制进度条进度
+const percentage = ref<number>(0);
+const progressStatus = ref<string>("");
+const progressUp = ref<boolean>(false);
+const increase = () => {
+  if (progressUp.value === true) {
+    percentage.value += 10;
+    if (percentage.value > 90) {
+      percentage.value = 90;
+    }
+  }
+};
+
+websocket.socket?.on("message", (data: string) => {
+  // 处理WebSocket消息事件
+  const messageTmp: message = JSON.parse(data);
+  const isSystem = messageTmp.isSystem;
+  const type = messageTmp.type;
+  if (isSystem === "1") {
+    if (type === "5") {
+      if (messageTmp.content === "success") {
+        progressStatus.value = "success";
+        percentage.value = 100;
+        progressUp.value = false;
+        videoRuleForm.src = messageTmp.videoUrl!;
+        videoRuleForm.lastTime = messageTmp.videoLastTime!;
+      } else if (messageTmp.content === "error") {
+        progressStatus.value = "success";
+        progressUp.value = false;
+      } else if (messageTmp.content === "in_progress") {
+        progressUp.value = true;
+        increase();
+      }
+    }
+  }
+});
+
+const headers = computed(() => {
+  return { Token: getToken() };
+});
 </script>
 
 <style scoped lang="scss">
@@ -278,6 +476,13 @@ const activeName = ref("Video");
       width: 50%;
       .video-src-upload {
         margin: 30px 20px;
+        .bilibili-form{
+          .notify{
+            margin-left: 20px;
+            color:#F56C6C;
+            font-size:12px;
+          }
+        }
       }
     }
   }

@@ -32,8 +32,8 @@
         </div>
       </div>
       <div class="comment-publish">
-        <div class="avatar-big">
-          <img :src="account?.avatar" />
+        <div class="avatar-big" @click="toMember">
+          <img :src="account?.avatar"/>
         </div>
         <div class="textarea-and-button">
           <el-input
@@ -76,6 +76,7 @@ import type {
   PageComment,
   ReplyCommentInfo,
 } from "@/api/comment/type";
+import { useRouter } from "vue-router";
 import { reqGetCommentPageList, reqReplyComment } from "@/api/comment/index";
 import type { CommentPageInfo } from "@/api/comment/type";
 import { useAccountStore } from "@/stores/modules/account";
@@ -83,6 +84,7 @@ import type { message } from "@/utils/websocketClass";
 import { ElMessage } from "element-plus";
 import { useWebSocketStore } from "@/stores/modules/websocket";
 
+const router = useRouter()
 const websocketStore = useWebSocketStore();
 const accountStore = useAccountStore();
 
@@ -236,6 +238,14 @@ const refreshCommentList = async (totalFatherId: number) => {
   }
   pageInfo.page = len / pageInfo.pageSize;
 };
+
+//前往用户界面
+const toMember = ()=>{
+  router.push({
+    name: "memberHome",
+    params: { uid: accountStore.myInfo!.uid },
+  });
+}
 </script>
 
 <style scoped lang="scss">
@@ -245,6 +255,7 @@ const refreshCommentList = async (totalFatherId: number) => {
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    object-fit: cover;
   }
   .comment-head {
     height: 100px;

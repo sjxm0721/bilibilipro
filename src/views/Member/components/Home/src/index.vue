@@ -47,6 +47,22 @@
           </div>
         </div>
       </div>
+        <div class="home-like">
+        <div class="like-nav">
+          <span class="label">最近点赞的视频</span>
+          <span class="label-show-num">{{ likevideoHomePageResult?.total }}</span>
+        </div>
+        <div class="video-body">
+          <div
+            v-if="likevideoHomePageResult"
+            class="video"
+            v-for="(item, index) in likevideoHomePageResult?.record"
+            :key="index"
+          >
+            <def-video-member-item :video="item"></def-video-member-item>
+          </div>
+        </div>
+      </div>
       <div class="home-favlist">
         <div class="favlist-nav">
           <span class="label">{{
@@ -70,50 +86,6 @@
           ></def-fav-list>
         </div>
       </div>
-      <!-- <div class="home-like">
-        <div class="like-nav">
-          <span class="label">最近点赞的视频</span>
-          <span class="label-show-num">11</span>
-        </div>
-        <div class="video-body">
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-          <div class="video">
-            <def-video-member-item></def-video-member-item>
-          </div>
-        </div>
-      </div> -->
       <!-- <div class="home-coin">
         <div class="coin-nav">
           <span class="label">最近投币的视频</span>
@@ -179,6 +151,8 @@ import { useMemberStore } from "@/stores/modules/member";
 import { useAccountStore } from "@/stores/modules/account";
 import type { FavList } from "@/api/fav/type";
 import { reqGetFatherFavList } from "@/api/fav";
+import type{LikeVideoPage} from "@/api/like/type"
+import {reqMemberLikeVideoPage} from "@/api/like/index"
 
 const accountStore = useAccountStore();
 const memberStore = useMemberStore();
@@ -191,6 +165,12 @@ const videoHomePage = ref<VideoPage>({
   page: 1,
   pageSize: 8,
 });
+
+const likeVideoPage = ref<LikeVideoPage>({
+  uid:Number(route.params.uid as string),
+  page:1,
+  pageSize:8
+})
 
 const changeOrder = (order: number) => {
   videoHomePage.value.order = order;
@@ -205,16 +185,26 @@ const getVideoHomePage = async () => {
   videoHomePageResult.value = res.data;
 };
 
-onMounted(() => {
-  getVideoHomePage();
-  getFatherFavList();
-});
+//获取最近点赞视频数据
+const likevideoHomePageResult = ref<PageVideoData>();
+const getLikeVideoHomePage = async () =>{
+  const {uid,page,pageSize} = likeVideoPage.value
+  const res = await reqMemberLikeVideoPage(uid,page,pageSize);
+  likevideoHomePageResult.value = res.data
+}
 
+//获取收藏夹数据
 const fatherFavList = ref<FavList[]>([]);
 const getFatherFavList = async () => {
   const res = await reqGetFatherFavList(parseInt(route.params.uid as string));
   fatherFavList.value = res.data;
 };
+
+onMounted(() => {
+  getVideoHomePage();
+  getLikeVideoHomePage()
+  getFatherFavList();
+});
 
 //点击更多跳转
 const toVideo = () => {

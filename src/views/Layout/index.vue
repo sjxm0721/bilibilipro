@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <LayoutFixed :key="$route.fullPath" />
+    <LayoutFixed/>
     <router-view></router-view>
     <LayoutFooter />
     <Login/>

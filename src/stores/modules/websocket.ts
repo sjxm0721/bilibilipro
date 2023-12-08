@@ -8,12 +8,13 @@ import { ref } from "vue";
 export const useWebSocketStore = defineStore("websocket", () => {
   const socket = ref<WebSocketClass | null>(null);
   const historyMessages = ref<{ [key: string]: message[] }>({});
+  const timeList = ref<{[key:string]:boolean}>({})
   const messageStore = useMessageStore();
   const initializeWebSocket = () => {
     return new Promise((resolve, reject) => {
       const account = useAccountStore().myInfo;
       socket.value = new WebSocketClass(
-        `ws://localhost:8080/websocket/${account?.uid}`,
+        `ws://43.138.245.107:8080/websocket/${account?.uid}`,
         {
           heartbeatInterval: 30000,
           reconnectInterval: 5000,
@@ -44,7 +45,11 @@ export const useWebSocketStore = defineStore("websocket", () => {
             if (!historyMessages.value[key]) {
               historyMessages.value[key] = [];
             }
-
+            const timeTmp = messageTmp.postTime!.slice(0,16)
+            if(!timeList.value[timeTmp]){
+              timeList.value[timeTmp]=true
+              messageTmp.showTime = timeTmp
+            }
             historyMessages.value[key].push(messageTmp);
           } else if (type === "1") {
             //点赞消息
@@ -84,6 +89,7 @@ export const useWebSocketStore = defineStore("websocket", () => {
   return {
     socket,
     historyMessages,
+    timeList,
     initializeWebSocket,
     closeWebSocket,
     sendMessage,

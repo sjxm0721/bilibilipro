@@ -71,6 +71,9 @@ dependencies:
   vue-router:
     specifier: ^4.2.4
     version: registry.npmmirror.com/vue-router@4.2.4(vue@3.3.4)
+  vue3-progress:
+    specifier: 0.0.1-beta4
+    version: registry.npmmirror.com/vue3-progress@0.0.1-beta4
   websocket:
     specifier: ^1.0.34
     version: registry.npmmirror.com/websocket@1.0.34
@@ -3770,6 +3773,13 @@ packages:
       semver: registry.npmmirror.com/semver@7.5.4
       typescript: registry.npmmirror.com/typescript@5.2.2
     dev: true
+
+  registry.npmmirror.com/vue3-progress@0.0.1-beta4:
+    resolution: {integrity: sha512-AiRlyzRvX0FPFkG8fcrFJ6fPQWt/3PdGy062fbWZB3qjAcU3MHzJPU5BZ5HfrmMHHnhk0u46du/k+KflmDdN9Q==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vue3-progress/-/vue3-progress-0.0.1-beta4.tgz}
+    name: vue3-progress
+    version: 0.0.1-beta4
+    requiresBuild: true
+    dev: false
 
   registry.npmmirror.com/vue@3.3.4:
     resolution: {integrity: sha512-VTyEYn3yvIeY1Py0WaYGZsXnz3y5UnGi62GjVEqvEGPl6nxbOrCXbVOTQWBEJUqAyTUk2uJ5JLVnYJ6ZzGbrSw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vue/-/vue-3.3.4.tgz}

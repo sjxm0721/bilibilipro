@@ -10,7 +10,7 @@
         <div class="info-title" @click="toVideo">
           {{ favList.videoTitle }}
         </div>
-        <div class="info-author" @mouseover="changeSvgColor" @mouseleave="svgColorReturn">
+        <div class="info-author" @mouseover="changeSvgColor" @mouseleave="svgColorReturn" @click="toMember">
           <def-svg-icon svg-name="up" :svg-color="svgColor" svg-width="1.2em"></def-svg-icon>
           {{ favList.videoUName }}
         </div>
@@ -62,6 +62,14 @@ import { ref } from "vue";
         params:{videoId:'BV'+props.favList.videoId}
       })
   }
+
+  //前往用户页面
+  const toMember = () =>{
+  router.push({
+    name: "memberHome",
+    params: { uid: props.favList.uid },
+  });
+}
 
 
   </script>

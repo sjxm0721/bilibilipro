@@ -1,9 +1,11 @@
 <template>
   <el-carousel :interval="5000" arrow="always">
-    <el-carousel-item v-for="image in images" :key="image">
-      <div class="carousel-container">
-        <img :src="image" />
-        <div class="info"></div>
+    <el-carousel-item v-for="(item,index) in images" :key="index">
+      <div class="carousel-container" @click="toVideo(item.videoId)">
+        <img :src="item.poster" />
+        <div class="info">
+          <span style="margin: 20px;font-size: 18px;color: #fff;">{{ item.title }}</span>
+        </div>
       </div>
     </el-carousel-item>
   </el-carousel>
@@ -11,14 +13,55 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { reqClickVideo } from "@/api/video";
+import type { HistoryPostInfo } from "@/api/history/type";
+import { useAccountStore } from "@/stores/modules/account";
+import { useHistoryStore } from "@/stores/modules/history";
+import { useRouter } from "vue-router";
 
+const router = useRouter()
+const historyStore = useHistoryStore()
+const accountStore = useAccountStore()
 const images = ref([
-  "../../../../src/assets/images/by.jpg",
-  "../../../../src/assets/images/ou.jpg",
-  "../../../../src/assets/images/ao.jpg",
-  "../../../../src/assets/images/wds.jpg",
-  "../../../../src/assets/images/mkm.jpg",
+  {
+    poster:"https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/ao.jpg",
+    title:"空门苍",
+    videoId:14,
+  },
+  {
+    poster:"https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/by.jpg",
+    title:"鸣濑白羽",
+    videoId:15,
+  },
+  {
+    poster:"https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/mkm.jpg",
+    title:"镜子阿姨，嘿嘿，我的镜子阿姨",
+    videoId:14,
+  },
+  {
+    poster:"https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/ou2.jpg",
+    title:"久岛鸥",
+    videoId:15,
+  },
+  {
+    poster:"https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/wds.jpg",
+    title:"䌷文德斯",
+    videoId:14,
+  }
 ]);
+
+const toVideo = async (videoId:number) => {
+  await reqClickVideo(videoId);
+  let historyPostInfo: HistoryPostInfo = {
+    uid: accountStore.myInfo?.uid!,
+    videoId,
+  };
+  historyStore.addHistoryPageList(historyPostInfo);
+  router.push({
+    name: "video",
+    params: { videoId: "BV" + videoId },
+  });
+};
 </script>
 <style scoped lang="scss">
 :deep().el-carousel__container {
@@ -62,6 +105,7 @@ const images = ref([
     display: flex;
     flex-direction: column;
     height: 100%;
+    cursor: pointer;
     img {
       height: 100%;
       object-fit: cover; 
@@ -74,6 +118,7 @@ const images = ref([
       height: 20%;
       width: 100%;
       background-color: rgba($color: #fff, $alpha: 0.2);
+      padding-top: 25px;
     }
   }
 }

@@ -27,7 +27,7 @@
       </div>
       <div class="article-body">
         <div class="body-empty">
-          <img src="@/assets/images/empty.jpg" />
+          <img src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg" />
           <div>该空间主人还未发表专栏内容</div>
         </div>
       </div>
@@ -63,10 +63,6 @@ const changeOrder = (order: number) => {
     .article-body {
       max-height: 520px;
       margin-top: 20px;
-      // display: grid;
-      // grid-template-columns: 18% 18% 18% 18% 18%;
-      // grid-column-gap: 2%;
-      // overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;

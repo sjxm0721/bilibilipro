@@ -120,8 +120,8 @@ const getLoginToken = async () => {
     width: 600px;
     min-height: 400px;
     background-color: #fff;
-    background-image: url("@/assets/images/login22.jpg"),
-      url("@/assets/images/login33.jpg");
+    background-image: url("https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/login22.jpg"),
+      url("https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/login33.jpg");
     background-position: 0 100%, 100% 100%;
     background-repeat: no-repeat, no-repeat;
     background-size: 20%;

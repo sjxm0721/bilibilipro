@@ -69,7 +69,7 @@
       </div>
     </div>
     <div v-else style="height: 400px;">
-      <img src="@/assets/images/empty.jpg" style="height: 100%;object-fit: contain;">
+      <img src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg" style="height: 100%;object-fit: contain;">
     </div>
     <div class="search-pagination">
       <el-pagination

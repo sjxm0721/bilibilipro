@@ -2,8 +2,8 @@
   <div
     class="nav-container"
     :class="[
-      { show: y > 50 || routePath !== '/' },
-      { fixed: y > 50 || routePath === '/' },
+      { show: y > 50 || route.fullPath !== '/' },
+      { fixed: y > 50 || route.fullPath === '/' },
     ]"
   >
     <div class="col-left">
@@ -47,7 +47,7 @@
         'search-focus':
           isSearchSuggestVisible === true
       }"
-      v-show="y > 50 || routePath !== '/'"
+      v-show="y > 50 || route.fullPath !== '/'"
       :style="{ visibility: searchHidden() }"
     >
       <!-- @keyup.enter="toSearch" -->
@@ -179,7 +179,7 @@
             >
               <div>
                 <img
-                  src="@/assets/images/empty.jpg"
+                  src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg"
                   style="width: 100%; height: 100%; object-fit: cover"
                 />
               </div>
@@ -223,7 +223,7 @@
             >
               <div>
                 <img
-                  src="@/assets/images/empty.jpg"
+                  src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg"
                   style="width: 100%; height: 100%; object-fit: cover"
                 />
               </div>
@@ -268,8 +268,8 @@ import { useMessageStore } from "@/stores/modules/message";
 
 const messageStore = useMessageStore()
 const { y } = useScroll(window);
-const routePath = ref(useRoute().fullPath);
 const router = useRouter();
+const route = useRoute()
 const accountStore = useAccountStore();
 const favStore = useFavStore();
 const historyStore = useHistoryStore();
@@ -409,12 +409,9 @@ onMounted(() => searchStore.getSearchHotList());
   display: flex;
   align-items: center;
   justify-content: space-around;
-
-  //隐藏状态：往上平移自身高度+完全透明
   transform: translateY(-100%);
   opacity: 0;
 
-  // 显示状态：移除平移+不透明
   &.show {
     transition: all 0.3s linear;
     transform: none;
@@ -423,7 +420,7 @@ onMounted(() => searchStore.getSearchHotList());
 
   &.fixed {
     position: fixed;
-    z-index: 999999;
+    z-index: 1998;
     left: 0;
     top: 0;
   }
@@ -521,7 +518,7 @@ onMounted(() => searchStore.getSearchHotList());
       background-color: #fff;
       width: 100%;
       top: 100%;
-      z-index: 999999999999;
+      z-index: 1999;
       -webkit-font-smoothing: antialiased;
       max-height: 640px;
       overflow-y: auto;
@@ -538,6 +535,7 @@ onMounted(() => searchStore.getSearchHotList());
       height: 40px;
       border: #fff 2px solid;
       border-radius: 50%;
+      object-fit: cover;
     }
 
     .to-login {

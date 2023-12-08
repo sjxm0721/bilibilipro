@@ -100,7 +100,7 @@ const title = computed(()=>titleList[choosedNav.value])
   width: 100%;
   overflow: hidden;
   height: calc(100vh - 70px);
-  background: url("@/assets/images/messageBg.jpg") top/cover no-repeat fixed;
+  background: url("https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/messageBg.jpg") top/cover no-repeat fixed;
   margin: 70px auto 0;
   .message-box {
     width: 75%;

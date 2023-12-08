@@ -14,14 +14,6 @@ import UploadMain from "@/views/Upload/components/UploadMain.vue";
 
 <style scoped lang="scss">
 .upload-container {
-  // .clearfix::before,
-  // .clearfix::after{
-  //   content:'';
-  //   display:table;
-  // }
-  // .clearfix::after{
-  //   clear:both;
-  // }
   .upload-body-container {
     width: 100%;
     margin-top: 70px;

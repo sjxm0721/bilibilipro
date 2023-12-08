@@ -169,7 +169,7 @@
               >
                 <div>
                   <img
-                    src="@/assets/images/empty.jpg"
+                    src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg"
                     style="width: 100%; height: 100%; object-fit: cover"
                   />
                 </div>
@@ -216,7 +216,7 @@
               >
                 <div>
                   <img
-                    src="@/assets/images/empty.jpg"
+                    src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg"
                     style="width: 100%; height: 100%; object-fit: cover"
                   />
                 </div>
@@ -236,7 +236,7 @@
           </div>
         </div>
       </div>
-      <div class="contribute-atc"  @click="toUpload">
+      <div class="contribute-atc" @click="toUpload">
         <el-button type="success"
           ><def-svg-icon
             svg-name="upload"
@@ -249,7 +249,7 @@
     </div>
     <div class="banner-logo">
       <a href="javascript:;">
-        <img src="@/assets/images/logo.jpg" />
+        <img src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/logo.jpg" />
       </a>
     </div>
   </div>
@@ -301,22 +301,25 @@ const toDynamic = () => {
 };
 
 const toSearch = (searchContent: string) => {
-  router.push({
-    name: "search",
-    query: { keyword: searchContent },
-  });
-  searchContent = searchContent.trim();
-  if (searchContent !== "") {
-    searchStore.addSearchHistory(searchContent);
-  }
+  router
+    .push({
+      name: "search",
+      query: { keyword: searchContent },
+    })
+    .then(() => {
+      searchContent = searchContent.trim();
+      if (searchContent !== "") {
+        searchStore.addSearchHistory(searchContent);
+      }
+    });
 };
 
 const toUpload = () => {
   router.push({
     name: "upload",
-    params: {uid:accountStore.myInfo?.uid}
-  })
-}
+    params: { uid: accountStore.myInfo?.uid },
+  });
+};
 
 const messageList: string[] = [
   "messageResponse",
@@ -353,7 +356,6 @@ const hideSearchSuggest = () => {
 };
 
 //搜索框事件监听器
-
 const refSearchSuggest = ref<HTMLElement | null>(null);
 
 onMounted(() => {
@@ -404,7 +406,7 @@ onMounted(() => searchStore.getSearchHotList());
   height: 150px;
   padding: 15px;
   padding-top: 15px;
-  background-image: url("@/assets/images/banner.jpg");
+  background-image: url("https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/banner.jpg");
   background-size: cover;
   display: flex;
   justify-content: space-around;
@@ -503,7 +505,7 @@ onMounted(() => searchStore.getSearchHotList());
       background-color: #fff;
       width: 100%;
       top: 100%;
-      z-index: 999999999999;
+      z-index: 1999;
       -webkit-font-smoothing: antialiased;
       max-height: 640px;
       overflow-y: auto;
@@ -520,6 +522,7 @@ onMounted(() => searchStore.getSearchHotList());
       height: 40px;
       border: #fff 2px solid;
       border-radius: 50%;
+      object-fit: cover;
     }
 
     .to-login {

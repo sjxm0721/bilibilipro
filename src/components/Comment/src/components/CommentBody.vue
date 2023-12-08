@@ -22,11 +22,11 @@
         </template>
       </el-dropdown>
     </div>
-    <div class="avatar-big">
+    <div class="avatar-big" @click="toMember">
       <img :src="commentData.avatar" />
     </div>
     <div class="comment-main">
-      <div class="user-info">
+      <div class="user-info" @click="toMember">
         <span>{{ commentData.accountName }}</span>
       </div>
       <div class="root-replay">
@@ -115,7 +115,9 @@ import { reqAddLike, reqCancelLike } from "@/api/like";
 import { useMemberStore } from "@/stores/modules/member";
 import type{message} from '@/utils/websocketClass'
 import { useWebSocketStore } from "@/stores/modules/websocket";
+import { useRouter } from "vue-router";
 
+const router = useRouter()
 const websocketStore = useWebSocketStore()
 const memberStore = useMemberStore();
 const likeStore = useLikeStore();
@@ -286,6 +288,14 @@ const deleteComment = async ()=>{
     
   }
 }
+
+//前往用户界面
+const toMember = ()=>{
+  router.push({
+    name: "memberHome",
+    params: { uid: props.commentData.uid },
+  });
+}
 </script>
 
 <style scoped lang="scss">
@@ -305,6 +315,7 @@ const deleteComment = async ()=>{
       width: 50px;
       height: 50px;
       border-radius: 50%;
+      object-fit: cover;
     }
   }
   .comment-main {

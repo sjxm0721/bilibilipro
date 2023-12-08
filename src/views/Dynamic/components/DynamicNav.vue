@@ -170,7 +170,7 @@
             >
               <div>
                 <img
-                  src="@/assets/images/empty.jpg"
+                  src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg"
                   style="width: 100%; height: 100%; object-fit: cover"
                 />
               </div>
@@ -214,7 +214,7 @@
             >
               <div>
                 <img
-                  src="@/assets/images/empty.jpg"
+                  src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg"
                   style="width: 100%; height: 100%; object-fit: cover"
                 />
               </div>
@@ -396,7 +396,7 @@ onMounted(() => searchStore.getSearchHotList());
 
   &.fixed {
     position: fixed;
-    z-index: 999999;
+    z-index: 1998;
     left: 0;
     top: 0;
   }
@@ -489,7 +489,7 @@ onMounted(() => searchStore.getSearchHotList());
       background-color: #fff;
       width: 100%;
       top: 100%;
-      z-index: 999999999999;
+      z-index: 1999;
       -webkit-font-smoothing: antialiased;
       max-height: 640px;
       overflow-y: auto;
@@ -506,6 +506,7 @@ onMounted(() => searchStore.getSearchHotList());
       height: 40px;
       border: #fff 2px solid;
       border-radius: 50%;
+      object-fit: cover;
     }
 
     .to-login {

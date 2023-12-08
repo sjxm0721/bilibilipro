@@ -130,7 +130,7 @@
         </div>
       </div>
       <div class="container-body">
-        <router-view :key="$route.fullPath" />
+        <router-view :key="($route.params.uid as string)" />
       </div>
     </div>
   </div>
@@ -214,7 +214,7 @@ const getUserInfo = () => {
 watch(
   ()=>route.params.uid,
   (newValue)=>{
-    if(newValue!==null){
+    if(newValue!==undefined){
       getUserInfo()
     }
   },
@@ -244,7 +244,6 @@ const toLine = () => {
 const isFollowed = ref<boolean>(false);
 const isFollow = async (followedUid: number) => {
   const res = await reqIsFollow(account!.uid, followedUid);
-  console.log(res);
   isFollowed.value = res.data;
 };
 
@@ -276,7 +275,7 @@ const cancelFollow = async ()=>{
     height: 250px;
     .info-bg {
       height: 75%;
-      background-image: url("@/assets/images/memberBg.jpg");
+      background-image: url("https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/memberBg.jpg");
       position: relative;
 
       #shadow {
@@ -304,6 +303,7 @@ const cancelFollow = async ()=>{
             width: 60px;
             height: 60px;
             border-radius: 50%;
+            object-fit: cover;
           }
         }
         .intro {

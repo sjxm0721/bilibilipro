@@ -25,6 +25,7 @@ request.interceptors.response.use((response)=>{
         return Promise.reject(response.data)
     }
 },(error)=>{
+    console.log(error.data.code)
     const accountStore = useAccountStore()
     //统一错误处理
     let message:string = ''
@@ -38,11 +39,13 @@ request.interceptors.response.use((response)=>{
         case 500:
             message = '服务器出现问题'
             break
+        case 504:
+            message = '视频上传异常'
+            break
         default:
             message = error.response.data.message
             break
     }
-    console.log(message)
     ElMessage({
         type:'error',
         message

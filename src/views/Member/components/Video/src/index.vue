@@ -47,36 +47,55 @@
   </template>
   
   <script setup lang="ts">
-  import { ref } from "vue";
-  import { useRouter } from "vue-router";
+  import { ref,watch } from "vue";
+  import { useRouter ,useRoute} from "vue-router";
+  import { useMemberStore } from "@/stores/modules/member";
   const navChoosed = ref(0);
   const navMouseIn = ref(-1);
   const router = useRouter()
+  const route = useRoute()
+  const memberStore = useMemberStore()
 
   const changeNav = (newNav: number) => {
     navChoosed.value = newNav;
     navMouseIn.value = -1;
     if(navChoosed.value === 0){
         router.push({
-          name:'memberVideo'
+          name:'memberVideo',
+          params: { uid: memberStore.memberInfo?.uid },
         })
     }
     else if(navChoosed.value === 1){
       router.push({
-          name:'memberAudio'
+          name:'memberAudio',
+          params: { uid: memberStore.memberInfo?.uid },
         })
     }
     else if(navChoosed.value === 2){
       router.push({
-          name:'memberArticle'
+          name:'memberArticle',
+          params: { uid: memberStore.memberInfo?.uid },
         })
     }
     else if(navChoosed.value === 3){
       router.push({
-          name:'memberAlbum'
+          name:'memberAlbum',
+          params: { uid: memberStore.memberInfo?.uid },
         })
     }
   };
+
+  const pathChoose = (newPath: string) => {
+  if (newPath.includes("/video/audio")) {
+    navChoosed.value = 1;
+  } else if (newPath.includes("/video/article")) {
+    navChoosed.value = 2;
+  } else if (newPath.includes("/video/album")) {
+    navChoosed.value = 3;
+  } else {
+    navChoosed.value = 0;
+  }
+};
   
   const mouseIn = (newNav: number) => {
     if (newNav !== navChoosed.value) {
@@ -87,6 +106,15 @@
   const mouseOut = () => {
     navMouseIn.value = -1;
   };
+
+
+  watch(
+  ()=>route.fullPath,
+  (newFullPath)=>{
+    pathChoose(newFullPath);
+  },
+  {immediate:true}
+)
   
 
   </script>
@@ -145,9 +173,9 @@
   
 
   
-      .right-video {
+      // .right-video {
        
-      }
+      // }
     }
   }
   </style>

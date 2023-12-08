@@ -98,7 +98,7 @@ const toMember = (uid:number) => {
               width: 60px;
               height: 60px;
               border-radius: 50%;
-              border-radius: 50%;
+              object-fit: cover;
               cursor: pointer;
             }
           }
