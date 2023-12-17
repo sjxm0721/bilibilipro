@@ -14,7 +14,7 @@ export const useWebSocketStore = defineStore("websocket", () => {
     return new Promise((resolve, reject) => {
       const account = useAccountStore().myInfo;
       socket.value = new WebSocketClass(
-        `ws://43.138.245.107:8080/websocket/${account?.uid}`,
+        `ws://localhost:8080/websocket/${account?.uid}`,
         {
           heartbeatInterval: 30000,
           reconnectInterval: 5000,

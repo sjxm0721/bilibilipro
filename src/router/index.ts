@@ -199,5 +199,15 @@ router.beforeEach((to, _ , next) => {
   }
 });
 
+router.beforeEach((_, from, next) => {
+     // 判断是否从 "video" 路由离开
+  if (from.name === "video") {
+    // 延迟刷新页面，确保路由能够顺利完成
+    setTimeout(() => {
+      window.location.reload();
+    }, 0);
+  }
+  next();
+});
 
 export default router;

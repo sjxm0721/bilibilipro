@@ -9,7 +9,7 @@
 import Danmaku, { DanmakuPluginOption } from "@nplayer/danmaku";
 import { Popover, Icon } from "nplayer";
 import Hls from "hls.js";
-import {ref,reactive, onMounted} from "vue";
+import {ref,reactive, onMounted,onUnmounted} from "vue";
 import bilibiliSvg from "@/utils/bilibiliSvg";
 import type{BarragePostData,BarrageData} from '@/api/barrage/type'
 import { BulletOption } from "@nplayer/danmaku/dist/src/ts/danmaku/bullet";
@@ -203,6 +203,10 @@ const sendBarrage = async(danmaku:BarragePostData)=>{
 
 defineExpose({
   updateDanmaku
+})
+
+onUnmounted(()=>{
+  player.dispose()
 })
 
 

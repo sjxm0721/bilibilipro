@@ -5,7 +5,7 @@ import { getToken} from './auth'
 
 let request = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_API,
-    timeout:500000
+    timeout:3000
 })
 
 //配置请求拦截器
@@ -25,7 +25,6 @@ request.interceptors.response.use((response)=>{
         return Promise.reject(response.data)
     }
 },(error)=>{
-    console.log(error.data.code)
     const accountStore = useAccountStore()
     //统一错误处理
     let message:string = ''
