@@ -32,12 +32,16 @@
           <a v-for="item in homeCategory" :key="item.categoryId">{{
             item.name
           }}</a>
-          <el-dropdown  v-show="homeCategoryLeft.length !== 0">
-            <a style="width: 100%;">更多</a>
+          <el-dropdown v-show="homeCategoryLeft.length !== 0">
+            <a style="width: 100%">更多</a>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item v-for="(item) in homeCategoryLeft" :key="item.categoryId">{{ item.name }}</el-dropdown-item>          
-            </el-dropdown-menu>
+                <el-dropdown-item
+                  v-for="item in homeCategoryLeft"
+                  :key="item.categoryId"
+                  >{{ item.name }}</el-dropdown-item
+                >
+              </el-dropdown-menu>
             </template>
           </el-dropdown>
         </div>
@@ -45,6 +49,7 @@
       <el-col :span="5">
         <div class="category-right">
           <a
+            @click="toRead"
             @mouseover="changeSvgColor('specolumn')"
             @mouseleave="svgColorReturn"
             ><def-svg-icon
@@ -105,9 +110,9 @@ import { reqGetHomeCategory } from "@/api/category/index";
 import { useRouter } from "vue-router";
 import { useAccountStore } from "@/stores/modules/account";
 
-const accountStore = useAccountStore()
+const accountStore = useAccountStore();
 const homeCategory = ref<Category[]>();
-const router = useRouter()
+const router = useRouter();
 const svgColors: any = reactive({
   specolumn: "#707070",
   activity: "#707070",
@@ -128,7 +133,7 @@ const svgColorReturn = () => {
 };
 
 //获取首页分类列表数据
-let homeCategoryLeft= ref<Category[]>([])
+let homeCategoryLeft = ref<Category[]>([]);
 const getHomeCategory = async () => {
   const res = await reqGetHomeCategory();
   homeCategory.value = res.data;
@@ -144,10 +149,16 @@ const toDynamic = () => {
     params: { uid: accountStore.myInfo?.uid },
   });
 };
+
+const toRead = () => {
+  router.push({
+    name: "readHome",
+    params: { uid: accountStore.myInfo?.uid },
+  });
+};
 </script>
 
 <style lang="scss" scoped>
-
 .example-showcase .el-dropdown-link {
   cursor: pointer;
   color: var(--el-color-primary);

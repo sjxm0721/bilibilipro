@@ -117,7 +117,8 @@
                     <el-form
                       ref="formBlRef"
                       :inline="true"
-                      :rules="bilibiliUploadRules"                      :model="bilibiliUpload"
+                      :rules="bilibiliUploadRules"
+                      :model="bilibiliUpload"
                       class="demo-form-inline"
                     >
                       <el-form-item label="视频资源" prop="bid">
@@ -140,17 +141,27 @@
                           </template>
                         </el-input>
                       </el-form-item>
-                      <el-form-item label="分P号" prop="pnum"> 
-                        <el-input-number v-model="bilibiliUpload.pnum" :min="0" :precision="0">
+                      <el-form-item label="分P号" prop="pnum">
+                        <el-input-number
+                          v-model="bilibiliUpload.pnum"
+                          :min="0"
+                          :precision="0"
+                        >
                         </el-input-number>
                         <span class="notify">若视频存在分P，请输入分P号</span>
                       </el-form-item>
                       <el-form-item label="SessData" prop="sessData">
                         <el-input v-model="bilibiliUpload.sessData"></el-input>
-                        <span class="notify">若为会员资源，请输入b站大会员账号的SessData</span>
-                       </el-form-item>
+                        <span class="notify"
+                          >若为会员资源，请输入b站大会员账号的SessData</span
+                        >
+                      </el-form-item>
                       <el-form-item>
-                        <el-button type="primary" @click="submitBlForm(formBlRef)">确定</el-button>
+                        <el-button
+                          type="primary"
+                          @click="submitBlForm(formBlRef)"
+                          >确定</el-button
+                        >
                       </el-form-item>
                     </el-form>
                   </div>
@@ -172,6 +183,77 @@
             </div>
           </div>
         </el-tab-pane>
+        <el-tab-pane label="文章投稿" name="Article">
+          <div class="video-upload">
+            <div>
+              <el-form
+                ref="articleFormRef"
+                :model="articleRuleForm"
+                :rules="articleRules"
+                label-width="120px"
+                class="demo-ruleForm"
+                :size="formSize"
+                status-icon
+              >
+                <el-form-item label="文章标题" prop="title">
+                  <el-input v-model="articleRuleForm.title" />
+                </el-form-item>
+                <el-form-item label="文章分类" prop="category">
+                  <el-radio-group v-model="articleRuleForm.category">
+                    <el-radio :label="1">动画</el-radio>
+                    <el-radio :label="2">游戏</el-radio>
+                    <el-radio :label="3">影视</el-radio>
+                    <el-radio :label="4">生活</el-radio>
+                    <el-radio :label="5">科技</el-radio>
+                    <el-radio :label="6">笔记</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="文章标签" prop="tags">
+                  <el-checkbox-group v-model="articleRuleForm.tags">
+                    <el-checkbox
+                      v-for="item in categoryList"
+                      :key="item.categoryId"
+                      :label="item.categoryId"
+                      >{{ item.name }}</el-checkbox
+                    >
+                  </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="文章封面" prop="poster">
+                  <el-upload
+                    class="poster-uploader"
+                    action="/api/user/common/uploadPic"
+                    :show-file-list="false"
+                    :on-success="handleArticlePosterSuccess"
+                    :before-upload="beforeArticlePosterUpload"
+                  >
+                    <img
+                      v-if="articleRuleForm.poster"
+                      :src="articleRuleForm.poster"
+                      class="poster"
+                    />
+                    <el-icon v-else class="poster-uploader-icon"
+                      ><Plus
+                    /></el-icon>
+                  </el-upload>
+                </el-form-item>
+                <el-form-item label="文章内容" prop="content">
+                  <v-md-editor
+                    v-model="articleRuleForm.content"
+                    height="400px"
+                  ></v-md-editor>
+                </el-form-item>
+                <el-form-item>
+                  <el-button
+                    type="primary"
+                    @click="submitArticleForm(articleFormRef)"
+                  >
+                    投稿
+                  </el-button>
+                </el-form-item>
+              </el-form>
+            </div>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -188,14 +270,17 @@ import { onMounted } from "vue";
 import type { Category } from "@/api/category/type";
 import { reqGetHomeCategory } from "@/api/category";
 import { useAccountStore } from "@/stores/modules/account";
-import type { VideoRuleForm,bilibiliUploadType } from "@/api/video/type";
+import type { VideoRuleForm, bilibiliUploadType } from "@/api/video/type";
 import { reqAddVideo, reqDlBiliVideo } from "@/api/video/index";
 import { useWebSocketStore } from "@/stores/modules/websocket";
 import type { message } from "@/utils/websocketClass";
 import { getToken } from "@/utils/auth";
 import type { DynamicPostData } from "@/api/dynamic/type";
 import { reqPublishDynamic } from "@/api/dynamic";
+import { ArticleRuleForm } from "@/api/article/type";
+import {useArticleStore} from "@/stores/modules/article";
 
+const articleStore = useArticleStore();
 const accountStore = useAccountStore();
 const websocket = useWebSocketStore();
 
@@ -204,7 +289,8 @@ const uploadType = ref<string>("file");
 
 const formSize = ref("default");
 const formRef = ref<FormInstance>();
-const formBlRef = ref<FormInstance>()
+const formBlRef = ref<FormInstance>();
+const articleFormRef = ref<FormInstance>();
 const videoRuleForm = reactive<VideoRuleForm>({
   poster: "",
   title: "",
@@ -215,7 +301,13 @@ const videoRuleForm = reactive<VideoRuleForm>({
   uid: accountStore.myInfo!.uid,
 });
 
-
+const articleRuleForm = reactive<ArticleRuleForm>({
+  title: "",
+  content: "",
+  poster: "",
+  tags: [],
+  category:"",
+});
 
 const bilibiliUpload = reactive<bilibiliUploadType>({
   videoType: "", //哪种类型视频
@@ -225,9 +317,9 @@ const bilibiliUpload = reactive<bilibiliUploadType>({
 });
 
 const bilibiliUploadRules = reactive<FormRules<bilibiliUploadType>>({
-  videoType:[{required:true,message:"请选择视频类型",trigger:"blur"}],
-  bid:[{required:true,message:"请输入视频资源号",trigger:"blur"}]
-})
+  videoType: [{ required: true, message: "请选择视频类型", trigger: "blur" }],
+  bid: [{ required: true, message: "请输入视频资源号", trigger: "blur" }],
+});
 
 //下载bili资源
 const dlBiliVideo = async (data: bilibiliUploadType) => {
@@ -295,6 +387,25 @@ const videoRules = reactive<FormRules<VideoRuleForm>>({
   ],
 });
 
+const articleRules = reactive<FormRules<ArticleRuleForm>>({
+  poster: [{ required: true, message: "请上传文章封面", trigger: "blur" }],
+  title: [
+    {
+      required: true,
+      message: "请输入文章标题",
+      trigger: "blur",
+    },
+  ],
+  category:[{required:true,message:'请选择文章分类',trigger:'blur'}],
+  content: [
+    {
+      required: true,
+      message: "请输入文章内容",
+      trigger: "blur",
+    },
+  ],
+});
+
 //获取首页分类列表数据
 const categoryList = ref<Category[]>();
 const getHomeCategory = async () => {
@@ -305,13 +416,12 @@ onMounted(() => getHomeCategory());
 
 //上传视频封面相关
 const handlePosterSuccess: UploadProps["onSuccess"] = (response) => {
-  if(response.code === 505){
+  if (response.code === 505) {
     ElMessage({
-      type:'error',
-      message:'图片上传失败'
-    })
-  }
-  else{
+      type: "error",
+      message: "图片上传失败",
+    });
+  } else {
     videoRuleForm.poster = response.data;
   }
 };
@@ -327,15 +437,36 @@ const beforePosterUpload: UploadProps["beforeUpload"] = (rawFile) => {
   return true;
 };
 
-//上传视频资源相关
-const handleVideoSuccess: UploadProps["onSuccess"] = (response:any) => {
-  if(response.code===504){
+const handleArticlePosterSuccess: UploadProps["onSuccess"] = (response) => {
+  if (response.code === 505) {
     ElMessage({
-      type:'error',
-      message:'视频上传失败，请重新上传'
-    })
+      type: "error",
+      message: "图片上传失败",
+    });
+  } else {
+    articleRuleForm.poster = response.data;
   }
-  else{
+};
+
+const beforeArticlePosterUpload: UploadProps["beforeUpload"] = (rawFile) => {
+  if (rawFile.type !== "image/jpeg") {
+    ElMessage.error("video picture must be JPG format!");
+    return false;
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error("article picture size can not exceed 2MB!");
+    return false;
+  }
+  return true;
+};
+
+//上传视频资源相关
+const handleVideoSuccess: UploadProps["onSuccess"] = (response: any) => {
+  if (response.code === 504) {
+    ElMessage({
+      type: "error",
+      message: "视频上传失败，请重新上传",
+    });
+  } else {
     progressUp.value = true;
   }
 };
@@ -343,9 +474,9 @@ const handleVideoSuccess: UploadProps["onSuccess"] = (response:any) => {
 const beforeVideoUpload: UploadProps["beforeUpload"] = (rawFile) => {
   if (rawFile.type !== "video/mp4") {
     ElMessage({
-      type:'error',
-      message:'video must be MP4 format!'
-    })
+      type: "error",
+      message: "video must be MP4 format!",
+    });
     return false;
   } else if (rawFile.size / 1024 / 1024 > 300) {
     ElMessage.error("video size can not exceed 300MB!");
@@ -357,11 +488,11 @@ const beforeVideoUpload: UploadProps["beforeUpload"] = (rawFile) => {
 const dynamicPostData = reactive<DynamicPostData>({
   uid: accountStore.myInfo?.uid!,
   text: "我刚刚发布了新的作品,快来看看吧!",
-  videoId:undefined
+  videoId: undefined,
 });
 const addVideo = async (data: VideoRuleForm) => {
   const res = await reqAddVideo(data);
-  if(res.code === 200){
+  if (res.code === 200) {
     dynamicPostData.videoId = res.data;
     await reqPublishDynamic(dynamicPostData);
   }
@@ -389,6 +520,31 @@ const submitForm = (formEl: FormInstance | undefined) => {
       ElMessage({
         type: "error",
         message: "上传视频失败",
+      });
+    }
+  });
+};
+
+//上传文章
+const submitArticleForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      //提交
+      articleStore.addArticle(articleRuleForm).then(() => {
+        ElMessage({
+          type: "success",
+          message: "上传文章成功",
+        });
+        articleRuleForm.poster = "";
+        articleRuleForm.title = "";
+        articleRuleForm.tags = [];
+        articleRuleForm.content = "";
+      });
+    } else {
+      ElMessage({
+        type: "error",
+        message: "上传文章失败",
       });
     }
   });
@@ -476,11 +632,11 @@ const headers = computed(() => {
       width: 50%;
       .video-src-upload {
         margin: 30px 20px;
-        .bilibili-form{
-          .notify{
+        .bilibili-form {
+          .notify {
             margin-left: 20px;
-            color:#F56C6C;
-            font-size:12px;
+            color: #f56c6c;
+            font-size: 12px;
           }
         }
       }
@@ -514,5 +670,8 @@ const headers = computed(() => {
   width: 144px;
   height: 90px;
   text-align: center;
+}
+.v-md-editor__toolbar-item.v-md-icon-fullscreen.v-md-editor__toolbar-item-fullscreen {
+  display: none;
 }
 </style>

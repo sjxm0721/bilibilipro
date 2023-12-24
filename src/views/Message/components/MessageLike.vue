@@ -1,39 +1,57 @@
 <template>
-  <div class="message-like-container" v-if="messageStore.likeMessages.length>0">
-    <ul>
-      <li v-for="(item, index) in messageStore.likeMessages" :key="index">
-        <div class="avatar" @click="toMember(item.fromUid!)">
-          <img :src="item.fromAvatar"/>
-        </div>
-        <div class="like-info">
-          <div class="left">
-            <div class="line-1">
-              <span class="from-user" @click="toMember(item.fromUid!)">{{ item.fromName }}</span>
-              &nbsp;
-              <span class="like-brief">赞了我的{{ likeItemInfo(item) }}</span>
+    <div
+      class="message-like-container"
+      v-if="messageStore.likeMessages.length > 0"
+    >
+      <ul>
+        <li v-for="(item, index) in messageStore.likeMessages" :key="index">
+          <div class="avatar" @click="toMember(item.fromUid!)">
+            <img :src="item.fromAvatar" />
+          </div>
+          <div class="like-info">
+            <div class="left">
+              <div class="line-1">
+                <span class="from-user" @click="toMember(item.fromUid!)">{{
+                  item.fromName
+                }}</span>
+                &nbsp;
+                <span class="like-brief">赞了我的{{ likeItemInfo(item) }}</span>
+              </div>
+              <div class="line-2">
+                {{ formatPostTime(item.postTime!) }}
+              </div>
             </div>
-            <div class="line-2">
-              {{ formatPostTime(item.postTime!) }}
+            <div class="right" v-if="item.commentId !== undefined">
+              {{ item.commentContent }}
+            </div>
+            <div class="right" v-else-if="item.dynamicId !== undefined">
+              {{ item.dynamicText }}
+            </div>
+            <div
+              v-else-if="item.videoId !== undefined"
+              style="
+                width: 60px;
+                height: 60px;
+                border-radius: 2px;
+                overflow: hidden;
+              "
+            >
+              <img
+                style="height: 100%; width: 100%; object-fit: cover"
+                :src="item.videoPoster"
+              />
             </div>
           </div>
-          <div class="right" v-if="item.commentId !== undefined">
-            {{ item.commentContent }}
-          </div>
-          <div class="right" v-else-if="item.dynamicId !== undefined">
-            {{ item.dynamicText }}
-          </div>
-          <div v-else-if="item.videoId!==undefined" style="width: 60px; height: 60px; border-radius: 2px; overflow: hidden;">
-            <img style="height: 100%; width: 100%; object-fit: cover;" :src="item.videoPoster" />
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div class="like-nothing-container" v-else>
-    <div class="nothing">
-      <img src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg" />
+        </li>
+      </ul>
     </div>
-  </div>
+    <div class="like-nothing-container" v-else>
+      <div class="nothing">
+        <img
+          src="https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/empty.jpg"
+        />
+      </div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -42,7 +60,7 @@ import type { message } from "@/utils/websocketClass";
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 const messageStore = useMessageStore();
 
 const likeItemInfo = (likeMessage: message) => {
@@ -70,16 +88,16 @@ const formatPostTime = (time: string) => {
 };
 
 //前往用户页面
-const toMember = (uid:number) => {
+const toMember = (uid: number) => {
   router.push({
     name: "memberHome",
     params: { uid },
   });
 };
 
-onMounted(()=>{
-  messageStore.setLikeMessageRead()
-})
+onMounted(() => {
+  messageStore.setLikeMessageRead();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -94,7 +112,7 @@ onMounted(()=>{
       padding: 24px 20px;
       display: flex;
       .avatar {
-        cursor:pointer;
+        cursor: pointer;
         width: 46px;
         height: 46px;
         border-radius: 50%;
@@ -125,9 +143,9 @@ onMounted(()=>{
             margin-bottom: 15px;
             .from-user {
               font-weight: 700;
-              cursor:pointer;
-              &:hover{
-                color: #00AEEC;
+              cursor: pointer;
+              &:hover {
+                color: #00aeec;
               }
             }
             .like-brief {

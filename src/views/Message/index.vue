@@ -10,13 +10,23 @@
         <div class="main-content">
           <ul>
             <li @click="changeNav(0)" :class="{ choosed: choosedNav === 0 }">
-              回复我的 <span class="notify notify-number" v-show="messageStore.commentNotRead!==0">{{ messageStore.commentNotRead }}</span>
+              回复我的
+              <span
+                class="notify notify-number"
+                v-show="messageStore.commentNotRead !== 0"
+                >{{ messageStore.commentNotRead }}</span
+              >
             </li>
             <li @click="changeNav(1)" :class="{ choosed: choosedNav === 1 }">
-              @ 我的 
+              @ 我的
             </li>
             <li @click="changeNav(2)" :class="{ choosed: choosedNav === 2 }">
-              收到的赞 <span class="notify notify-number" v-show="messageStore.likeNotRead!==0">{{ messageStore.likeNotRead }}</span> 
+              收到的赞
+              <span
+                class="notify notify-number"
+                v-show="messageStore.likeNotRead !== 0"
+                >{{ messageStore.likeNotRead }}</span
+              >
             </li>
             <li @click="changeNav(3)" :class="{ choosed: choosedNav === 3 }">
               系统通知
@@ -31,8 +41,11 @@
         <div class="top-title">
           {{ title }}
         </div>
-        <div class="center-message">
+        <!-- <div class="center-message">
           <router-view></router-view>
+        </div> -->
+        <div class="center-message">
+            <router-view></router-view>
         </div>
       </div>
     </div>
@@ -45,12 +58,11 @@ import { useRoute, useRouter } from "vue-router";
 import { computed, ref, watch } from "vue";
 import { useMessageStore } from "@/stores/modules/message";
 
-const messageStore = useMessageStore()
+const messageStore = useMessageStore();
 const route = useRoute();
 const router = useRouter();
 const uid = route.params.uid;
 const choosedNav = ref<number>(0);
-
 
 const messageList: string[] = [
   "messageResponse",
@@ -65,8 +77,8 @@ const titleList: string[] = [
   "@ 我的",
   "收到的赞",
   "系统通知",
-  "我的消息"
-]
+  "我的消息",
+];
 
 const changeNav = (newNav: number) => {
   choosedNav.value = newNav;
@@ -92,7 +104,7 @@ watch(
   { immediate: true }
 );
 
-const title = computed(()=>titleList[choosedNav.value])
+const title = computed(() => titleList[choosedNav.value]);
 </script>
 
 <style scoped lang="scss">
@@ -100,7 +112,8 @@ const title = computed(()=>titleList[choosedNav.value])
   width: 100%;
   overflow: hidden;
   height: calc(100vh - 70px);
-  background: url("https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/messageBg.jpg") top/cover no-repeat fixed;
+  background: url("https://bilibilipro.oss-cn-beijing.aliyuncs.com/pic_used_in_web/messageBg.jpg")
+    top/cover no-repeat fixed;
   margin: 70px auto 0;
   .message-box {
     width: 75%;
@@ -150,7 +163,7 @@ const title = computed(()=>titleList[choosedNav.value])
               content: "\25cf";
               transform: translateY(-3%);
             }
-            .notify-number{
+            .notify-number {
               background-color: #fb7299;
               line-height: 16px;
               height: 16px;
@@ -158,11 +171,11 @@ const title = computed(()=>titleList[choosedNav.value])
               border-radius: 10px;
               width: 28px;
             }
-            .notify{
+            .notify {
               display: inline-block;
               text-align: center;
               color: #fff;
-              transition: width 200ms,height 200ms;
+              transition: width 200ms, height 200ms;
             }
           }
         }
@@ -190,3 +203,4 @@ const title = computed(()=>titleList[choosedNav.value])
   }
 }
 </style>
+
